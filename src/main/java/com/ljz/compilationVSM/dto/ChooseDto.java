@@ -1,12 +1,13 @@
-package com.ljz.compilationVSM.entity;
+package com.ljz.compilationVSM.dto;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ChooseBody {
+public class ChooseDto {
     Integer id;
     String question;
     List<String> choiceList;
+    Boolean mark;
 }

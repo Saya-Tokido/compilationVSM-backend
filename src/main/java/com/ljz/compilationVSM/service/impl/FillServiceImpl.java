@@ -3,13 +3,14 @@ package com.ljz.compilationVSM.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ljz.compilationVSM.dao.FillMapper;
-import com.ljz.compilationVSM.entity.CheckUnit;
-import com.ljz.compilationVSM.entity.Choose;
+import com.ljz.compilationVSM.dto.CheckUnit;
+import com.ljz.compilationVSM.dto.FillDto;
 import com.ljz.compilationVSM.entity.Fill;
 import com.ljz.compilationVSM.service.FillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,8 +19,15 @@ public class FillServiceImpl extends ServiceImpl<FillMapper, Fill> implements Fi
     @Autowired
     private FillMapper fillMapper;
     @Override
-    public List<Fill> getQuestion(int number) {
-        return fillMapper.getQuestion(number);
+    public List<FillDto> getQuestion(int number) {
+        List<FillDto> fillDtoList=new ArrayList<>();
+        fillMapper.getQuestion(number).stream().forEach(item->{
+            FillDto fillDto=new FillDto();
+            fillDto.setId(item.getId());
+            fillDto.setTitle(item.getTitle());
+            fillDtoList.add(fillDto);
+        });
+        return fillDtoList;
     }
 
     @Override

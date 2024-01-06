@@ -2,9 +2,9 @@ package com.ljz.compilationVSM.controller;
 
 
 import com.ljz.compilationVSM.common.Result;
-import com.ljz.compilationVSM.entity.CheckUnit;
-import com.ljz.compilationVSM.entity.ChooseBody;
-import com.ljz.compilationVSM.entity.Fill;
+import com.ljz.compilationVSM.dto.CheckUnit;
+import com.ljz.compilationVSM.dto.ChooseDto;
+import com.ljz.compilationVSM.dto.FillDto;
 import com.ljz.compilationVSM.service.ChooseService;
 import com.ljz.compilationVSM.service.FillService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +28,11 @@ public class QuestionController {
     @PathVariable("questionType") String type,
     @RequestParam(value = "number", required = false) int number ){
         if(type.equals("choose")){
-            List<ChooseBody> body=chooseService.getQuestion(number);
+            List<ChooseDto> body=chooseService.getQuestion(number);
             return Result.success(body);
         }
         else{
-            List<Fill> body=fillService.getQuestion(number);
+            List<FillDto> body=fillService.getQuestion(number);
             return Result.success(body);
         }
     }

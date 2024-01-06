@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.entity;
+package com.ljz.compilationVSM.dto;
 
 import lombok.Data;
 

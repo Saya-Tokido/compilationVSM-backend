@@ -3,9 +3,9 @@ package com.ljz.compilationVSM.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ljz.compilationVSM.dao.ChooseMapper;
-import com.ljz.compilationVSM.entity.CheckUnit;
+import com.ljz.compilationVSM.dto.CheckUnit;
 import com.ljz.compilationVSM.entity.Choose;
-import com.ljz.compilationVSM.entity.ChooseBody;
+import com.ljz.compilationVSM.dto.ChooseDto;
 import com.ljz.compilationVSM.service.ChooseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ public class ChooseServiceImpl extends ServiceImpl<ChooseMapper, Choose> impleme
     @Autowired
     private ChooseMapper chooseMapper;
     @Override
-    public List<ChooseBody> getQuestion(int number) {
+    public List<ChooseDto> getQuestion(int number) {
         List<Choose> chooseList = chooseMapper.getQuestion(number);
-        List<ChooseBody> bodyList=new ArrayList<>();
+        List<ChooseDto> bodyList=new ArrayList<>();
         chooseList.stream().forEach(item -> {
-            ChooseBody chooseBody=new ChooseBody();
+            ChooseDto chooseBody=new ChooseDto();
             chooseBody.setId(item.getId());
             chooseBody.setQuestion(item.getTitle());
             List<String> choiceList=new ArrayList<>();
