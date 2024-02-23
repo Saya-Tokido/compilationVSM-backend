@@ -3,19 +3,23 @@ package com.ljz.compilationVSM.controller;
 
 import com.ljz.compilationVSM.common.Result;
 import com.ljz.compilationVSM.service.CodeBlockService;
+import com.ljz.compilationVSM.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @Slf4j
-@RestController("/master/question")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RestController
+@RequestMapping("/master/question")
 public class CodeBlockController {
 
     @Autowired
     private CodeBlockService codeBlockService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public Result getComment(
@@ -23,7 +27,8 @@ public class CodeBlockController {
             @RequestParam(value = "compLanguage") String compLanguage,
             @RequestParam(value = "method") String method,
             HttpServletRequest request){
-        String[] comments=codeBlockService.getComment(language,compLanguage,method,request.getHeader("token"));
+        userService.logged(request.getHeader("token"));
+        String[] comments= codeBlockService.getComment(language,compLanguage,method);
         return Result.success(comments);
     }
 }

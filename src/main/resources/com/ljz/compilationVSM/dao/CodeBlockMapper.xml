@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljz.compilationVSM.dao.CodeBlockMapper">
-    <select id="getQuestion" resultType="com.ljz.compilationVSM.entity.Choose">
-        select id,title,choice0,choice1,choice2,choice3
-        from choose
-        order by rand()
-            limit #{number}
+    <select id="getComment" resultType="java.lang.String">
+        select mc.content
+        from method_code mc
+        inner join source s
+            on mc.source_id=s.id
+        where s.language=#{language}
+        and s.comp_language=#{compLanguage}
     </select>
 </mapper>

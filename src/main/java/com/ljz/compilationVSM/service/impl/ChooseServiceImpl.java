@@ -7,6 +7,7 @@ import com.ljz.compilationVSM.dto.CheckUnit;
 import com.ljz.compilationVSM.entity.Choose;
 import com.ljz.compilationVSM.dto.ChooseDto;
 import com.ljz.compilationVSM.service.ChooseService;
+import com.ljz.compilationVSM.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class ChooseServiceImpl extends ServiceImpl<ChooseMapper, Choose> impleme
 
     @Autowired
     private ChooseMapper chooseMapper;
+    @Autowired
+    private UserService userService;
     @Override
     public List<ChooseDto> getQuestion(int number) {
         List<Choose> chooseList = chooseMapper.getQuestion(number);

@@ -24,22 +24,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public Result<String> login(HttpServletRequest request, @RequestBody Map loginMap){
+    public Result login(@RequestBody Map loginMap){
         log.info("Get the login request");
-        HttpSession session=request.getSession();
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName,loginMap.get("userName"))
-                .eq(User::getPassword,loginMap.get("password"));
-
-        User user = userService.getOne(queryWrapper);
-        if(user == null){
-
-            log.info("login failed");
-            return Result.error("userName or password error!");
-        }
-        log.info("login successful");
-        return Result.success(TokenHandler.genAccessToken(user.getId()));
+        String token=userService.login(loginMap);
+        return Result.success(token);
     }
-
-
 }
