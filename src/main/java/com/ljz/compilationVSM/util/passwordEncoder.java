@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.utils;
+package com.ljz.compilationVSM.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ljz.compilationVSM.common.Result;
 import com.ljz.compilationVSM.entity.User;
 import com.ljz.compilationVSM.service.UserService;
-import com.ljz.compilationVSM.utils.TokenHandler;
+import com.ljz.compilationVSM.util.TokenHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class UserController {
             return Result.error("userName or password error!");
         }
         log.info("login successful");
-        return Result.success(TokenHandler.getToken(user));
+        return Result.success(TokenHandler.genAccessToken(user.getId()));
     }
 
 

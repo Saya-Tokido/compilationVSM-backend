@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class ChooseDto {
-    Integer id;
+    Long id;
     String question;
     List<String> choiceList;
     Boolean mark;

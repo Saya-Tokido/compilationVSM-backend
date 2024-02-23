@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FillDto {
-    Integer id;
+    Long id;
     String title;
     Boolean mark;
 }

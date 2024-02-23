@@ -39,4 +39,7 @@ class CompilationVSMApplicationTests {
 		System.out.println(response.getBody());
 	}
 
+	void test2(){
+		String test="//"
+	}
 }

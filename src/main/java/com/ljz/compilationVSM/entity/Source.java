@@ -3,8 +3,8 @@ package com.ljz.compilationVSM.entity;
 import lombok.Data;
 
 @Data
-public class User {
+public class Source {
     private Long id;
-    private String userName;
-    private String password;
+    private String language;
+    private String compLanguage;
 }

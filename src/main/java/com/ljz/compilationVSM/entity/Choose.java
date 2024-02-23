@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Choose {
-    Integer id;
+    Long id;
     String title;
     String choice0;
     String choice1;

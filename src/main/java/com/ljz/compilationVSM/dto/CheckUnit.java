@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CheckUnit {
-    Integer id;
+    Long id;
     String answer;
     Boolean mark;
 

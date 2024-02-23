@@ -30,12 +30,12 @@ public class ChooseServiceImpl extends ServiceImpl<ChooseMapper, Choose> impleme
             chooseBody.setId(item.getId());
             chooseBody.setQuestion(item.getTitle());
             List<String> choiceList=new ArrayList<>();
-            choiceList.addLast(item.getChoice0());
-            choiceList.addLast(item.getChoice1());
-            choiceList.addLast(item.getChoice2());
-            choiceList.addLast(item.getChoice3());
+            choiceList.add(item.getChoice0());
+            choiceList.add(item.getChoice1());
+            choiceList.add(item.getChoice2());
+            choiceList.add(item.getChoice3());
             chooseBody.setChoiceList(choiceList);
-            bodyList.addLast(chooseBody);
+            bodyList.add(chooseBody);
         });
         return bodyList;
     }

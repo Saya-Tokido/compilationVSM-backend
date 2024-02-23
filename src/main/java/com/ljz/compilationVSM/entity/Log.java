@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class Log {
-    Integer id;
+    Long id;
     String type;
     @TableField(fill= FieldFill.INSERT)
     LocalDateTime time;

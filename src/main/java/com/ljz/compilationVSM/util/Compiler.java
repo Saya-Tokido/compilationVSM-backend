@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.utils;
+package com.ljz.compilationVSM.util;
 
 import com.ljz.compilationVSM.dto.CodeDto;
 import org.springframework.http.*;
