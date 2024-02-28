@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 
 @RequestMapping("/question")
 public class QuestionController {
@@ -25,14 +25,10 @@ public class QuestionController {
     private ChooseService chooseService;
     @Autowired
     private FillService fillService;
-    @Autowired
-    private UserService userService;
     @GetMapping("/{questionType}")
     public Result<Object> getQuestion(
     @PathVariable("questionType") String type,
-    @RequestParam(value = "number", required = false) int number,
-    HttpServletRequest request){
-        userService.logged(request.getHeader("token"));
+    @RequestParam(value = "number", required = false) int number){
         if(type.equals("choose")){
             List<ChooseDto> body=chooseService.getQuestion(number);
             return Result.success(body);
@@ -45,9 +41,7 @@ public class QuestionController {
     @PostMapping("/{questionType}")
     public Result<Object> checkAnswer(
             @PathVariable("questionType") String type,
-            @RequestBody List<CheckUnit> checkBody,
-            HttpServletRequest request){
-        userService.logged(request.getHeader("token"));
+            @RequestBody List<CheckUnit> checkBody){
         if(type.equals("choose")){
             chooseService.checkAnswer(checkBody);
             return Result.success(checkBody);

@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @Slf4j
 @RequestMapping("/experiment")
@@ -17,11 +17,8 @@ public class ExperimentController {
 
     @Autowired
     private ExperimentService experimentService;
-    @Autowired
-    private UserService userService;
     @PostMapping
-    public Result checkExperiment(@RequestBody CodeDto codeDto, HttpServletRequest request){
-        userService.logged(request.getHeader("token"));
+    public Result checkExperiment(@RequestBody CodeDto codeDto){
         String feedback = experimentService.checkExperiment(codeDto);
         log.info(feedback);
         return Result.success(feedback);

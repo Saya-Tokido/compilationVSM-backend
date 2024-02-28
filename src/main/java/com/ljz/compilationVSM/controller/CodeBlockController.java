@@ -11,23 +11,19 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/master/question")
 public class CodeBlockController {
 
     @Autowired
     private CodeBlockService codeBlockService;
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public Result getComment(
             @RequestParam(value = "language") String language,
             @RequestParam(value = "compLanguage") String compLanguage,
-            @RequestParam(value = "method") String method,
-            HttpServletRequest request){
-        userService.logged(request.getHeader("token"));
+            @RequestParam(value = "method") String method){
         String[] comments= codeBlockService.getComment(language,compLanguage,method);
         return Result.success(comments);
     }
