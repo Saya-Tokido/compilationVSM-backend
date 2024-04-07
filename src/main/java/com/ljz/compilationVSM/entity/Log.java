@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class Log {
-    Long id;
-    String type;
+    private Long id;
+    private String type;
     @TableField(fill= FieldFill.INSERT)
-    LocalDateTime time;
-    String details;
-    Integer userId;
+    private LocalDateTime time;
+    private String details;
+    private Integer userId;
 }

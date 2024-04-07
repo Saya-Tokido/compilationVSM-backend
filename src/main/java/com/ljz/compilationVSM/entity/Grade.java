@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Grade {
-    Long id;
-    Short score;
-    Integer userId;
-    Short experimentId;
-    String difficulty;
+    private Long id;
+    private Short score;
+    private Integer userId;
+    private Short experimentId;
+    private String difficulty;
 }

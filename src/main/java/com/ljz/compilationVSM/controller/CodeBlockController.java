@@ -2,12 +2,15 @@ package com.ljz.compilationVSM.controller;
 
 
 import com.ljz.compilationVSM.common.Result;
+import com.ljz.compilationVSM.dto.MethodNameDto;
 import com.ljz.compilationVSM.service.CodeBlockService;
 import com.ljz.compilationVSM.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Slf4j
@@ -19,12 +22,20 @@ public class CodeBlockController {
     @Autowired
     private CodeBlockService codeBlockService;
 
-    @GetMapping
+    @GetMapping("/method_impl")
     public Result getComment(
             @RequestParam(value = "language") String language,
             @RequestParam(value = "compLanguage") String compLanguage,
             @RequestParam(value = "method") String method){
         String[] comments= codeBlockService.getComment(language,compLanguage,method);
         return Result.success(comments);
+    }
+
+    @GetMapping("/method_name")
+    public Result getMethodName(
+            @RequestParam(value = "language") String language,
+            @RequestParam(value = "compLanguage") String compLanguage){
+        List<MethodNameDto> methodNameList=codeBlockService.getMethodName(language,compLanguage);
+        return Result.success(methodNameList);
     }
 }

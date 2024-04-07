@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Fill {
-    Long id;
-    String title;
-    String keyAnswer;
+    private Long id;
+    private String title;
+    private String keyAnswer;
 }

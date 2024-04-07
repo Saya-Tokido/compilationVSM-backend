@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class Choose {
-    Long id;
-    String title;
-    String choice0;
-    String choice1;
-    String choice2;
-    String choice3;
-    String keyAnswer;
+    private Long id;
+    private String title;
+    private String choice0;
+    private String choice1;
+    private String choice2;
+    private String choice3;
+    private String keyAnswer;
 }
