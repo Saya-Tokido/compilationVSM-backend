@@ -26,10 +26,10 @@ public class CodeBlockServiceImpl implements CodeBlockService {
     }
 
     @Override
-    public List getMethodName(String language, String compLanguage) {
+    public List<MethodNameDto> getMethodName(String language, String compLanguage) {
         List<MethodName> methodNameList= codeBlockMapper.getMethodName(language,compLanguage);
         List<MethodNameDto> dtoList=new ArrayList<>();
-        methodNameList.stream().forEach(item->{
+        methodNameList.forEach(item->{
             MethodNameDto dto=new MethodNameDto();
             dto.setName(item.getName());
             dto.setLevel(item.getLevel().getStr());
