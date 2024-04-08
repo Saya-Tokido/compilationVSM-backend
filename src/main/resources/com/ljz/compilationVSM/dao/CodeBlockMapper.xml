@@ -10,9 +10,14 @@
         and s.comp_language=#{compLanguage}
     </select>
     <select id="getMethodName" resultType="com.ljz.compilationVSM.entity.MethodName">
-        select name,level,commit_num,pass_num
+        select id,name,level,commit_num,pass_num
         from method_name
         where language=#{language}
           and comp_language=#{compLanguage}
+    </select>
+    <select id="getMethodBody" resultType="com.ljz.compilationVSM.entity.MethodBody">
+        select id,description,input,output,in_param,out_param,body
+        from method_body
+        where method_id=#{methodId}
     </select>
 </mapper>

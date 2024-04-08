@@ -2,6 +2,7 @@ package com.ljz.compilationVSM.controller;
 
 
 import com.ljz.compilationVSM.common.Result;
+import com.ljz.compilationVSM.dto.MethodBodyDto;
 import com.ljz.compilationVSM.dto.MethodNameDto;
 import com.ljz.compilationVSM.service.CodeBlockService;
 import com.ljz.compilationVSM.service.UserService;
@@ -37,5 +38,11 @@ public class CodeBlockController {
             @RequestParam(value = "compLanguage") String compLanguage){
         List<MethodNameDto> methodNameList=codeBlockService.getMethodName(language,compLanguage);
         return Result.success(methodNameList);
+    }
+
+    @GetMapping("/method_body/{method_id}")
+    public Result getMethodBody(@PathVariable(value = "method_id") Integer methodId){
+        MethodBodyDto methodBodyDto=codeBlockService.getMethodBody(methodId);
+        return Result.success(methodBodyDto);
     }
 }

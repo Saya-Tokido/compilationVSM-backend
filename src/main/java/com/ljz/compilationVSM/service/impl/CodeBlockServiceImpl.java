@@ -1,7 +1,9 @@
 package com.ljz.compilationVSM.service.impl;
 
 import com.ljz.compilationVSM.dao.CodeBlockMapper;
+import com.ljz.compilationVSM.dto.MethodBodyDto;
 import com.ljz.compilationVSM.dto.MethodNameDto;
+import com.ljz.compilationVSM.entity.MethodBody;
 import com.ljz.compilationVSM.entity.MethodName;
 import com.ljz.compilationVSM.service.CodeBlockService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ public class CodeBlockServiceImpl implements CodeBlockService {
         List<MethodNameDto> dtoList=new ArrayList<>();
         methodNameList.forEach(item->{
             MethodNameDto dto=new MethodNameDto();
+            dto.setId(item.getId());
             dto.setName(item.getName());
             dto.setLevel(item.getLevel().getStr());
             dto.setCommitNum(item.getCommitNum());
@@ -39,5 +42,19 @@ public class CodeBlockServiceImpl implements CodeBlockService {
             dtoList.add(dto);
         });
         return dtoList;
+    }
+
+    @Override
+    public MethodBodyDto getMethodBody(Integer methodId) {
+        MethodBody methodBody=codeBlockMapper.getMethodBody(methodId);
+        MethodBodyDto dto=new MethodBodyDto(
+                methodBody.getId(),
+                methodBody.getDescription(),
+                methodBody.getInput(),
+                methodBody.getOutput(),
+                methodBody.getInParam(),
+                methodBody.getOutParam(),
+                methodBody.getBody());
+        return dto;
     }
 }
