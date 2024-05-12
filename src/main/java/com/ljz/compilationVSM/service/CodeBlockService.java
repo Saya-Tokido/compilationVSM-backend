@@ -11,4 +11,6 @@ public interface CodeBlockService {
     List<MethodNameDto> getMethodName(String language, String compLanguage);
 
     MethodBodyDto getMethodBody(Integer methodId);
+
+    String check(String code);
 }

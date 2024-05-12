@@ -57,4 +57,9 @@ public class CodeBlockServiceImpl implements CodeBlockService {
                 methodBody.getBody());
         return dto;
     }
+
+    @Override
+    public String check(String code) {
+        return "passed";
+    }
 }
