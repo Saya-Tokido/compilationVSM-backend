@@ -1,6 +1,7 @@
-package com.ljz.compilationVSM.util;
+package com.ljz.compilationVSM.common.protobuf.serializer;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.ljz.compilationVSM.common.protobuf.outer.LoginUserOuterClass;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.dto.LoginUser;
 import com.ljz.compilationVSM.entity.User;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ProtobufRedisSerializer implements RedisSerializer<LoginUser> {
+public class LoginProtobufRedisSerializer implements RedisSerializer<LoginUser> {
 
     @Override
     public byte[] serialize(LoginUser loginUser) {

@@ -1,7 +1,7 @@
 server:
   port: 607
 #  address: 2409:894c:c36:66c6:449a:eafb:55f2:cdd1
-  address: 10.16.4.209
+  address: 192.168.1.106
 spring:
   application:
     #应用的名称，可选
@@ -25,5 +25,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
-#reggie:
-#  path: D:\1testfile\test\
+
+# 自定义字段值
+ai-model:
+  url: http://10.16

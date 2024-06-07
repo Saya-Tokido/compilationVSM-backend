@@ -11,6 +11,7 @@ import com.ljz.compilationVSM.service.UserService;
 import com.ljz.compilationVSM.util.TokenHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +30,7 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
+    @Qualifier("loginRedisTemplate")
     private RedisTemplate redisTemplate;
 
     @Override

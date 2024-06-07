@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.config;
+package com.ljz.compilationVSM.common.config;
 
 import com.ljz.compilationVSM.filter.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
