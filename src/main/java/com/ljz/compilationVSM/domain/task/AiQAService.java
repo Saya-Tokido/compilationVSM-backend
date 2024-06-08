@@ -1,8 +1,9 @@
 package com.ljz.compilationVSM.domain.task;
 
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
-import com.ljz.compilationVSM.dto.FreeQADTO;
-import com.ljz.compilationVSM.dto.OptimCodeDTO;
+import com.ljz.compilationVSM.domain.dto.OptimizedDTO;
+import com.ljz.compilationVSM.domain.dto.FreeQADTO;
+import com.ljz.compilationVSM.domain.dto.OptimCodeDTO;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ public interface AiQAService {
 
     /**
      * 代码优化问答
-     * @param code
+     * @param optimCodeDTO
      * @return
      */
 
-    OptimCodeDTO optimize(String code);
+    OptimizedDTO optimize(OptimCodeDTO optimCodeDTO);
 
     /**
      * 获取指定问答问题列表

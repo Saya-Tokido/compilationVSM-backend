@@ -8,6 +8,8 @@ import com.ljz.compilationVSM.api.response.AiQAQuestionListResponse;
 import com.ljz.compilationVSM.api.response.FreeQAResponse;
 import com.ljz.compilationVSM.api.response.OptimResponse;
 import com.ljz.compilationVSM.common.Result;
+import com.ljz.compilationVSM.domain.convert.OptimCodeMapping;
+import com.ljz.compilationVSM.domain.dto.OptimizedDTO;
 import com.ljz.compilationVSM.domain.task.AiQAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class AiQuestionController {
 
     @Autowired
     private AiQAService aiQAService;
+    @Autowired
+    private OptimCodeMapping optimCodeMapping;
 
     /**
      * 代码优化
@@ -32,7 +36,8 @@ public class AiQuestionController {
      */
     @PostMapping("/optim")
     public Result<OptimResponse> optimize(@RequestBody OptimRequest request) {
-        return Result.success(aiQAService.optimize(request.getCode()));
+        OptimizedDTO optimize = aiQAService.optimize(optimCodeMapping.convert(request));
+        return Result.success(optimCodeMapping.convert2(optimize));
     }
 
     /**

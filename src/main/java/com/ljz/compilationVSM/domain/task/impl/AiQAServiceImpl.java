@@ -4,10 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.domain.convert.QuestionListMapping;
+import com.ljz.compilationVSM.domain.dto.OptimizedDTO;
 import com.ljz.compilationVSM.domain.facade.AiModelFacade;
 import com.ljz.compilationVSM.domain.task.AiQAService;
-import com.ljz.compilationVSM.dto.FreeQADTO;
-import com.ljz.compilationVSM.dto.OptimCodeDTO;
+import com.ljz.compilationVSM.domain.dto.FreeQADTO;
+import com.ljz.compilationVSM.domain.dto.OptimCodeDTO;
 import com.ljz.compilationVSM.entity.AiQAPO;
 import com.ljz.compilationVSM.service.AiQARepository;
 import com.ljz.compilationVSM.util.GzipUtil;
@@ -37,10 +38,8 @@ public class AiQAServiceImpl implements AiQAService {
     private static final String ANSWER_KEY = "specific_answer";
 
     public FreeQADTO askByMessage(String question) {
-        String response = aiModelFacade.post(question);
-        FreeQADTO freeQADto = new FreeQADTO();
-        String answer = parseResponse(response);
-        freeQADto.setQuestion(answer);
+        String answer = aiModelFacade.askByMessage(question);
+        FreeQADTO freeQADto = new FreeQADTO(answer);
         return freeQADto;
     }
 
@@ -69,9 +68,9 @@ public class AiQAServiceImpl implements AiQAService {
     }
 
     @Override
-    public OptimCodeDTO optimize(String code) {
-        // todo 调用大模型优化接口
-        return null;
+    public OptimizedDTO optimize(OptimCodeDTO optimCodeDTO) {
+        String optimizedCode = aiModelFacade.optimize(optimCodeDTO);
+        return new OptimizedDTO(optimizedCode);
     }
 
     @Override
@@ -81,16 +80,5 @@ public class AiQAServiceImpl implements AiQAService {
         List<AiQAPO> list = aiQARepository.list(queryWrapper);
         List<KeyValueDTO<String, String>> dtoList = questionListMapping.convert(list);
         return dtoList;
-    }
-
-    /**
-     * 解析大模型响应信息
-     *
-     * @param response
-     * @return
-     */
-    private String parseResponse(String response) {
-        //todo 调用大模型问答接口
-        return null;
     }
 }
