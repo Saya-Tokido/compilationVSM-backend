@@ -26,6 +26,20 @@ mybatis-plus:
     db-config:
       id-type: ASSIGN_ID
 
+logging:
+  level:
+    root: INFO # 根日志级别
+    com.ljz.com.ljz.compilationVSM: DEBUG # 指定包下的日志级别
+
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+  #    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" # 控制台日志输出格式
+  #    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" # 文件日志输出格式
+
+  file: # 配置文件日志
+    name: mylog.log # 日志文件名
+    path: ./log # 日志文件路径，可根据需要更改
+
 # 自定义字段值
 ai-model:
   baseurl: http://10.16.8.168:6006

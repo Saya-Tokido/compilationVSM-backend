@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
@@ -41,7 +42,13 @@ public class AiModelFacadeImpl implements AiModelFacade {
         Mono<BaseResponseDTO<String>> response = postRequest(freeQAPath,requestBody, String.class);
 //        AtomicReference<String> responseData =null;
 //        response.subscribe(result -> responseData.set(result.getData()));
-        return response.block().getData();
+        Optional<String> data = Optional.ofNullable(response.block().getData());
+        if(data.isPresent()){
+            return data.get();
+        }else{
+            log.error("大模型平台返回数据为空");
+            throw new BizException("大模型平台返回数据为空");
+        }
     }
 
     @Override
@@ -51,7 +58,13 @@ public class AiModelFacadeImpl implements AiModelFacade {
         Mono<BaseResponseDTO<String>> response = postRequest(optimPath,requestBody, String.class);
 //        AtomicReference<String> responseData =null;
 //        response.subscribe(result -> responseData.set(result.getData()));
-        return response.block().getData();
+        Optional<String> data = Optional.ofNullable(response.block().getData());
+        if(data.isPresent()){
+            return data.get();
+        }else{
+            log.error("大模型平台返回数据为空");
+            throw new BizException("大模型平台返回数据为空");
+        }
     }
 
     /**
