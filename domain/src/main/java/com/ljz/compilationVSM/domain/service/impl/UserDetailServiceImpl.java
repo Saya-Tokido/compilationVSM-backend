@@ -1,13 +1,11 @@
-package com.ljz.compilationVSM.service.impl;
+package com.ljz.compilationVSM.domain.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ljz.compilationVSM.common.exception.BizException;
-import com.ljz.compilationVSM.dao.UserMapper;
-import com.ljz.compilationVSM.dto.LoginUser;
-import com.ljz.compilationVSM.entity.User;
-import com.ljz.compilationVSM.service.UserService;
+import com.ljz.compilationVSM.domain.dto.LoginUserDTO;
+import com.ljz.compilationVSM.infrastructure.po.UserPO;
+import com.ljz.compilationVSM.infrastructure.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,21 +18,21 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class UserDetailServiceImpl  extends ServiceImpl<UserMapper, User> implements UserDetailsService, UserService{
+public class UserDetailServiceImpl  implements UserDetailsService{
 
     @Autowired
-    private UserMapper userMapper;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException,BizException {
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName,userName);
-        User user = getOne(queryWrapper);
+        LambdaQueryWrapper<UserPO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserPO::getUserName,userName);
+        UserPO user = userRepository.getOne(queryWrapper);
         if(Optional.ofNullable(user).isEmpty()) {
             log.info("login failed");
             throw new BizException(1001, "userName or password error!");
         }
 //        List<String> perms=userMapper.selectPermsById(user.getId());
-        return new LoginUser(user,null);
+        return new LoginUserDTO(user,null);
     }
 }

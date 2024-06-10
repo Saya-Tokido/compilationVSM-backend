@@ -1,14 +1,14 @@
 server:
   port: 607
 #  address: 2409:894c:c36:66c6:449a:eafb:55f2:cdd1
-  address: 10.16.15.228
+  address: 192.168.1.105
 spring:
   application:
     #应用的名称，可选
     name: compilationVSM
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.16.40.100:3306/compilationVSM?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://10.16.40.100:3306/compilationVSM_backup?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
     username: root
     password: root
   data:

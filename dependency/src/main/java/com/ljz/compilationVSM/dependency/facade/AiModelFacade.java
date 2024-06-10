@@ -1,6 +1,6 @@
-package com.ljz.compilationVSM.domain.facade;
+package com.ljz.compilationVSM.dependency.facade;
 
-import com.ljz.compilationVSM.domain.dto.OptimCodeDTO;
+import com.ljz.compilationVSM.dependency.dto.AiOptimCodeDTO;
 
 public interface AiModelFacade {
     /**
@@ -12,5 +12,5 @@ public interface AiModelFacade {
     /**
      * 大模型代码优化接口
      */
-    public String optimize(OptimCodeDTO optimCodeDTO);
+    public String optimize(AiOptimCodeDTO aioptimCodeDTO);
 }

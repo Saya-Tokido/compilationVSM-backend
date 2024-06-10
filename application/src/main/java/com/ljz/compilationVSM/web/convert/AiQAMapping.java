@@ -21,10 +21,11 @@ import java.util.stream.Collectors;
 public interface AiQAMapping {
     OptimCodeDTO optimConvert(OptimRequest source);
     OptimResponse optimConvert2(OptimizedDTO source);
-
+//todo 修改字段名
     FreeQAQuestionDTO freeQAConvert(FreeQARequest source);
     FreeQAResponse freeQAConvert2(FreeQAAnswerDTO source);
 
+    @Mapping(target = "questionKey",expression = "java(source.getKey())")
     SpecificQuestionDTO specificConvert(SpecificQuestionRequest source);
     SpecificQuestionResponse specificConvert2(SpecificAnswerDTO source);
 }

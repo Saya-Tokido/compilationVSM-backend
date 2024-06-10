@@ -6,10 +6,15 @@ import com.ljz.compilationVSM.domain.dto.LoggedDTO;
 import com.ljz.compilationVSM.domain.dto.LoginDTO;
 import com.ljz.compilationVSM.domain.dto.LoginUserDTO;
 import com.ljz.compilationVSM.domain.service.LoginService;
+import com.ljz.compilationVSM.domain.utils.TokenHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -40,7 +45,7 @@ public class LoginServiceImpl implements LoginService {
         LoginUserDTO loginUserDTO = (LoginUserDTO) authenticate.getPrincipal();
         Long userid = loginUserDTO.getUserPO().getId();
         String token = TokenHandler.genAccessToken(userid);
-        redisTemplate.opsForHash().put("login",userid.toString(),loginDTO);
+        redisTemplate.opsForHash().put("login",userid.toString(),loginUserDTO);
         return new LoggedDTO(token);
     }
 

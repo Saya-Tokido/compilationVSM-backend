@@ -2,15 +2,14 @@ package com.ljz.compilationVSM.web.security.filter;
 
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.domain.dto.LoginUserDTO;
-import com.ljz.compilationVSM.web.security.utils.TokenHandler;
+import com.ljz.compilationVSM.domain.service.AuthenticationService;
+import com.ljz.compilationVSM.domain.utils.TokenHandler;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -25,9 +24,11 @@ import java.util.Objects;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 
+    private final AuthenticationService authenticationService;
     @Autowired
-    @Qualifier("loginRedisTemplate")
-    private RedisTemplate redisTemplate;
+    public JwtAuthenticationTokenFilter(AuthenticationService authenticationService){
+        this.authenticationService=authenticationService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, BizException {
@@ -43,13 +44,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             throw new BizException(1003,"token error!");
         }
-        LoginUserDTO loginUser=(LoginUserDTO) redisTemplate.opsForHash().get("login", userId.toString());
+        LoginUserDTO loginUser=authenticationService.getLoginUserDTO(userId.toString());
 
         if(Objects.isNull(loginUser)){
             throw new BizException(1004,"User is not logged in!");
         }
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUser,null,loginUser.getAuthorities());
+                new UsernamePasswordAuthenticationToken(loginUser.getAuthorities(), loginUser, null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);

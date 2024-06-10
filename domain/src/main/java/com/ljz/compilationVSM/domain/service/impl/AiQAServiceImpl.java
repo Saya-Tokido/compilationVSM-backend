@@ -3,9 +3,10 @@ package com.ljz.compilationVSM.domain.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
 import com.ljz.compilationVSM.common.exception.BizException;
+import com.ljz.compilationVSM.dependency.facade.AiModelFacade;
+import com.ljz.compilationVSM.domain.convert.AiModelFacadeMapping;
 import com.ljz.compilationVSM.domain.convert.QuestionListMapping;
 import com.ljz.compilationVSM.domain.dto.*;
-import com.ljz.compilationVSM.domain.facade.AiModelFacade;
 import com.ljz.compilationVSM.domain.service.AiQAService;
 import com.ljz.compilationVSM.domain.utils.GzipUtil;
 import com.ljz.compilationVSM.infrastructure.po.AiQAPO;
@@ -29,6 +30,8 @@ public class AiQAServiceImpl implements AiQAService {
     private AiQARepository aiQARepository;
     @Autowired
     private QuestionListMapping questionListMapping;
+    @Autowired
+    private AiModelFacadeMapping aiModelFacadeMapping;
     @Autowired
     @Qualifier("stringMessageRedisTemplate")
     private RedisTemplate redisTemplate;
@@ -67,7 +70,7 @@ public class AiQAServiceImpl implements AiQAService {
 
     @Override
     public OptimizedDTO optimize(OptimCodeDTO optimCodeDTO) {
-        String optimizedCode = aiModelFacade.optimize(optimCodeDTO);
+        String optimizedCode = aiModelFacade.optimize(aiModelFacadeMapping.convert(optimCodeDTO));
         return new OptimizedDTO(optimizedCode);
     }
 

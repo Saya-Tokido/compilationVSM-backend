@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.common.config;
+package com.ljz.compilationVSM.dependency.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

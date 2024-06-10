@@ -1,18 +1,18 @@
-package com.ljz.compilationVSM.dependency.facade;
+package com.ljz.compilationVSM.dependency.facade.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.dependency.convert.AiModelOptimCodeMapping;
 import com.ljz.compilationVSM.dependency.dto.AiAskByMessageRequestDTO;
+import com.ljz.compilationVSM.dependency.dto.AiOptimCodeDTO;
 import com.ljz.compilationVSM.dependency.dto.AiOptimCodeRequestDTO;
 import com.ljz.compilationVSM.dependency.dto.base.BaseResponseDTO;
-import com.ljz.compilationVSM.domain.facade.AiModelFacade;
-import com.ljz.compilationVSM.domain.dto.OptimCodeDTO;
+import com.ljz.compilationVSM.dependency.facade.AiModelFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -49,7 +49,7 @@ public class AiModelFacadeImpl implements AiModelFacade {
     }
 
     @Override
-    public String optimize(OptimCodeDTO optimCodeDTO) {
+    public String optimize(AiOptimCodeDTO optimCodeDTO) {
         AiOptimCodeRequestDTO convertDTO = aiModelOptimCodeMapping.convert(optimCodeDTO);
         String requestBody = object2JsonString(convertDTO);
         Mono<BaseResponseDTO<String>> response = postRequest(optimPath,requestBody, String.class);

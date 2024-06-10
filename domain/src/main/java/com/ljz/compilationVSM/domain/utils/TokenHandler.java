@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.web.security.utils;
+package com.ljz.compilationVSM.domain.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
