@@ -1,8 +1,8 @@
 package com.ljz.compilationVSM.web.security.filter;
 
 import com.ljz.compilationVSM.common.exception.BizException;
-import com.ljz.compilationVSM.domain.dto.LoginUserDTO;
-import com.ljz.compilationVSM.domain.service.AuthenticationService;
+import com.ljz.compilationVSM.domain.login.dto.LoginUserDTO;
+import com.ljz.compilationVSM.domain.login.service.AuthenticationService;
 import com.ljz.compilationVSM.domain.utils.TokenHandler;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

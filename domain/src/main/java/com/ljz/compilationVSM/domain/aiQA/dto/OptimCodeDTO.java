@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.domain.dto;
+package com.ljz.compilationVSM.domain.aiQA.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

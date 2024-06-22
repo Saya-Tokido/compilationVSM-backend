@@ -10,6 +10,7 @@ import com.ljz.compilationVSM.dependency.dto.base.BaseResponseDTO;
 import com.ljz.compilationVSM.dependency.facade.AiModelFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class AiModelFacadeImpl implements AiModelFacade {
 
     @Autowired
+    @Qualifier("aiModelWebClient")
     private WebClient webClient;
     @Autowired
     private AiModelOptimCodeMapping aiModelOptimCodeMapping;

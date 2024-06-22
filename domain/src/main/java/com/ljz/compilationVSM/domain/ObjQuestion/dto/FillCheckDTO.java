@@ -1,17 +1,17 @@
-package com.ljz.compilationVSM.api.request;
+package com.ljz.compilationVSM.domain.ObjQuestion.dto;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class FillCheckRequest {
+public class FillCheckDTO {
     private List<Answer> answers;
 
     @Data
     public static class Answer {
 
-        private Integer id;
+        private String id;
 
         private String answer;
     }

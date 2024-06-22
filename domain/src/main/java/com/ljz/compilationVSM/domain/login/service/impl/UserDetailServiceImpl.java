@@ -1,9 +1,9 @@
-package com.ljz.compilationVSM.domain.service.impl;
+package com.ljz.compilationVSM.domain.login.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ljz.compilationVSM.common.exception.BizException;
-import com.ljz.compilationVSM.domain.dto.LoginUserDTO;
+import com.ljz.compilationVSM.domain.login.dto.LoginUserDTO;
 import com.ljz.compilationVSM.infrastructure.po.UserPO;
 import com.ljz.compilationVSM.infrastructure.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j

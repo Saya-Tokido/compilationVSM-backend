@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.domain.dto;
+package com.ljz.compilationVSM.domain.aiQA.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class FreeQAQuestionDTO {
-    private String answer;
+    private String question;
 }

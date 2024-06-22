@@ -1,15 +1,18 @@
 package com.ljz.compilationVSM.domain.ObjQuestion.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class CheckedChooseDTO {
+@AllArgsConstructor
+public class CheckedFillDTO {
     private List<CheckUnit> checkUnitList;
     @Data
+    @AllArgsConstructor
     public static class CheckUnit{
-        Integer id;
+        String id;
         String answer;
         Boolean mark;
     }

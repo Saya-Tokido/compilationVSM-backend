@@ -1,6 +1,6 @@
-package com.ljz.compilationVSM.domain.service;
+package com.ljz.compilationVSM.domain.login.service;
 
-import com.ljz.compilationVSM.domain.dto.LoginUserDTO;
+import com.ljz.compilationVSM.domain.login.dto.LoginUserDTO;
 
 public interface AuthenticationService {
 

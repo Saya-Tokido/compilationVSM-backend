@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljz.compilationVSM.infrastructure.mapper.ChooseMapper">
-
+    <select id="getChoose" resultType="com.ljz.compilationVSM.infrastructure.po.ChoosePO">
+        select `id`,`title`,`choice0`,`choice1`,`choice2`,`choice3`
+        from `t_choose`
+        order by rand()
+            limit #{number}
+    </select>
 </mapper>

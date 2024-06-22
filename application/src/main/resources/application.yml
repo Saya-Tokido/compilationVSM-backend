@@ -1,7 +1,7 @@
 server:
   port: 607
 #  address: 2409:894c:c36:66c6:449a:eafb:55f2:cdd1
-  address: 192.168.1.105
+  address: 192.168.1.104
 spring:
   application:
     #应用的名称，可选
@@ -45,3 +45,8 @@ ai-model:
   baseurl: http://10.16.8.168:6006
   freeQA: /proxy/ask_by_message
   optimize: /proxy/optimize
+remote-compiler:
+  baseurl: https://www.runoob.com
+  path: /try/compile2.php
+  token: 066417defb80d038228de76ec581a50a
+  success: \n\n

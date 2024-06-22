@@ -1,7 +1,7 @@
-package com.ljz.compilationVSM.domain.service;
+package com.ljz.compilationVSM.domain.login.service;
 
-import com.ljz.compilationVSM.domain.dto.LoggedDTO;
-import com.ljz.compilationVSM.domain.dto.LoginDTO;
+import com.ljz.compilationVSM.domain.login.dto.LoggedDTO;
+import com.ljz.compilationVSM.domain.login.dto.LoginDTO;
 
 public interface LoginService {
     public LoggedDTO login(LoginDTO loginDTO);

@@ -1,13 +1,13 @@
-package com.ljz.compilationVSM.domain.service.impl;
+package com.ljz.compilationVSM.domain.aiQA.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.dependency.facade.AiModelFacade;
+import com.ljz.compilationVSM.domain.aiQA.dto.*;
 import com.ljz.compilationVSM.domain.convert.AiModelFacadeMapping;
 import com.ljz.compilationVSM.domain.convert.QuestionListMapping;
-import com.ljz.compilationVSM.domain.dto.*;
-import com.ljz.compilationVSM.domain.service.AiQAService;
+import com.ljz.compilationVSM.domain.aiQA.service.AiQAService;
 import com.ljz.compilationVSM.domain.utils.GzipUtil;
 import com.ljz.compilationVSM.infrastructure.po.AiQAPO;
 import com.ljz.compilationVSM.infrastructure.repository.AiQARepository;
@@ -39,7 +39,7 @@ public class AiQAServiceImpl implements AiQAService {
     private static final String ANSWER_KEY = "specific_answer";
 
     public FreeQAAnswerDTO askByMessage(FreeQAQuestionDTO question) {
-        String answer = aiModelFacade.askByMessage(question.getAnswer());
+        String answer = aiModelFacade.askByMessage(question.getQuestion());
         FreeQAAnswerDTO freeQADto = new FreeQAAnswerDTO(answer);
         return freeQADto;
     }

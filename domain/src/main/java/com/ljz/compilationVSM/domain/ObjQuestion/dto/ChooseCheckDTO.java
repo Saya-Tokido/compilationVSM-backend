@@ -1,17 +1,19 @@
-package com.ljz.compilationVSM.api.request;
+package com.ljz.compilationVSM.domain.ObjQuestion.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ChooseCheckRequest {
+@AllArgsConstructor
+public class ChooseCheckDTO {
     private List<Answer> answers;
 
     @Data
     public static class Answer {
 
-        private Integer id;
+        private String id;
 
         private String answer;
     }

@@ -1,2 +1,13 @@
-package com.ljz.compilationVSM.api.request;public class ChooseResponse {
+package com.ljz.compilationVSM.api.response;
+
+import lombok.Data;
+
+@Data
+public class ChooseResponse {
+    String id;
+    String title;
+    String choice0;
+    String choice1;
+    String choice2;
+    String choice3;
 }

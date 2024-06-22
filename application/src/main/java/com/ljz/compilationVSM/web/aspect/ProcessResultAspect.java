@@ -21,7 +21,7 @@ public class ProcessResultAspect {
     /**
      * 切入点
      */
-    @Pointcut("execution(public * com.ljz.compilationVSM.domain.service.*.*.*(..))")
+    @Pointcut("execution(public * com.ljz.compilationVSM.domain.*.*.*(..))")
     private void commonPointcut() {
     }
 

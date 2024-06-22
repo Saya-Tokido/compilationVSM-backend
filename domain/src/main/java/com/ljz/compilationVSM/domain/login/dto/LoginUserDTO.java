@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.domain.dto;
+package com.ljz.compilationVSM.domain.login.dto;
 
 import com.ljz.compilationVSM.infrastructure.po.UserPO;
 import lombok.Data;

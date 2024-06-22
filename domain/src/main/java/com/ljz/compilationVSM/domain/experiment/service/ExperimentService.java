@@ -1,7 +1,8 @@
-package com.ljz.compilationVSM.service;
+package com.ljz.compilationVSM.domain.experiment.service;
 
-import com.ljz.compilationVSM.dto.CodeDto;
+import com.ljz.compilationVSM.domain.experiment.dto.CodeDTO;
+import com.ljz.compilationVSM.domain.experiment.dto.FeedbackDTO;
 
 public interface ExperimentService {
-    public String checkExperiment(CodeDto codeDto);
+    public FeedbackDTO checkExperiment(CodeDTO codeDTO);
 }

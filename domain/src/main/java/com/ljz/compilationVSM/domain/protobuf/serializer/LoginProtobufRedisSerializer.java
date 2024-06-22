@@ -3,7 +3,7 @@ package com.ljz.compilationVSM.domain.protobuf.serializer;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.protobuf.outer.LoginUserDTOOuterClass;
-import com.ljz.compilationVSM.domain.dto.LoginUserDTO;
+import com.ljz.compilationVSM.domain.login.dto.LoginUserDTO;
 import com.ljz.compilationVSM.infrastructure.po.UserPO;
 import org.springframework.data.redis.serializer.RedisSerializer;
 

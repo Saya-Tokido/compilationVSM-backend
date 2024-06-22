@@ -1,7 +1,7 @@
-package com.ljz.compilationVSM.domain.service;
+package com.ljz.compilationVSM.domain.aiQA.service;
 
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
-import com.ljz.compilationVSM.domain.dto.*;
+import com.ljz.compilationVSM.domain.aiQA.dto.*;
 
 import java.util.List;
 

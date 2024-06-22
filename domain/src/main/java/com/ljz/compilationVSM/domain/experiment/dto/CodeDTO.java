@@ -1,9 +1,11 @@
-package com.ljz.compilationVSM.dto;
+package com.ljz.compilationVSM.domain.experiment.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class CodeDto {
+@AllArgsConstructor
+public class CodeDTO {
     String code;
     String stdin;
     String language;
