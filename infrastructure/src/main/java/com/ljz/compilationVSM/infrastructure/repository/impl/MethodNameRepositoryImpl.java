@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author ljz
- * @since 2024-06-09 17:32:58
+ * @since 2024-12-02 15:12:10
  */
 @Service
 public class MethodNameRepositoryImpl extends ServiceImpl<MethodNameMapper, MethodNamePO> implements MethodNameRepository {

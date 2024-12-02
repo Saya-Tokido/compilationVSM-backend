@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS `t_choose`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_choose` (
-                            `id` bigint NOT NULL AUTO_INCREMENT,
+                            `id` bigint NOT NULL,
                             `title` varchar(200) DEFAULT NULL,
                             `choice0` varchar(40) DEFAULT NULL,
                             `choice1` varchar(40) DEFAULT NULL,
@@ -29,9 +29,9 @@ CREATE TABLE `t_choose` (
                             `key_answer` varchar(40) DEFAULT NULL,
                             `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                             `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                            `is_delete` tinyint DEFAULT '0',
+                            `is_delete` tinyint(1) DEFAULT 0,
                             PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -49,14 +49,14 @@ DROP TABLE IF EXISTS `t_fill`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_fill` (
-                          `id` bigint NOT NULL AUTO_INCREMENT,
+                          `id` bigint NOT NULL,
                           `title` varchar(200) DEFAULT NULL,
                           `key_answer` varchar(20) DEFAULT NULL,
                           `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                           `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                          `is_delete` tinyint DEFAULT '0',
+                          `is_delete` tinyint(1) DEFAULT 0,
                           PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -74,8 +74,8 @@ DROP TABLE IF EXISTS `t_method_body`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_method_body` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
-                                 `method_id` int DEFAULT NULL,
+                                 `id` bigint NOT NULL,
+                                 `method_id` bigint DEFAULT NULL,
                                  `description` varchar(200) DEFAULT NULL,
                                  `input` varchar(200) DEFAULT NULL,
                                  `output` varchar(200) DEFAULT NULL,
@@ -85,9 +85,9 @@ CREATE TABLE `t_method_body` (
                                  `check_body` varchar(200) DEFAULT NULL,
                                  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                                  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                 `is_delete` tinyint DEFAULT '0',
+                                 `is_delete` tinyint(1) DEFAULT 0,
                                  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -105,25 +105,25 @@ DROP TABLE IF EXISTS `t_method_name`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_method_name` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
+                                 `id` bigint NOT NULL,
                                  `language` varchar(10) DEFAULT NULL,
                                  `comp_language` varchar(10) DEFAULT NULL,
                                  `name` varchar(100) DEFAULT NULL,
-                                 `level` tinyint DEFAULT NULL,
+                                 `level` varchar(5) DEFAULT NULL,
                                  `commit_num` bigint DEFAULT NULL,
                                  `pass_num` bigint DEFAULT NULL,
                                  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                                  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                 `is_delete` tinyint DEFAULT '0',
+                                 `is_delete` tinyint(1) DEFAULT 0,
                                  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
 LOCK TABLES `t_method_name` WRITE;
 /*!40000 ALTER TABLE `t_method_name` DISABLE KEYS */;
 INSERT INTO `t_method_name`(`id`,`language`,`comp_language`,`name`,`level`,`commit_num`,`pass_num`)
-VALUES (1,'c','PL0','void error(int n)',0,4234242,3242),(2,'c','PL0','int getsym()',2,4244234242,3242342),(3,'c','PL0','int getch()',1,423214242,32342),(4,'c','PL0','void init()',1,421134242,113242),(5,'c','PL0','int gen(enums fct, int y, int z)',2,411234242,31111242),(6,'c','PL0','int test(bool * sl, bool * s2, int n)',1,421134242,321134242),(7,'c','PL0','int inset(int e, bool * s)',1,421134242,321134242),(8,'c','PL0','int addset(bool * sr, bool * sl, bool * s2, int n)',1,421134242,321134242),(9,'c','PL0','int subset(bool * sr, bool * sl, bool * s2, int n)',1,421134242,321134242),(10,'c','PL0','int mulset(bool * sr, bool * sl, bool * s2, int n)',1,421134242,321134242),(11,'c','PL0','int block(int lev, int tx, bool * fsys)',1,421134242,321134242),(12,'c','PL0','void interpret()',1,421134242,321134242),(13,'c','PL0','int factor(bool * fsys, int * ptx, int lev)',1,421134242,321134242),(14,'c','PL0','int term(bool * fsys, int * ptx, int lev)',1,421134242,321134242),(15,'c','PL0','int condition(bool * fsys, int * ptx, int lev)',1,421134242,321134242),(16,'c','PL0','int expression(bool * fsys, int * ptx, int lev)',1,421134242,321134242),(17,'c','PL0','int statement(bool * fsys, int * ptx, int lev)',1,421134242,321134242),(18,'c','PL0','void listcode(int cx0)',1,421134242,321134242),(19,'c','PL0','int vardeclaration(int * ptx, int lev, int * pdx)',1,421134242,321134242),(20,'c','PL0','int constdeclaration(int * ptx, int lev, int * pdx)',1,421134242,321134242),(21,'c','PL0','int position(char * idt, int tx)',1,421134242,321134242),(22,'c','PL0','void enter(enums object k, int * ptx, int lev, int * pdx)',1,421134242,321134242),(23,'c','PL0','int base(int l, int * s, int b)',1,421134242,321134242);
+VALUES (1,'c','PL0','void error(int n)',0,4234242,3242),(2,'c','PL0','int getsym()','2',4244234242,3242342),(3,'c','PL0','int getch()','1',423214242,32342),(4,'c','PL0','void init()','1',421134242,113242),(5,'c','PL0','int gen(enums fct, int y, int z)','2',411234242,31111242),(6,'c','PL0','int test(bool * sl, bool * s2, int n)','1',421134242,321134242),(7,'c','PL0','int inset(int e, bool * s)','1',421134242,321134242),(8,'c','PL0','int addset(bool * sr, bool * sl, bool * s2, int n)','1',421134242,321134242),(9,'c','PL0','int subset(bool * sr, bool * sl, bool * s2, int n)','1',421134242,321134242),(10,'c','PL0','int mulset(bool * sr, bool * sl, bool * s2, int n)','1',421134242,321134242),(11,'c','PL0','int block(int lev, int tx, bool * fsys)','1',421134242,321134242),(12,'c','PL0','void interpret()','1',421134242,321134242),(13,'c','PL0','int factor(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(14,'c','PL0','int term(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(15,'c','PL0','int condition(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(16,'c','PL0','int expression(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(17,'c','PL0','int statement(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(18,'c','PL0','void listcode(int cx0)','1',421134242,321134242),(19,'c','PL0','int vardeclaration(int * ptx, int lev, int * pdx)','1',421134242,321134242),(20,'c','PL0','int constdeclaration(int * ptx, int lev, int * pdx)','1',421134242,321134242),(21,'c','PL0','int position(char * idt, int tx)','1',421134242,321134242),(22,'c','PL0','void enter(enums object k, int * ptx, int lev, int * pdx)','1',421134242,321134242),(23,'c','PL0','int base(int l, int * s, int b)','1',421134242,321134242);
 /*!40000 ALTER TABLE `t_method_name` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +139,7 @@ CREATE TABLE `t_ai_q_a` (
                             `answer` blob,
                             `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                             `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                            `is_delete` tinyint DEFAULT '0',
+                            `is_delete` tinyint(1) DEFAULT 0,
                             PRIMARY KEY (`id`),
                             KEY `pk_id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -160,21 +160,21 @@ DROP TABLE IF EXISTS `t_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_user` (
-                          `id` bigint NOT NULL AUTO_INCREMENT,
+                          `id` bigint NOT NULL,
                           `user_name` varchar(20) DEFAULT NULL,
                           `password` varchar(256) DEFAULT NULL,
                           `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                           `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                          `is_delete` tinyint DEFAULT '0',
+                          `is_delete` tinyint(1) DEFAULT 0,
                           PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
 LOCK TABLES `t_user` WRITE;
 /*!40000 ALTER TABLE `t_user` DISABLE KEYS */;
 INSERT INTO `t_user`(`id`,`user_name`,`password`)
-VALUES (1,'mitsuha','$2a$10$gezWANeSw8bcYD1y0Me13eDm6kWn6DCyhd00Of37.2ZKlzwzqDwHi');
+VALUES (3791743912,'admin','$2a$10$I0ZIk16j0D7tK61EdOKCMOoVIO5EDdr3JuKSsGp2zBXjkuLx66JRC');
 /*!40000 ALTER TABLE `t_user` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2024-06-09 17:32:58
+ * @since 2024-12-02 15:12:10
  */
 @Getter
 @Setter
@@ -39,5 +39,5 @@ public class AiQAPO implements Serializable {
     private LocalDateTime updateTime;
 
     @TableField("is_delete")
-    private Byte isDelete;
+    private Boolean isDelete;
 }

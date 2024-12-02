@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author ljz
- * @since 2024-06-09 17:32:58
+ * @since 2024-12-02 15:12:10
  */
 public interface MethodNameMapper extends BaseMapper<MethodNamePO> {
 

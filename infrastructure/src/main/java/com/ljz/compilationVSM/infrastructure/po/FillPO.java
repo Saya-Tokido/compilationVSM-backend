@@ -1,6 +1,5 @@
 package com.ljz.compilationVSM.infrastructure.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -15,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2024-06-09 17:32:58
+ * @since 2024-12-02 15:12:10
  */
 @Getter
 @Setter
@@ -24,7 +23,7 @@ public class FillPO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId("id")
     private Long id;
 
     @TableField("title")
@@ -40,5 +39,5 @@ public class FillPO implements Serializable {
     private LocalDateTime updateTime;
 
     @TableField("is_delete")
-    private Byte isDelete;
+    private Boolean isDelete;
 }

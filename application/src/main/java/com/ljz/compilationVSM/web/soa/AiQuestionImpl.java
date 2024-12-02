@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * ai 问答
+ * ai 问答接口实现
+ * @author ljz
+ * @since 2024-12-01
  */
 @RestController
 @Slf4j
