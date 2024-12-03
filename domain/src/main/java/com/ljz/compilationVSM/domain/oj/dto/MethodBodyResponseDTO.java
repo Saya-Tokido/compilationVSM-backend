@@ -38,9 +38,24 @@ public class MethodBodyResponseDTO {
     private String inParam;
 
     /**
-     * 出参
+     * 返回值
      */
     private String outParam;
+
+    /**
+     * 全局变量
+     */
+    private String globalVar;
+
+    /**
+     * 有变动的全局变量
+     */
+    private String changedGlobal;
+
+    /**
+     * 前置函数
+     */
+    private String preMethod;
 
     /**
      * 初始函数体

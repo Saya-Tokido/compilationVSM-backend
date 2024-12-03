@@ -6,10 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 public enum LanguageEnum {
     C("C","7"),
-    CPP("C++","8"),
-    JAVA("Java","9"),
-    PYTHON("Python","10"),
-    GOLANG("Golang","11");
+    CPP("C++","7"),
+    JAVA("Java","8"),
+    PYTHON("Python","15"),
+    GOLANG("Golang","6");
 
 
 

@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2024-12-02 15:12:10
+ * @since 2024-12-02 21:28:15
  */
 @Getter
 @Setter
@@ -44,11 +44,17 @@ public class MethodBodyPO implements Serializable {
     @TableField("out_param")
     private String outParam;
 
+    @TableField("global_var")
+    private String globalVar;
+
+    @TableField("changed_global")
+    private String changedGlobal;
+
+    @TableField("pre_method")
+    private String preMethod;
+
     @TableField("body")
     private String body;
-
-    @TableField("check_body")
-    private String checkBody;
 
     @TableField("create_time")
     private LocalDateTime createTime;

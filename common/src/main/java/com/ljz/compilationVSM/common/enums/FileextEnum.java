@@ -8,7 +8,7 @@ public enum FileextEnum {
     C("c"),
     CPP("cpp"),
     JAVA("java"),
-    PYTHON("py"),
+    PYTHON("py3"),
     GOLANG("go");
 
 

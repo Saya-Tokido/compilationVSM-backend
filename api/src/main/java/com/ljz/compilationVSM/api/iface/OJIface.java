@@ -1,7 +1,9 @@
 package com.ljz.compilationVSM.api.iface;
 
 import com.ljz.compilationVSM.api.base.Response;
+import com.ljz.compilationVSM.api.request.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.MethodListRequest;
+import com.ljz.compilationVSM.api.response.CodeReviewResponse;
 import com.ljz.compilationVSM.api.response.MethodBodyResponse;
 import com.ljz.compilationVSM.api.response.MethodListResponse;
 
@@ -25,4 +27,12 @@ public interface OJIface {
      * @return 函数体响应
      */
     Response<MethodBodyResponse> getMethodBody(String methodId);
+
+    /**
+     * 校验代码
+     * @param methodId 函数名id
+     * @param code 用户提交的代码
+     * @return 代码评估结果
+     */
+    Response<CodeReviewResponse> checkCode(String methodId, CheckCodeRequest code);
 }

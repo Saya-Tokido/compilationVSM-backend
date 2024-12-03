@@ -18,19 +18,40 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("t_user")
-public class UserPO implements Serializable {
+@TableName("t_method_testcase")
+public class MethodTestcasePO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 用例id
+     */
     @TableId("id")
     private Long id;
 
-    @TableField("user_name")
-    private String userName;
+    /**
+     * 函数id
+     */
+    @TableField("method_id")
+    private Long methodId;
 
-    @TableField("password")
-    private String password;
+    /**
+     * 校验时前置代码
+     */
+    @TableField("pre_code")
+    private String preCode;
+
+    /**
+     * 终端输入
+     */
+    @TableField("terminal_input")
+    private String terminalInput;
+
+    /**
+     * 终端输出
+     */
+    @TableField("terminal_output")
+    private String terminalOutput;
 
     @TableField("create_time")
     private LocalDateTime createTime;
@@ -40,10 +61,4 @@ public class UserPO implements Serializable {
 
     @TableField("is_delete")
     private Boolean isDelete;
-
-    public UserPO(Long id,String userName,String password){
-        this.id=id;
-        this.userName=userName;
-        this.password=password;
-    }
 }

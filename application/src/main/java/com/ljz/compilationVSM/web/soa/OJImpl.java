@@ -2,9 +2,12 @@ package com.ljz.compilationVSM.web.soa;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.OJIface;
+import com.ljz.compilationVSM.api.request.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.MethodListRequest;
+import com.ljz.compilationVSM.api.response.CodeReviewResponse;
 import com.ljz.compilationVSM.api.response.MethodBodyResponse;
 import com.ljz.compilationVSM.api.response.MethodListResponse;
+import com.ljz.compilationVSM.domain.oj.dto.CodeReviewResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodBodyResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodListRequestDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodResponseDTO;
@@ -38,7 +41,14 @@ public class OJImpl implements OJIface {
     @Override
     @GetMapping("/question/method_body/{id}")
     public Response<MethodBodyResponse> getMethodBody(@PathVariable("id") String methodId) {
-        MethodBodyResponseDTO methodBody = ojService.getMethodBody(methodId);
+        MethodBodyResponseDTO methodBody = ojService.getMethodBody(Long.parseLong(methodId));
         return Response.success(ojMapping.methodBodyResponseConvert(methodBody));
+    }
+
+    @PostMapping("/question/method_body/check/{id}")
+    @Override
+    public Response<CodeReviewResponse> checkCode(@PathVariable("id") String methodId, @RequestBody CheckCodeRequest request) {
+        CodeReviewResponseDTO codeReviewResponseDTO = ojService.checkCode(Long.parseLong(methodId), request.getCode());
+        return Response.success(new CodeReviewResponse(codeReviewResponseDTO.getStatus(),codeReviewResponseDTO.getMessage()));
     }
 }

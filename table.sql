@@ -76,13 +76,15 @@ DROP TABLE IF EXISTS `t_method_body`;
 CREATE TABLE `t_method_body` (
                                  `id` bigint NOT NULL,
                                  `method_id` bigint DEFAULT NULL,
-                                 `description` varchar(200) DEFAULT NULL,
+                                 `description` varchar(1000) DEFAULT NULL,
                                  `input` varchar(200) DEFAULT NULL,
                                  `output` varchar(200) DEFAULT NULL,
                                  `in_param` varchar(200) DEFAULT NULL,
                                  `out_param` varchar(200) DEFAULT NULL,
+                                 `global_var` varchar(200) DEFAULT NULL,
+                                 `changed_global` varchar(200) DEFAULT NULL,
+                                 `pre_method` varchar(200) DEFAULT NULL,
                                  `body` varchar(300) DEFAULT NULL,
-                                 `check_body` varchar(200) DEFAULT NULL,
                                  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                                  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                  `is_delete` tinyint(1) DEFAULT 0,
@@ -90,13 +92,6 @@ CREATE TABLE `t_method_body` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
-LOCK TABLES `t_method_body` WRITE;
-/*!40000 ALTER TABLE `t_method_body` DISABLE KEYS */;
-INSERT INTO `t_method_body`(`id`,`method_id`,`description`,`input`,`output`,`in_param`,`out_param`,`body`,`check_body`)
-VALUES (1,3,'get a char and assign to c','int a = 8;','','char c','char c','int getch(){}','c-->i');
-/*!40000 ALTER TABLE `t_method_body` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 
@@ -126,6 +121,28 @@ INSERT INTO `t_method_name`(`id`,`language`,`comp_language`,`name`,`level`,`comm
 VALUES (1,'c','PL0','void error(int n)',0,4234242,3242),(2,'c','PL0','int getsym()','2',4244234242,3242342),(3,'c','PL0','int getch()','1',423214242,32342),(4,'c','PL0','void init()','1',421134242,113242),(5,'c','PL0','int gen(enums fct, int y, int z)','2',411234242,31111242),(6,'c','PL0','int test(bool * sl, bool * s2, int n)','1',421134242,321134242),(7,'c','PL0','int inset(int e, bool * s)','1',421134242,321134242),(8,'c','PL0','int addset(bool * sr, bool * sl, bool * s2, int n)','1',421134242,321134242),(9,'c','PL0','int subset(bool * sr, bool * sl, bool * s2, int n)','1',421134242,321134242),(10,'c','PL0','int mulset(bool * sr, bool * sl, bool * s2, int n)','1',421134242,321134242),(11,'c','PL0','int block(int lev, int tx, bool * fsys)','1',421134242,321134242),(12,'c','PL0','void interpret()','1',421134242,321134242),(13,'c','PL0','int factor(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(14,'c','PL0','int term(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(15,'c','PL0','int condition(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(16,'c','PL0','int expression(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(17,'c','PL0','int statement(bool * fsys, int * ptx, int lev)','1',421134242,321134242),(18,'c','PL0','void listcode(int cx0)','1',421134242,321134242),(19,'c','PL0','int vardeclaration(int * ptx, int lev, int * pdx)','1',421134242,321134242),(20,'c','PL0','int constdeclaration(int * ptx, int lev, int * pdx)','1',421134242,321134242),(21,'c','PL0','int position(char * idt, int tx)','1',421134242,321134242),(22,'c','PL0','void enter(enums object k, int * ptx, int lev, int * pdx)','1',421134242,321134242),(23,'c','PL0','int base(int l, int * s, int b)','1',421134242,321134242);
 /*!40000 ALTER TABLE `t_method_name` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+
+
+
+DROP TABLE IF EXISTS `t_method_testcase`;
+CREATE TABLE `t_method_testcase` (
+                                     `id` bigint NOT NULL COMMENT "用例id",
+                                     `method_id` bigint DEFAULT NULL COMMENT "函数id",
+                                     `pre_code` varchar(2500) DEFAULT NULL COMMENT "校验时前置代码",
+                                     `terminal_input` varchar(300) DEFAULT NULL COMMENT "终端输入",
+                                     `terminal_output` varchar(300) DEFAULT NULL COMMENT "终端输出",
+                                     `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                                     `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                     `is_delete` tinyint(1) DEFAULT 0,
+                                     PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
+
 
 
 

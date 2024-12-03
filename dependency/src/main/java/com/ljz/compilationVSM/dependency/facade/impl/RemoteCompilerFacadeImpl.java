@@ -86,6 +86,8 @@ public class RemoteCompilerFacadeImpl implements RemoteCompilerFacade {
      */
     private CompilationOutputDTO checkResponse(CompilationResponse data) {
         CompilationOutputDTO compilationOutputDTO = new CompilationOutputDTO();
+        // 配置文件解析有问题
+        successMessage="\n\n";
         if(data.getErrors().equals(successMessage)){
             compilationOutputDTO.setOutput(data.getOutput());
             compilationOutputDTO.setCompilationError(false);

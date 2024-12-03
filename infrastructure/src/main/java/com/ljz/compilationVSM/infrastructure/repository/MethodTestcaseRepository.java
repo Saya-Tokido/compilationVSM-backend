@@ -1,6 +1,6 @@
 package com.ljz.compilationVSM.infrastructure.repository;
 
-import com.ljz.compilationVSM.infrastructure.po.UserPO;
+import com.ljz.compilationVSM.infrastructure.po.MethodTestcasePO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author ljz
  * @since 2024-12-02 21:28:15
  */
-public interface UserRepository extends IService<UserPO> {
+public interface MethodTestcaseRepository extends IService<MethodTestcasePO> {
 
 }
