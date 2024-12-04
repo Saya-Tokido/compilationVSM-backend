@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompilationRequestDTO {
+public class CompilationRequest2 {
     String code;
     String stdin;
-    String language;
-    String fileext;
-    String token;
+    String type;
 }

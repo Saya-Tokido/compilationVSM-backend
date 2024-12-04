@@ -1,22 +1,23 @@
 package com.ljz.compilationVSM.api.request;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
- * 获取函数列表请求
+ * 代码编译体请求
+ *
  * @author ljz
- * @since 2024-12-01
+ * @since 2024-12-04
  */
-@Data
-public class MethodListRequest {
+@Getter
+public class CodeProblemRequest {
 
     /**
-     * 使用语言
+     * 编程代码
      */
     private String language;
 
     /**
-     * 待编译语言
+     * 待编译代码
      */
     private String compLanguage;
 }

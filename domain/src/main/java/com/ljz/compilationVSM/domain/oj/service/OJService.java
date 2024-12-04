@@ -1,9 +1,6 @@
 package com.ljz.compilationVSM.domain.oj.service;
 
-import com.ljz.compilationVSM.domain.oj.dto.CodeReviewResponseDTO;
-import com.ljz.compilationVSM.domain.oj.dto.MethodBodyResponseDTO;
-import com.ljz.compilationVSM.domain.oj.dto.MethodListRequestDTO;
-import com.ljz.compilationVSM.domain.oj.dto.MethodResponseDTO;
+import com.ljz.compilationVSM.domain.oj.dto.*;
 
 import java.util.List;
 
@@ -29,11 +26,27 @@ public interface OJService {
     MethodBodyResponseDTO getMethodBody(Long id);
 
     /**
-     * 校验代码
+     * 校验函数代码
      * @param methodId 函数名id
      * @param code 待校验代码
      * @return  校验反馈
      */
-    CodeReviewResponseDTO checkCode(Long methodId,String code);
+    CodeReviewResponseDTO checkMethodCode(Long methodId,String code);
+
+    /**
+     * 获取词法分析器示例输入输出
+     * @param language 编译的语言
+     * @param compLanguage 待编译的语言
+     * @return 词法分析器题目
+     */
+    LexerProblemResponseDTO getDemoProblem(String language,String compLanguage);
+
+    /**
+     * 校验词法分析器代码
+     * @param lexerId 词法分析器题目id
+     * @param code 待校验代码
+     * @return  校验反馈
+     */
+    CodeReviewResponseDTO checkLexerCode(Long lexerId,String code);
 
 }

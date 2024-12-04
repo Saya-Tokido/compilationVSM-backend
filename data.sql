@@ -9,3 +9,8 @@ values(3116114,
        'int i = 8;',
        '\nfhj……*……*（w4oqqh53fowhgfowhfoa…^hjf￥……oahwgofahwjioefhjo\n105\nfhj……*……*（w4oqqh53fowhgfowhfoa…^hjf￥……oahwgofahwjioefhjo\n'
       );
+
+
+insert into `t_lexer`(id, language, comp_language, description, commit_num, pass_num)
+values (1,"C++","PL0", "描述", 1,0),
+       (2,"C++","Cangjie", "", 1,0);

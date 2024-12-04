@@ -1,15 +1,15 @@
 package com.ljz.compilationVSM.api.request;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
- * 校验代码请求
+ * 代码校验请求
  *
  * @author ljz
- * @since 2024-12-03
+ * @since 2024-12-04
  */
-@Data
-public class CheckCodeRequest {
+@Getter
+public class CodeCheckRequest {
 
     /**
      * 题目id
@@ -17,7 +17,7 @@ public class CheckCodeRequest {
     private String problemId;
 
     /**
-     * 待编译函数
+     * 待校验的代码
      */
     private String code;
 }

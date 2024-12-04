@@ -23,9 +23,9 @@ z*y84m)G]p
 
 
 
-### 代码编译
+### 函数代码编译
 
-目前代码编译包括四个部分
+目前函数代码编译包括四个部分
 
 1. 题目获取
 2. 函数选择
@@ -153,3 +153,133 @@ int getch(void) {
 }
 ```
 
+
+
+
+
+
+
+
+
+
+
+## 代码查重
+
+查重逻辑未使用AST，方法较为简易
+
+
+
+1. 将所有变量名，包括函数名，全部替换为var，去掉所有空格和注释，但保留关键字和运算符等，将除了花括号的每一行的代码字符串转化为hash(即使在不同机器上，相同字符串的hash也是一样的)存入set
+2. 两个set取交集，行数超过指定值即为疑似重复
+3. 选取学号前一位和后一位以及上一次提交的代码(如果有的话)来进行查重
+
+
+
+```java
+// 参考代码，待验证
+
+
+import java.util.regex.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+
+public class CodeDeobfuscator {
+
+    // 去除单行注释
+    private static String removeSingleLineComments(String code) {
+        return code.replaceAll("//.*", "");
+    }
+
+    // 去除多行注释
+    private static String removeMultiLineComments(String code) {
+        return code.replaceAll("/\\*.*?\\*/", "", Pattern.DOTALL);
+    }
+
+    // 替换变量名和函数名为 'var'
+    private static String replaceIdentifiers(String code) {
+        // 仅替换变量名和函数名（不影响关键字）
+        code = code.replaceAll("\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b", "var");
+        return code;
+    }
+
+    // 移除多余空格
+    private static String removeWhitespace(String code) {
+        return code.replaceAll("\\s+", "");
+    }
+
+    // 计算字符串的 MD5 哈希值
+    private static String computeHash(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : messageDigest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // 处理代码
+    public static Set<String> processCode(String code) {
+        Set<String> hashes = new HashSet<>();
+        String[] lines = code.split("\n");
+
+        for (String line : lines) {
+            // 移除注释和空白
+            String normalizedCode = removeSingleLineComments(line);
+            normalizedCode = removeMultiLineComments(normalizedCode);
+            normalizedCode = removeWhitespace(normalizedCode);
+
+            // 替换变量名和函数名
+            normalizedCode = replaceIdentifiers(normalizedCode);
+
+            // 如果代码行不是空的，计算它的哈希值
+            if (!normalizedCode.isEmpty()) {
+                String hash = computeHash(normalizedCode);
+                hashes.add(hash); // 将哈希值存入集合
+            }
+        }
+
+        return hashes;
+    }
+
+    public static void main(String[] args) {
+        // 示例代码
+        String code = "int main() {\n    int x = 10;\n    // Variable assignment\n    x = x + 2;\n    return x;\n}";
+
+        // 处理代码并获取哈希值
+        Set<String> hashes = processCode(code);
+
+        // 输出哈希值
+        System.out.println("代码片段的哈希值:");
+        for (String hash : hashes) {
+            System.out.println(hash);
+        }
+    }
+}
+```
+
+
+
+只记录一个用户第一次ac的代码
+
+
+
+
+
+```c++
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+    string str;
+    cin>>str;
+    cout<<"test2";
+    return 0;
+}
+```

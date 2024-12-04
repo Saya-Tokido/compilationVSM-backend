@@ -144,6 +144,38 @@ CREATE TABLE `t_method_testcase` (
 
 
 
+DROP TABLE IF EXISTS `t_lexer`;
+
+CREATE TABLE `t_lexer` (
+                           `id` bigint NOT NULL COMMENT "分词器id",
+                           `language` varchar(10) DEFAULT NULL COMMENT "编程语言",
+                           `comp_language` varchar(10) DEFAULT NULL COMMENT "待编译语言",
+                           `description`  varchar(100) DEFAULT NULL COMMENT "题目描述",
+                           `commit_num` bigint DEFAULT NULL COMMENT "提交次数",
+                           `pass_num` bigint DEFAULT NULL COMMENT "通过次数",
+                           `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                           `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                           `is_delete` tinyint(1) DEFAULT 0,
+                           PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT = "词法分析器题目表";
+
+
+
+
+
+DROP TABLE IF EXISTS `t_lexer_testcase`;
+CREATE TABLE `t_lexer_testcase` (
+                                    `id` bigint NOT NULL COMMENT "用例id",
+                                    `lexer_id` bigint DEFAULT NULL COMMENT "编译器id",
+                                    `terminal_input` varchar(300) DEFAULT NULL COMMENT "终端输入",
+                                    `terminal_output` varchar(300) DEFAULT NULL COMMENT "终端输出",
+                                    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                                    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                    `is_delete` tinyint(1) DEFAULT 0,
+                                    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT "词法分析器测试用例表";
+
+
 
 
 

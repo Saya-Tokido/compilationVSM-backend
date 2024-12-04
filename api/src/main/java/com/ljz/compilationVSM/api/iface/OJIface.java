@@ -2,8 +2,9 @@ package com.ljz.compilationVSM.api.iface;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.request.CheckCodeRequest;
-import com.ljz.compilationVSM.api.request.MethodListRequest;
+import com.ljz.compilationVSM.api.request.CodeProblemRequest;
 import com.ljz.compilationVSM.api.response.CodeReviewResponse;
+import com.ljz.compilationVSM.api.response.LexerProblemResponse;
 import com.ljz.compilationVSM.api.response.MethodBodyResponse;
 import com.ljz.compilationVSM.api.response.MethodListResponse;
 
@@ -19,7 +20,7 @@ public interface OJIface {
      * @param request 获取函数名列表请求
      * @return  函数名列表响应
      */
-    Response<MethodListResponse> getMethodList(MethodListRequest request);
+    Response<MethodListResponse> getMethodList(CodeProblemRequest request);
 
     /**
      * 获取函数体
@@ -29,10 +30,23 @@ public interface OJIface {
     Response<MethodBodyResponse> getMethodBody(String methodId);
 
     /**
-     * 校验代码
-     * @param methodId 函数名id
-     * @param code 用户提交的代码
+     * 校验函数代码
+     * @param request 代码校验请求
      * @return 代码评估结果
      */
-    Response<CodeReviewResponse> checkCode(String methodId, CheckCodeRequest code);
+    Response<CodeReviewResponse> checkMethodCode(CheckCodeRequest request);
+
+    /**
+     * 获取词法分析器示例输入输出
+     * @param request 代码题获取请求
+     * @return 词法分析器题目
+     */
+    Response<LexerProblemResponse> getDemoProblem(CodeProblemRequest request);
+
+    /**
+     * 校验词法分析器代码
+     * @param request 代码校验请求
+     * @return 代码评估结果
+     */
+    Response<CodeReviewResponse> checkLexerCode(CheckCodeRequest request);
 }

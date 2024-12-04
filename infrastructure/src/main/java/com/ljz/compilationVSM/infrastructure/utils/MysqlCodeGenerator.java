@@ -30,7 +30,7 @@ public class MysqlCodeGenerator {
                         )
                 )
                 .strategyConfig(builder -> builder
-                        .addInclude("t_ai_q_a","t_choose","t_fill","t_method_body","t_method_name","t_user","t_method_testcase")
+                        .addInclude("t_lexer_testcase")
                         .addTablePrefix("t_")
                         .entityBuilder()
                         .formatFileName("%sPO")

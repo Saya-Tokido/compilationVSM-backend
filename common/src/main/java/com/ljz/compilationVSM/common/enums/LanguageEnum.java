@@ -3,6 +3,13 @@ package com.ljz.compilationVSM.common.enums;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * 编程语言枚举
+ *
+ * @author ljz
+ * @since 2024-12-04
+ */
+@Deprecated
 @Getter
 public enum LanguageEnum {
     C("C","7"),
