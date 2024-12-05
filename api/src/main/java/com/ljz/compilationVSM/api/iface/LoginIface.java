@@ -7,10 +7,22 @@ import com.ljz.compilationVSM.api.response.LoginResponse;
 
 /**
  * 登录登出接口
+ *
+ * @author ljz
+ * @since 2024-12-05
  */
 public interface LoginIface {
 
-    public Response<LoginResponse> login(LoginRequest request);
+    /**
+     * 登录
+     * @param request 登录请求
+     * @return 登录响应
+     */
+    Response<LoginResponse> login(LoginRequest request);
 
-    public Response<String> logout();
+    /**
+     * 登出
+     * @return 登出信息
+     */
+    Response<String> logout();
 }

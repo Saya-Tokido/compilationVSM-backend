@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",imports = {List.class})
 public interface OJMapping {
     List<MethodResponse> methodResponseListConvert(List<MethodResponseDTO> source);
 
@@ -19,4 +19,5 @@ public interface OJMapping {
     MethodBodyResponse methodBodyResponseConvert(MethodBodyResponseDTO source);
 
     LexerProblemResponse lexerProblemResponseConvert(LexerProblemResponseDTO source);
+
 }

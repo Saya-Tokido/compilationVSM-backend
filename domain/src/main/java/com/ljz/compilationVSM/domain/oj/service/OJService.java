@@ -3,6 +3,7 @@ package com.ljz.compilationVSM.domain.oj.service;
 import com.ljz.compilationVSM.domain.oj.dto.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 代码评估服务
@@ -48,5 +49,12 @@ public interface OJService {
      * @return  校验反馈
      */
     CodeReviewResponseDTO checkLexerCode(Long lexerId,String code);
+
+    /**
+     * 获取词法分析器编程语言
+     *
+     * @return 词法分析对象语言与编程语言映射
+     */
+    Map<String,List<String>> getLexerLanguage();
 
 }

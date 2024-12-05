@@ -4,10 +4,7 @@ import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.OJIface;
 import com.ljz.compilationVSM.api.request.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.CodeProblemRequest;
-import com.ljz.compilationVSM.api.response.CodeReviewResponse;
-import com.ljz.compilationVSM.api.response.LexerProblemResponse;
-import com.ljz.compilationVSM.api.response.MethodBodyResponse;
-import com.ljz.compilationVSM.api.response.MethodListResponse;
+import com.ljz.compilationVSM.api.response.*;
 import com.ljz.compilationVSM.domain.oj.dto.*;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
 import com.ljz.compilationVSM.web.convert.OJMapping;
@@ -15,9 +12,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * OJ接口实现
+ *
  * @author ljz
  * @since 2024-12-01
  */
@@ -47,7 +47,7 @@ public class OJImpl implements OJIface {
     @Override
     public Response<CodeReviewResponse> checkMethodCode(@RequestBody CheckCodeRequest request) {
         CodeReviewResponseDTO codeReviewResponseDTO = ojService.checkMethodCode(Long.parseLong(request.getProblemId()), request.getCode());
-        return Response.success(new CodeReviewResponse(codeReviewResponseDTO.getStatus(),codeReviewResponseDTO.getMessage()));
+        return Response.success(new CodeReviewResponse(codeReviewResponseDTO.getStatus(), codeReviewResponseDTO.getMessage()));
     }
 
     @PostMapping("/lexer")
@@ -61,6 +61,17 @@ public class OJImpl implements OJIface {
     @Override
     public Response<CodeReviewResponse> checkLexerCode(@RequestBody CheckCodeRequest request) {
         CodeReviewResponseDTO codeReviewResponseDTO = ojService.checkLexerCode(Long.parseLong(request.getProblemId()), request.getCode());
-        return Response.success(new CodeReviewResponse(codeReviewResponseDTO.getStatus(),codeReviewResponseDTO.getMessage()));
+        return Response.success(new CodeReviewResponse(codeReviewResponseDTO.getStatus(), codeReviewResponseDTO.getMessage()));
+    }
+
+    @Override
+    @GetMapping("/lexer/language")
+    public Response<LexerLanguageResponse> getLexerLanguage() {
+        Map<String, List<String>> lexerLanguage = ojService.getLexerLanguage();
+        List<LexerLanguageResponse.LanguageMap> languageMapList = lexerLanguage.entrySet().stream()
+                .map(entry -> new LexerLanguageResponse.LanguageMap(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        return Response.success(new LexerLanguageResponse(languageMapList));
     }
 }

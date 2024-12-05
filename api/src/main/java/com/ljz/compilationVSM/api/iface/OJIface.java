@@ -3,10 +3,7 @@ package com.ljz.compilationVSM.api.iface;
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.request.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.CodeProblemRequest;
-import com.ljz.compilationVSM.api.response.CodeReviewResponse;
-import com.ljz.compilationVSM.api.response.LexerProblemResponse;
-import com.ljz.compilationVSM.api.response.MethodBodyResponse;
-import com.ljz.compilationVSM.api.response.MethodListResponse;
+import com.ljz.compilationVSM.api.response.*;
 
 /**
  * 代码评估接口
@@ -49,4 +46,11 @@ public interface OJIface {
      * @return 代码评估结果
      */
     Response<CodeReviewResponse> checkLexerCode(CheckCodeRequest request);
+
+    /**
+     * 获取词法分析器编程语言
+     *
+     * @return 词法分析器编程语言
+     */
+    Response<LexerLanguageResponse> getLexerLanguage();
 }

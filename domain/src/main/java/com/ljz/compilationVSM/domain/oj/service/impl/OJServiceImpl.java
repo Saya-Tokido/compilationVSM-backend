@@ -17,9 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -137,6 +135,18 @@ public class OJServiceImpl implements OJService {
         }
         //todo 待查重
         return new CodeReviewResponseDTO(CompileStatusEnum.SUCCESS.getCode(), "通过全部用例");
+    }
+
+    @Override
+    public Map<String, List<String>> getLexerLanguage() {
+        LambdaQueryWrapper<LexerPO> queryWrapper = Wrappers.<LexerPO>lambdaQuery()
+                .select(LexerPO::getLanguage, LexerPO::getCompLanguage)
+                .eq(LexerPO::getIsDelete, Boolean.FALSE);
+        HashMap<String, List<String>> languageHashMap = new HashMap<>();
+        lexerRepository.list(queryWrapper).forEach(lexerPO -> languageHashMap
+                .computeIfAbsent(lexerPO.getCompLanguage(), k -> new ArrayList<>())
+                .add(lexerPO.getLanguage()));
+        return languageHashMap;
     }
 
     /**

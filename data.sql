@@ -13,4 +13,14 @@ values(3116114,
 
 insert into `t_lexer`(id, language, comp_language, description, commit_num, pass_num)
 values (1,"C++","PL0", "描述", 1,0),
-       (2,"C++","Cangjie", "", 1,0);
+       (2,"C++","Cangjie", "描述。。。", 1,0);
+
+insert into `t_lexer_testcase`(id, lexer_id, terminal_input, terminal_output)
+values (1,
+        1,
+        'test1',
+        'test2'),
+       (6,
+        2,
+        'test8',
+        'test9');

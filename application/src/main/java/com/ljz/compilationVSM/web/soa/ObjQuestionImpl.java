@@ -7,10 +7,7 @@ import com.ljz.compilationVSM.api.request.ChooseCheckRequest;
 import com.ljz.compilationVSM.api.request.ChooseRequest;
 import com.ljz.compilationVSM.api.request.FillCheckRequest;
 import com.ljz.compilationVSM.api.request.FillRequest;
-import com.ljz.compilationVSM.api.response.ChooseCheckResponse;
-import com.ljz.compilationVSM.api.response.ChooseListResponse;
-import com.ljz.compilationVSM.api.response.FillCheckResponse;
-import com.ljz.compilationVSM.api.response.FillListResponse;
+import com.ljz.compilationVSM.api.response.*;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.CheckedChooseDTO;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.CheckedFillDTO;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.ChooseDTO;
@@ -20,7 +17,6 @@ import com.ljz.compilationVSM.domain.ObjQuestion.service.FillService;
 import com.ljz.compilationVSM.web.convert.ObjQuestionMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,4 +65,5 @@ public class ObjQuestionImpl implements ObjQuestionIface {
         CheckedFillDTO fillDTO = fillService.checkFill(objQuestionMapping.fillCheckDTOConvert(request));
         return Response.success(objQuestionMapping.fillCheckedConvert(fillDTO));
     }
+
 }

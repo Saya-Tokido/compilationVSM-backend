@@ -1,11 +1,33 @@
 package com.ljz.compilationVSM.common.utils;
 
+/**
+ * 雪花Id生成算法
+ *
+ * @author ljz
+ * @since 2024-12-05
+ */
 public class SnowflakeIdGenerator {
-    private final long epoch = 1609459200230L; // 自定义起始时间戳
+
+    /**
+     * 自定义起始时间戳 41位毫秒级
+     */
+    private final long epoch = 1733356800000L;
+
+    /**
+     * 每个数据中心工作(部署的服务)id位数
+     */
     private final long workerIdBits = 5L;
+
+    /**
+     * 数据中心id位数
+     */
     private final long datacenterIdBits = 5L;
     private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
     private final long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+
+    /**
+     * 每个服务每个时间戳内能生成的id数位数
+     */
     private final long sequenceBits = 12L;
     private final long workerIdShift = sequenceBits;
     private final long datacenterIdShift = sequenceBits + workerIdBits;
@@ -65,8 +87,7 @@ public class SnowflakeIdGenerator {
     }
 
     public static long generate() {
-        SnowflakeIdGenerator idGenerator = new SnowflakeIdGenerator(19, 22);
-        long id = idGenerator.nextId();
-        return id;
+        SnowflakeIdGenerator idGenerator = new SnowflakeIdGenerator(1, 1);
+        return idGenerator.nextId();
     }
 }
