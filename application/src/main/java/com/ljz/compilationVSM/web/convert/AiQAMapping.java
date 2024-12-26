@@ -1,11 +1,11 @@
 package com.ljz.compilationVSM.web.convert;
 
-import com.ljz.compilationVSM.api.request.FreeQARequest;
-import com.ljz.compilationVSM.api.request.OptimRequest;
-import com.ljz.compilationVSM.api.request.SpecificQuestionRequest;
-import com.ljz.compilationVSM.api.response.FreeQAResponse;
-import com.ljz.compilationVSM.api.response.OptimResponse;
-import com.ljz.compilationVSM.api.response.SpecificQuestionResponse;
+import com.ljz.compilationVSM.api.request.student.FreeQARequest;
+import com.ljz.compilationVSM.api.request.student.OptimRequest;
+import com.ljz.compilationVSM.api.request.student.SpecificQuestionRequest;
+import com.ljz.compilationVSM.api.response.student.FreeQAResponse;
+import com.ljz.compilationVSM.api.response.student.OptimResponse;
+import com.ljz.compilationVSM.api.response.student.SpecificQuestionResponse;
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
 import com.ljz.compilationVSM.domain.aiQA.dto.*;
 import org.mapstruct.Mapper;

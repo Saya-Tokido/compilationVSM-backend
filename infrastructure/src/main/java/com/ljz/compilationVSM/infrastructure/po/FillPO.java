@@ -10,11 +10,11 @@ import lombok.Setter;
 
 /**
  * <p>
- * 
+ * 填空题表
  * </p>
  *
  * @author ljz
- * @since 2024-12-02 21:28:15
+ * @since 2024-12-25 10:09:05
  */
 @Getter
 @Setter
@@ -23,21 +23,39 @@ public class FillPO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键id
+     */
     @TableId("id")
     private Long id;
 
+    /**
+     * 题目
+     */
     @TableField("title")
     private String title;
 
+    /**
+     * 答案内容
+     */
     @TableField("key_answer")
     private String keyAnswer;
 
+    /**
+     * 创建时间
+     */
     @TableField("create_time")
     private LocalDateTime createTime;
 
+    /**
+     * 更新时间
+     */
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    /**
+     * 逻辑删除标志，0为未删除，1为删除
+     */
     @TableField("is_delete")
     private Boolean isDelete;
 }

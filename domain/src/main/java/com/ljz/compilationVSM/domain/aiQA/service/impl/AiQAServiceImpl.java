@@ -8,7 +8,7 @@ import com.ljz.compilationVSM.domain.aiQA.dto.*;
 import com.ljz.compilationVSM.domain.convert.AiModelFacadeMapping;
 import com.ljz.compilationVSM.domain.convert.QuestionListMapping;
 import com.ljz.compilationVSM.domain.aiQA.service.AiQAService;
-import com.ljz.compilationVSM.domain.utils.GzipUtil;
+import com.ljz.compilationVSM.common.utils.GzipUtil;
 import com.ljz.compilationVSM.infrastructure.po.AiQAPO;
 import com.ljz.compilationVSM.infrastructure.repository.AiQARepository;
 import lombok.extern.slf4j.Slf4j;
@@ -60,10 +60,14 @@ public class AiQAServiceImpl implements AiQAService {
                     return new SpecificAnswerDTO(answer);
                 } catch (IOException e) {
                     log.error("In AskByKey,Decompress Error!", e);
-                    throw new BizException("Decompress Error!");
+                    //todo
+//                    throw new BizException("Decompress Error!");
+                    return null;
                 }
             } else {
-                throw new BizException("No answer for this question!");
+                //todo
+//                throw new BizException("No answer for this question!");
+                return null;
             }
         }
     }

@@ -92,7 +92,9 @@ public class OJServiceImpl implements OJService {
         LexerPO lexerPO = lexerRepository.getOne(queryWrapper1);
         if(Objects.isNull(lexerPO)){
             log.warn("词法分析器题目获取,未查到编程语言为{} 待编译语言为{} 的题目",language,compLanguage);
-            throw new BizException("未查到该题目类型");
+            //todo
+//            throw new BizException("未查到该题目类型");
+            return null;
         }
         LambdaQueryWrapper<LexerTestcasePO> queryWrapper2 = Wrappers.<LexerTestcasePO>lambdaQuery()
                 .select(LexerTestcasePO::getLexerId, LexerTestcasePO::getTerminalInput, LexerTestcasePO::getTerminalOutput)
@@ -103,7 +105,9 @@ public class OJServiceImpl implements OJService {
         LexerTestcasePO lexerTestcasePO = lexerTestcaseRepository.getOne(queryWrapper2);
         if(Objects.isNull(lexerTestcasePO)){
             log.warn("词法分析器题目获取,未查到编程语言为{} 待编译语言为{} 的题目",language,compLanguage);
-            throw new BizException("未查到该题目类型");
+            //todo
+            //            throw new BizException("未查到该题目类型");
+            return null;
         }
         LexerProblemResponseDTO lexerProblemResponseDTO = ojConvert.lexerProblemConvert(lexerTestcasePO);
         lexerProblemResponseDTO.setDescription(lexerPO.getDescription());
@@ -174,13 +178,15 @@ public class OJServiceImpl implements OJService {
                 return new CodeReviewResponseDTO(CompileStatusEnum.PARTIAL_ERROR.getCode(), "未能通过全部测试用例");
             }
         } catch (Exception e) {
-            if (e instanceof InterruptedException) {
-                throw new BizException("获取编译结果时任务中断");
-            } else if (e instanceof ExecutionException) {
-                throw new BizException("获取编译结果失败");
-            } else {
-                throw new BizException("获取编译结果出现未知错误");
-            }
+            //todo
+//            if (e instanceof InterruptedException) {
+//                throw new BizException("获取编译结果时任务中断");
+//            } else if (e instanceof ExecutionException) {
+//                throw new BizException("获取编译结果失败");
+//            } else {
+//                throw new BizException("获取编译结果出现未知错误");
+//            }
+            return null;
         }
         return null;
     }

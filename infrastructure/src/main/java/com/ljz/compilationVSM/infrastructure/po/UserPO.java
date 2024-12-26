@@ -10,11 +10,11 @@ import lombok.Setter;
 
 /**
  * <p>
- * 
+ * 用户表
  * </p>
  *
  * @author ljz
- * @since 2024-12-02 21:28:15
+ * @since 2024-12-25 10:09:05
  */
 @Getter
 @Setter
@@ -23,27 +23,45 @@ public class UserPO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键id
+     */
     @TableId("id")
     private Long id;
 
+    /**
+     * 用户名
+     */
     @TableField("user_name")
     private String userName;
 
+    /**
+     * 密码
+     */
     @TableField("password")
     private String password;
 
+    /**
+     * 角色类型
+     */
+    @TableField("role")
+    private Integer role;
+
+    /**
+     * 创建时间
+     */
     @TableField("create_time")
     private LocalDateTime createTime;
 
+    /**
+     * 更新时间
+     */
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    /**
+     * 逻辑删除标志，0为未删除，1为删除
+     */
     @TableField("is_delete")
     private Boolean isDelete;
-
-    public UserPO(Long id,String userName,String password){
-        this.id=id;
-        this.userName=userName;
-        this.password=password;
-    }
 }

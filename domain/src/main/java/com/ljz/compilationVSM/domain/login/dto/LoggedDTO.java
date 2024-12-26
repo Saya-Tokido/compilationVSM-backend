@@ -1,10 +1,11 @@
 package com.ljz.compilationVSM.domain.login.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
+
+@Getter
+@Setter
 public class LoggedDTO {
     String token;
 }

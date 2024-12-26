@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2024-12-04 16:12:22
+ * @since 2024-12-25 10:09:05
  */
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class LexerPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 分词器id
+     * 主键id
      */
     @TableId("id")
     private Long id;
@@ -36,7 +36,7 @@ public class LexerPO implements Serializable {
     private String language;
 
     /**
-     * 待编译语言
+     * 待编程语言
      */
     @TableField("comp_language")
     private String compLanguage;
@@ -59,12 +59,21 @@ public class LexerPO implements Serializable {
     @TableField("pass_num")
     private Long passNum;
 
+    /**
+     * 创建时间
+     */
     @TableField("create_time")
     private LocalDateTime createTime;
 
+    /**
+     * 更新时间
+     */
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    /**
+     * 逻辑删除标志，0为未删除，1为删除
+     */
     @TableField("is_delete")
     private Boolean isDelete;
 }

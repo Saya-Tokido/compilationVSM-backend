@@ -1,11 +1,11 @@
 package com.ljz.compilationVSM.web.convert;
 
-import com.ljz.compilationVSM.api.request.ChooseCheckRequest;
-import com.ljz.compilationVSM.api.request.FillCheckRequest;
-import com.ljz.compilationVSM.api.response.ChooseCheckResponse;
-import com.ljz.compilationVSM.api.response.ChooseResponse;
-import com.ljz.compilationVSM.api.response.FillCheckResponse;
-import com.ljz.compilationVSM.api.response.FillResponse;
+import com.ljz.compilationVSM.api.request.student.ChooseCheckRequest;
+import com.ljz.compilationVSM.api.request.student.FillCheckRequest;
+import com.ljz.compilationVSM.api.response.student.ChooseCheckResponse;
+import com.ljz.compilationVSM.api.response.student.ChooseResponse;
+import com.ljz.compilationVSM.api.response.student.FillCheckResponse;
+import com.ljz.compilationVSM.api.response.student.FillResponse;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import org.mapstruct.Mapper;
 

@@ -1,0 +1,56 @@
+package com.ljz.compilationVSM.common.exception;
+
+import lombok.AllArgsConstructor;
+
+/**
+ * 异常枚举
+ *
+ * @author ljz
+ * @since 2024-12-25
+ */
+public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
+
+    /**
+     * 通用异常
+     */
+    SERVER_ERROR(500, "服务器内部错误"),
+    PARAMETER_ERROR(1001, "请求参数错误"),
+
+
+    /**
+     * 用户异常
+     */
+    USER_NOT_EXIST_ERROR(2001, "用户不存在"),
+    USERID_NOT_EXIST_ERROR(2002, "userId不存在"),
+    USERNAME_OR_PASSWORD_ERROR(2003, "用户名或密码错误"),
+    ILLEGAL_TOKEN_ERROR(2004, "非法token"),
+    TOKEN_EXPIRED_ERROR(2005, "token已过期,请重新登录"),
+    NULL_TOKEN_ERROR(2006, "token为空"),
+    LOGIN_EXPIRED_ERROR(2007, "登录过期,请重新登录"),
+    PERMISSION_FORBIDDEN(2008, "无权限访问");
+
+    /**
+     * 错误码
+     */
+    private final Integer resultCode;
+
+    /**
+     * 错误描述
+     */
+    private final String resultMsg;
+
+    BizExceptionCodeEnum(Integer resultCode, String resultMsg) {
+        this.resultCode = resultCode;
+        this.resultMsg = resultMsg;
+    }
+
+    @Override
+    public Integer getResultCode() {
+        return this.resultCode;
+    }
+
+    @Override
+    public String getResultMsg() {
+        return this.resultMsg;
+    }
+}

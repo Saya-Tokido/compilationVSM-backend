@@ -10,11 +10,11 @@ import lombok.Setter;
 
 /**
  * <p>
- * 词法分析器测试用例表
+ * 词法分析器用例表
  * </p>
  *
  * @author ljz
- * @since 2024-12-04 16:15:08
+ * @since 2024-12-25 10:09:05
  */
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class LexerTestcasePO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用例id
+     * 主键id
      */
     @TableId("id")
     private Long id;
@@ -47,12 +47,21 @@ public class LexerTestcasePO implements Serializable {
     @TableField("terminal_output")
     private String terminalOutput;
 
+    /**
+     * 创建时间
+     */
     @TableField("create_time")
     private LocalDateTime createTime;
 
+    /**
+     * 更新时间
+     */
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    /**
+     * 逻辑删除标志，0为未删除，1为删除
+     */
     @TableField("is_delete")
     private Boolean isDelete;
 }

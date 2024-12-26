@@ -40,9 +40,23 @@ logging:
     name: mylog.log # 日志文件名
     path: ./log # 日志文件路径，可根据需要更改
 
+
+
+
 # 自定义字段值
+
+role-permission: '{"student":[1000,1002,1003,1004,1005,1006,1008],"teacher":[2000,2001,2002,2003,2004,2005,2006,2008],"admin":[3000,3002,3003,3004,3005,3006,3008]}'
+
+redis-key-prefix:
+  login-info: 'login:info:'
+  login-record: 'login:record:'
+
+expire-time:
+  login-info: 18000
+  login-record: 19800
+  token: 21600
 ai-model:
-  baseurl: http://10.16.8.168:6006
+  baseurl: http://192.168.1.150:6006
   freeQA: /proxy/ask_by_message
   optimize: /proxy/optimize
 remote-compiler:

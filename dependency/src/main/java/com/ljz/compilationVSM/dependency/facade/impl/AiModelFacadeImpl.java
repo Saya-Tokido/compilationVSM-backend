@@ -2,6 +2,7 @@ package com.ljz.compilationVSM.dependency.facade.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ljz.compilationVSM.common.exception.BizException;
+import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.dependency.convert.AiModelOptimCodeMapping;
 import com.ljz.compilationVSM.dependency.dto.AiAskByMessageRequestDTO;
 import com.ljz.compilationVSM.dependency.dto.AiOptimCodeDTO;
@@ -46,7 +47,9 @@ public class AiModelFacadeImpl implements AiModelFacade {
             return data.get();
         }else{
             log.error("大模型平台返回数据为空");
-            throw new BizException("大模型平台返回数据为空");
+            //todo
+//            throw new BizException("大模型平台返回数据为空");
+            return null;
         }
     }
 
@@ -62,7 +65,9 @@ public class AiModelFacadeImpl implements AiModelFacade {
             return data.get();
         }else{
             log.error("大模型平台返回数据为空");
-            throw new BizException("大模型平台返回数据为空");
+            //todo
+//            throw new BizException("大模型平台返回数据为空");
+            return null;
         }
     }
 
@@ -78,7 +83,9 @@ public class AiModelFacadeImpl implements AiModelFacade {
             return objectMapper.writeValueAsString(object);
         } catch (Exception e) {
             log.error("Object to json string error!", e);
-            throw new BizException("Object to json string error!");
+            //todo
+//            throw new BizException("Object to json string error!");
+            return null;
         }
     }
 
@@ -97,14 +104,18 @@ public class AiModelFacadeImpl implements AiModelFacade {
                         HttpStatusCode::is4xxClientError,
                         clientResponse -> {
                             log.error("Client error! {}", clientResponse);
-                            return Mono.error(new BizException("Client error!"));
+                            //todo
+//                            return Mono.error(new BizException("Client error!"));
+                            return null;
                         }
                 )
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         clientResponse -> {
                             log.error("Server error! {}", clientResponse);
-                            return Mono.error(new BizException("Server error!"));
+                            //todo
+                            return Mono.error(new BizException(BizExceptionCodeEnum.SERVER_ERROR));
+//                            return Mono.error(new BizException("Server error!"));
                         }
                 )
                 .bodyToMono(new ParameterizedTypeReference<BaseResponseDTO<T>>() {})
