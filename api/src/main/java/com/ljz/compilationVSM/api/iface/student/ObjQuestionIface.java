@@ -1,14 +1,8 @@
 package com.ljz.compilationVSM.api.iface.student;
 
 import com.ljz.compilationVSM.api.base.Response;
-import com.ljz.compilationVSM.api.request.student.ChooseCheckRequest;
-import com.ljz.compilationVSM.api.request.student.ChooseRequest;
-import com.ljz.compilationVSM.api.request.student.FillCheckRequest;
-import com.ljz.compilationVSM.api.request.student.FillRequest;
-import com.ljz.compilationVSM.api.response.student.ChooseCheckResponse;
-import com.ljz.compilationVSM.api.response.student.ChooseListResponse;
-import com.ljz.compilationVSM.api.response.student.FillCheckResponse;
-import com.ljz.compilationVSM.api.response.student.FillListResponse;
+import com.ljz.compilationVSM.api.request.student.*;
+import com.ljz.compilationVSM.api.response.student.*;
 
 /**
  * 客观题接口
@@ -17,32 +11,21 @@ import com.ljz.compilationVSM.api.response.student.FillListResponse;
  * @since 2024-12-05
  */
 public interface ObjQuestionIface {
-    /**
-     * 获取选择题
-     * @param request
-     * @return
-     */
-    Response<ChooseListResponse> getChoose(ChooseRequest request);
 
     /**
-     * 获取填空题
-     * @param request
-     * @return
+     * 获取客观题题目
+     *
+     * @param request 请求
+     * @return 客观题响应
      */
-    Response<FillListResponse> getFill(FillRequest request);
+    Response<ObjResponse> getObjQuestion(ObjRequest request);
 
     /**
-     * 校验选择题
-     * @param request
-     * @return
+     * 校验客观题
+     *
+     * @param request 请求
+     * @return 校验结果
      */
-    Response<ChooseCheckResponse> checkChoose(ChooseCheckRequest request);
-
-    /**
-     * 校验填空题
-     * @param request
-     * @return
-     */
-    Response<FillCheckResponse> checkFill(FillCheckRequest request);
+    Response<ObjCheckResponse> checkObjQuestion(ObjCheckRequest request);
 
 }

@@ -20,15 +20,5 @@ public interface ObjQuestionMapping {
     FillResponse fillConvert(FillDTO source);
     List<FillResponse> fillListConvert(List<FillDTO> source);
 
-    ChooseCheckDTO.Answer chooseCheckAnswerConvert(ChooseCheckRequest.Answer source);
-    ChooseCheckDTO chooseCheckDTOConvert(ChooseCheckRequest source);
 
-    FillCheckDTO.Answer fillCheckAnswerConvert(FillCheckRequest.Answer source);
-    FillCheckDTO fillCheckDTOConvert(FillCheckRequest source);
-
-    ChooseCheckResponse.CheckUnit chooseCheckUnitConvert(CheckedChooseDTO.CheckUnit source);
-    ChooseCheckResponse chooseCheckedConvert(CheckedChooseDTO source);
-
-    FillCheckResponse.CheckUnit fillCheckUnitConvert(CheckedFillDTO.CheckUnit source);
-    FillCheckResponse fillCheckedConvert(CheckedFillDTO source);
 }

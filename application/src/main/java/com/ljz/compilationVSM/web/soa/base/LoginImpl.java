@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @AllArgsConstructor
+@RequestMapping("/api")
 public class LoginImpl implements LoginIface {
 
     private final LoginService loginService;

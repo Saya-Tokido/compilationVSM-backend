@@ -8,11 +8,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class CheckedChooseDTO {
-    private List<CheckUnit> checkUnitList;
+    private List<CheckUnitDTO> checkUnitList;
     @Data
     @AllArgsConstructor
     public static class CheckUnit{
-        String id;
         String answer;
         Boolean mark;
     }

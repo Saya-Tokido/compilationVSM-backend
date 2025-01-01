@@ -51,13 +51,12 @@ CREATE TABLE `t_choose` (
                             `choice1` varchar(40) DEFAULT '' COMMENT '选项1',
                             `choice2` varchar(40) DEFAULT '' COMMENT '选项2',
                             `choice3` varchar(40) DEFAULT '' COMMENT '选项3',
-                            `key_answer` varchar(40) DEFAULT '' COMMENT '正确选项内容',
+                            `key_answer` varchar(5) DEFAULT '' COMMENT '正确选项编号',
                             `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                             `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                             `is_delete` tinyint(1) DEFAULT 0 COMMENT '逻辑删除标志，0为未删除，1为删除',
                             PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '选择题表';
-
 
 
 DROP TABLE IF EXISTS `t_fill`;
