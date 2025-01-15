@@ -62,9 +62,7 @@ ai-model:
 remote-compiler:
   baseurl: https://rapi.xjq.icu
   path: /code/run
-  # 以下配置均已过期
-  #  baseurl: https://www.runoob.com
-  #  path: /try/compile2.php
-  token: 066417defb80d038228de76ec581a50a
-  #两个连续的换行符，配置文件解析有问题
-  success: \n\n
+obj-question:
+  delimiter: '&1klB!'
+  choose-weight: 5
+  fill-weight: 5

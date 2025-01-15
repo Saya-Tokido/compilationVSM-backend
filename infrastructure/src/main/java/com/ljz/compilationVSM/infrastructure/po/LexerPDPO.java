@@ -3,8 +3,6 @@ package com.ljz.compilationVSM.infrastructure.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,14 +15,13 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2024-12-25 10:09:05
+ * @since 2025-01-15 16:09:00
  */
 @Getter
 @Setter
 @TableName("t_lexer_p_d")
 public class LexerPDPO implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

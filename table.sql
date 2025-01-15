@@ -75,7 +75,7 @@ CREATE TABLE `t_fill` (
 DROP TABLE IF EXISTS `t_obj_answer`;
 CREATE TABLE `t_obj_answer` (
                                 `id` bigint NOT NULL COMMENT '主键id',
-                                `student_id` bigint DEFAULT 0 COMMENT '学生id',
+                                `user_id` bigint DEFAULT 0 COMMENT '学生用户id',
                                 `choose_id_list` varchar(300) DEFAULT '' COMMENT '选择题id列表',
                                 `fill_id_list` varchar(300) DEFAULT '' COMMENT '填空题id列表',
                                 `choose_answer_list` varchar(30) DEFAULT '' COMMENT '选择题答题选项列表',
@@ -93,7 +93,7 @@ CREATE TABLE `t_obj_answer` (
 DROP TABLE IF EXISTS `t_lexer_answer`;
 CREATE TABLE `t_lexer_answer` (
                                   `id` bigint NOT NULL COMMENT '主键id',
-                                  `student_id` bigint DEFAULT 0 COMMENT '学生id',
+                                  `user_id` bigint DEFAULT 0 COMMENT '学生用户id',
                                   `last_code_id` bigint DEFAULT 0 COMMENT '最后一次提交的代码id',
                                   `best_code_id` bigint DEFAULT 0 COMMENT '有得分的最高成绩的代码id',
                                   `grade` int(11) DEFAULT 0 COMMENT '成绩',
@@ -107,7 +107,7 @@ CREATE TABLE `t_lexer_answer` (
 DROP TABLE IF EXISTS `t_lexer_code`;
 CREATE TABLE `t_lexer_code` (
                                 `id` bigint NOT NULL COMMENT '主键id',
-                                `code` text DEFAULT '' COMMENT '完整代码',
+                                `code` text COMMENT '完整代码',
                                 `code_map` varchar(6000) DEFAULT '' COMMENT '查重代码映射',
                                 `row_num` int(11) DEFAULT 0 COMMENT '代码行数',
                                 `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
