@@ -27,7 +27,12 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
     TOKEN_EXPIRED_ERROR(2005, "token已过期,请重新登录"),
     NULL_TOKEN_ERROR(2006, "token为空"),
     LOGIN_EXPIRED_ERROR(2007, "登录过期,请重新登录"),
-    PERMISSION_FORBIDDEN(2008, "无权限访问");
+    PERMISSION_FORBIDDEN_ERROR(2008, "无权限访问"),
+
+    /**
+     * 客观题异常
+     */
+    ILLEGAL_OBJ_QUESTION_ID_ERROR(3001,"非法客观题Id");
 
     /**
      * 错误码

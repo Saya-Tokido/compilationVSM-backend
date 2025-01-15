@@ -207,7 +207,7 @@ public class ProcessResultAspect {
         boolean hasPermission = roleConfig.hasPermission(Objects.requireNonNull(RoleEnum.getByCode(String.valueOf(role))).getName(), permission.getCode());
         if (!hasPermission) {
             log.info("用户 userId = {} 无权限访问 {}", UserContextHolder.getUserId(), permission.getName());
-            throw new BizException(BizExceptionCodeEnum.PERMISSION_FORBIDDEN);
+            throw new BizException(BizExceptionCodeEnum.PERMISSION_FORBIDDEN_ERROR);
         }
     }
 }

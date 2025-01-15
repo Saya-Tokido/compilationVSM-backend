@@ -2,6 +2,8 @@ package com.ljz.compilationVSM.domain.ObjQuestion.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ljz.compilationVSM.common.exception.BizException;
+import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.common.utils.SnowflakeIdGenerator;
 import com.ljz.compilationVSM.common.utils.UserContextHolder;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.ObjCheckRequestDTO;
@@ -20,6 +22,7 @@ import com.ljz.compilationVSM.infrastructure.repository.FillRepository;
 import com.ljz.compilationVSM.infrastructure.repository.ObjAnswerRepository;
 import com.ljz.compilationVSM.infrastructure.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,7 @@ import java.util.stream.Collectors;
  * @since 2025-01-13
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ObjQuestionServiceImpl implements ObjQuestionService {
 
@@ -98,6 +102,10 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
         List<ObjCheckResponseDTO.ResultUnit> chooseResult = new ArrayList<>();
         chooseAnswerList.forEach(item -> {
             String keyAnswer = chooseKeyAnswerList.get(item.getId());
+            if(Objects.isNull(keyAnswer)){
+                log.error("校验客观题内容,id为 {} 的选择题不存在",item.getId().toString());
+                throw new BizException(BizExceptionCodeEnum.ILLEGAL_OBJ_QUESTION_ID_ERROR);
+            }
             if (keyAnswer.substring(1).equals(item.getAnswer())) {
                 chooseResult.add(new ObjCheckResponseDTO.ResultUnit(null, 1));
             } else {
@@ -114,6 +122,10 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
         List<ObjCheckResponseDTO.ResultUnit> fillResult = new ArrayList<>();
         fillAnswerList.forEach(item -> {
             String keyAnswer = fillKeyAnswerList.get(item.getId());
+            if(Objects.isNull(keyAnswer)){
+                log.error("校验客观题内容,id为 {} 的填空题不存在",item.getId().toString());
+                throw new BizException(BizExceptionCodeEnum.ILLEGAL_OBJ_QUESTION_ID_ERROR);
+            }
             if (keyAnswer.equals(item.getAnswer())) {
                 fillResult.add(new ObjCheckResponseDTO.ResultUnit(null, 1));
             } else {
