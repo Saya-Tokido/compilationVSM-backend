@@ -15,7 +15,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-01-15 16:09:00
+ * @since 2025-01-19 19:46:28
  */
 @Getter
 @Setter
@@ -29,6 +29,12 @@ public class LexerPDPO implements Serializable {
      */
     @TableId("id")
     private Long id;
+
+    /**
+     * 词法分析器题目id
+     */
+    @TableField("lexer_id")
+    private Long lexerId;
 
     /**
      * 查重代码id

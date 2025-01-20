@@ -7,6 +7,12 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import java.nio.file.Paths;
 import java.util.Map;
 
+/**
+ * MybatisPlus代码生成器
+ *
+ * @author ljz
+ * @since 2025-01-16
+ */
 public class MysqlCodeGenerator {
     public static void main(String[] args) {
         String finalProjectPath = System.getProperty("user.dir");
@@ -30,7 +36,8 @@ public class MysqlCodeGenerator {
                         )
                 )
                 .strategyConfig(builder -> builder
-                        .addInclude("t_ai_q_a,t_choose,t_fill,t_lexer,t_lexer_answer,t_lexer_code,t_lexer_p_d,t_lexer_testcase,t_method_body,t_method_name,t_method_testcase,t_obj_answer,t_student,t_teacher,t_user")
+                        // 目前已有表名 t_ai_q_a,t_choose,t_fill,t_lexer,t_lexer_answer,t_lexer_code,t_lexer_p_d,t_lexer_testcase,t_method_body,t_method_name,t_method_testcase,t_obj_answer,t_student,t_teacher,t_user,t_config
+                        .addInclude("t_ai_q_a,t_choose,t_fill,t_lexer,t_lexer_answer,t_lexer_code,t_lexer_p_d,t_lexer_testcase,t_method_body,t_method_name,t_method_testcase,t_obj_answer,t_student,t_teacher,t_user,t_config")
                         .addTablePrefix("t_")
                         .entityBuilder()
                         .enableFileOverride()

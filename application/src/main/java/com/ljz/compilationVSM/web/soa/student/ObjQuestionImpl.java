@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/student/obj_question")
+@RequestMapping("/api/student/obj-question")
 public class ObjQuestionImpl implements ObjQuestionIface {
     private final ObjQuestionMapping objQuestionMapping;
     private final ObjQuestionService objQuestionService;

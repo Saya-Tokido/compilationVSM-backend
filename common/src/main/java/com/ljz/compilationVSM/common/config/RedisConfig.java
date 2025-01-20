@@ -1,8 +1,10 @@
 package com.ljz.compilationVSM.common.config;
 
 
+import com.ljz.compilationVSM.common.config.redis.protobuf.serializer.LexerTestCaseProtobufRedisSerializer;
 import com.ljz.compilationVSM.common.config.redis.protobuf.serializer.StringProtobufRedisSerializer;
 import com.ljz.compilationVSM.common.config.redis.protobuf.serializer.LoginProtobufRedisSerializer;
+import com.ljz.compilationVSM.common.dto.LexerTestCaseDTO;
 import com.ljz.compilationVSM.common.dto.LoginUserDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -77,6 +79,28 @@ public class RedisConfig {
 
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(serializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+
+        return template;
+    }
+
+    /**
+     * 词法分析器用例 redis模板Bean
+     *
+     * @param connectionFactory 链接工厂
+     * @return redis模板Bean
+     */
+    @Bean(name="LexerRedisTemplate")
+    public RedisTemplate<String, LexerTestCaseDTO> lexerRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, LexerTestCaseDTO> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        LexerTestCaseProtobufRedisSerializer serializer=new LexerTestCaseProtobufRedisSerializer();
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
 

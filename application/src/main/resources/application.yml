@@ -50,6 +50,7 @@ role-permission: '{"student":[1001,1002],"teacher":[],"admin":[]}'
 redis-key-prefix:
   login-info: 'login:info:'
   login-record: 'login:record:'
+  lexer-testcase: 'lexer:testcase'
 
 expire-time:
   login-info: 18000
@@ -65,3 +66,13 @@ obj-question:
   delimiter: '&1klB!'
   choose-weight: 5
   fill-weight: 5
+oj:
+  source-code-delimiter:
+    prefix: 'TEjM536xCG'
+    suffix: 'hiIHETHAf1'
+  lexer:
+    testcase-weight: 5
+distribute:
+  id-generator:
+    datacenterId: 0
+    workerId: 0

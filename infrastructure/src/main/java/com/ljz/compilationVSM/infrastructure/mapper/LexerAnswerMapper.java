@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2024-12-25 09:58:21
  */
 public interface LexerAnswerMapper extends BaseMapper<LexerAnswerPO> {
-
+    void updateLexerAnswer(LexerAnswerPO lexerAnswerPO);
 }

@@ -1,6 +1,7 @@
 package com.ljz.compilationVSM.api.iface.student;
 
 import com.ljz.compilationVSM.api.base.Response;
+import com.ljz.compilationVSM.api.request.base.SourceCodeResponse;
 import com.ljz.compilationVSM.api.request.student.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.student.CodeProblemRequest;
 import com.ljz.compilationVSM.api.response.student.*;
@@ -53,4 +54,11 @@ public interface OJIface {
      * @return 词法分析器编程语言
      */
     Response<LexerLanguageResponse> getLexerLanguage();
+
+    /**
+     * 获取学生最后一次提交的代码
+     *
+     * @return 代码数组
+     */
+    Response<SourceCodeResponse> getLastCommitCode(String lexerId);
 }

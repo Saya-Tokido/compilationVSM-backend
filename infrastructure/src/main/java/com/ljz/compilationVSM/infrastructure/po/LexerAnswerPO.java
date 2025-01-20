@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-01-15 16:09:00
+ * @since 2025-01-19 19:46:28
  */
 @Getter
 @Setter
@@ -36,7 +36,13 @@ public class LexerAnswerPO implements Serializable {
     private Long userId;
 
     /**
-     * 最后一次提交的代码id
+     * 词法分析器题目
+     */
+    @TableField("lexer_id")
+    private Long lexerId;
+
+    /**
+     * 有得分的最后一次提交的代码id
      */
     @TableField("last_code_id")
     private Long lastCodeId;

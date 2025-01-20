@@ -57,4 +57,11 @@ public interface OJService {
      */
     Map<String,List<String>> getLexerLanguage();
 
+    /**
+     * 获取学生最后一次提交的代码
+     *
+     * @return 代码数组
+     */
+    SourceCodeResponseDTO getLastCommitCode(String lexerId);
+
 }

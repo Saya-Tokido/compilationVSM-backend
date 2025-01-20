@@ -1,5 +1,6 @@
 package com.ljz.compilationVSM.common.utils;
 
+import com.ljz.compilationVSM.common.dto.LexerTestCaseDTO;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.common.dto.LoginUserDTO;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +28,8 @@ public class RedisUtil {
     private final RedisTemplate<String, String> stringMessageRedisTemplate;
 
     private final RedisTemplate<String, LoginUserDTO> loginRedisTemplate;
+
+    private final RedisTemplate<String, LexerTestCaseDTO> lexerRedisTemplate;
 
     /**
      * string类型 查询key是否存在
@@ -102,4 +106,46 @@ public class RedisUtil {
         loginRedisTemplate.opsForValue().set(key, value);
         loginRedisTemplate.expire(key, expire, TimeUnit.SECONDS);
     }
+
+    /**
+     * LexerTestCase类型 查询key是否存在
+     *
+     * @param key 待查询的key
+     * @return 查询结果
+     */
+    public boolean lexerKeyExists(String key) {
+        return Boolean.TRUE.equals(stringMessageRedisTemplate.hasKey(key));
+    }
+
+    /**
+     * LexerTestCase类型 获取值
+     *
+     * @param key 待查询的key
+     * @return 查询结果
+     */
+    public List<LexerTestCaseDTO> lexerTestCaseGet(String key) {
+        Optional<List<LexerTestCaseDTO>> lexerTestCaseOptional = Optional.ofNullable(lexerRedisTemplate.opsForList().range(key,0,-1));
+        return lexerTestCaseOptional.orElse(null);
+    }
+
+    /**
+     * LexerTestCase类型 插入值
+     *
+     * @param key    redis key
+     * @param value  待插入的值
+     */
+    public void lexerListPut(String key, List<LexerTestCaseDTO> value) {
+        lexerRedisTemplate.opsForList().leftPushAll(key,value);
+    }
+
+    /**
+     * 删除LexerTestCase类型的记录
+     *
+     * @param key redis key
+     * @return 是否删除
+     */
+    public boolean lexerListDelete(String key) {
+        return Boolean.TRUE.equals(lexerRedisTemplate.delete(key));
+    }
+
 }

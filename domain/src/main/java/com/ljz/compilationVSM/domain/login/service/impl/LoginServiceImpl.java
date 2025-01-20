@@ -35,6 +35,7 @@ public class LoginServiceImpl implements LoginService {
     private final UserRepository userRepository;
     private final RedisUtil redisUtil;
     private final BCryptUtil bCryptUtil;
+    private final SnowflakeIdGenerator idGenerator;
 
     @Value("${redis-key-prefix.login-info}")
     private String loginInfoPrefix;
@@ -63,7 +64,7 @@ public class LoginServiceImpl implements LoginService {
         // 判断是否重复登录 (用户登录记录表和登录信息表，其中登录信息表比登录记录表早过期)
         clearLoginInfoAndRecord(userPO.getId().toString());
         // 登录操作
-        long loginId = SnowflakeIdGenerator.generate();
+        long loginId = idGenerator.generate();
         // 存入redis
         LoginUserDTO loginUserDTO = new LoginUserDTO();
         loginUserDTO.setUserId(userPO.getId());
@@ -75,6 +76,7 @@ public class LoginServiceImpl implements LoginService {
         // 生成token
         LoggedDTO loggedDTO = new LoggedDTO();
         loggedDTO.setToken(TokenHandler.genAccessToken(loginId));
+        loggedDTO.setRoleId(userPO.getRole());
         return loggedDTO;
     }
 

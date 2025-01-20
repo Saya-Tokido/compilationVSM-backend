@@ -32,7 +32,14 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
     /**
      * 客观题异常
      */
-    ILLEGAL_OBJ_QUESTION_ID_ERROR(3001,"非法客观题Id");
+    ILLEGAL_OBJ_QUESTION_ID_ERROR(3001,"非法客观题Id"),
+
+    /**
+     * 词法分析器题异常
+     */
+    LEXER_PROBLEM_NOT_FOUNT(4001,"词法分析器题目不存在"),
+    LEXER_TESTCASE_NOT_FOUNT(4002,"词法分析器用例不存在"),
+    LEXER_EXAM_CLOSED(4003,"词法分析器题停止提交");
 
     /**
      * 错误码

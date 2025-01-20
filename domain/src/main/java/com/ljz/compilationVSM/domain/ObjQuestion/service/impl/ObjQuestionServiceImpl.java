@@ -20,7 +20,6 @@ import com.ljz.compilationVSM.infrastructure.po.ObjAnswerPO;
 import com.ljz.compilationVSM.infrastructure.repository.ChooseRepository;
 import com.ljz.compilationVSM.infrastructure.repository.FillRepository;
 import com.ljz.compilationVSM.infrastructure.repository.ObjAnswerRepository;
-import com.ljz.compilationVSM.infrastructure.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +48,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
     private final ChooseRepository chooseRepository;
     private final FillRepository fillRepository;
     private final ObjAnswerRepository objAnswerRepository;
-    private final StudentRepository studentRepository;
+    private final SnowflakeIdGenerator idGenerator;
 
     /**
      * 填空题作答内容分割符
@@ -148,7 +147,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
                     .collect(Collectors.joining(","));
             String fillAnswer = fillAnswerList.stream().map(ObjCheckRequestDTO.Answer::getAnswer)
                     .collect(Collectors.joining(fillDelimiter));
-            objAnswerPO.setId(SnowflakeIdGenerator.generate());
+            objAnswerPO.setId(idGenerator.generate());
             objAnswerPO.setChooseIdList(chooseIdList);
             objAnswerPO.setChooseAnswerList(String.join(chooseAnswer));
             objAnswerPO.setFillIdList(fillIdList);

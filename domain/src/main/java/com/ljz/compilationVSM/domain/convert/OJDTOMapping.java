@@ -1,5 +1,6 @@
 package com.ljz.compilationVSM.domain.convert;
 
+import com.ljz.compilationVSM.common.dto.LexerTestCaseDTO;
 import com.ljz.compilationVSM.common.enums.LevelEnum;
 import com.ljz.compilationVSM.domain.oj.dto.LexerProblemResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodBodyResponseDTO;
@@ -32,4 +33,5 @@ public interface OJDTOMapping {
     })
     LexerProblemResponseDTO lexerProblemConvert(LexerTestcasePO source);
 
+    List<LexerTestCaseDTO> lexerTestCaseConvert(List<LexerTestcasePO> source);
 }

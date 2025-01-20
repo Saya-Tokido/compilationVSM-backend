@@ -1,11 +1,13 @@
 package com.ljz.compilationVSM.web.convert;
 
+import com.ljz.compilationVSM.api.request.base.SourceCodeResponse;
 import com.ljz.compilationVSM.api.response.student.LexerProblemResponse;
 import com.ljz.compilationVSM.api.response.student.MethodBodyResponse;
 import com.ljz.compilationVSM.api.response.student.MethodResponse;
 import com.ljz.compilationVSM.domain.oj.dto.LexerProblemResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodBodyResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodResponseDTO;
+import com.ljz.compilationVSM.domain.oj.dto.SourceCodeResponseDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -19,5 +21,7 @@ public interface OJMapping {
     MethodBodyResponse methodBodyResponseConvert(MethodBodyResponseDTO source);
 
     LexerProblemResponse lexerProblemResponseConvert(LexerProblemResponseDTO source);
+
+    SourceCodeResponse sourceCodeResponseConvert(SourceCodeResponseDTO source);
 
 }

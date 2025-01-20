@@ -1,11 +1,15 @@
 package com.ljz.compilationVSM.common.utils;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * 雪花Id生成算法
  *
  * @author ljz
  * @since 2024-12-05
  */
+@Component
 public class SnowflakeIdGenerator {
 
     /**
@@ -34,23 +38,21 @@ public class SnowflakeIdGenerator {
     private final long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
     private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
+    /**
+     * 服务id
+     */
+    @Value("${distribute.id-generator.workerId}")
     private long workerId;
+
+    /**
+     * 数据中心id
+     */
+    @Value("${distribute.id-generator.datacenterId}")
     private long datacenterId;
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    public SnowflakeIdGenerator(long workerId, long datacenterId) {
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
-        }
-        if (datacenterId > maxDatacenterId || datacenterId < 0) {
-            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
-        }
-        this.workerId = workerId;
-        this.datacenterId = datacenterId;
-    }
-
-    public synchronized long nextId() {
+    private synchronized long nextId() {
         long timestamp = timeGen();
 
         if (timestamp < lastTimestamp) {
@@ -86,8 +88,7 @@ public class SnowflakeIdGenerator {
         return System.currentTimeMillis();
     }
 
-    public static long generate() {
-        SnowflakeIdGenerator idGenerator = new SnowflakeIdGenerator(1, 1);
-        return idGenerator.nextId();
+    public long generate() {
+        return nextId();
     }
 }

@@ -28,6 +28,13 @@ public enum PermissionEnum {
     OBJ_QUESTION_QUERY("获取客观题题目","1001"),
     OBJ_QUESTION_CHECK("客观题校验","1002"),
 
+    /**
+     * 词法分析器题相关权限
+     */
+    LEXER_LANGUAGE_QUERY("获取词法分析器语言","2001"),
+    LEXER_DEMO_PROBLEM_QUERY("获取词法分析器示例","2002"),
+    LEXER_LAST_COMMIT_CODE_QUERY("获取词法分析器最后一次提交代码","2003"),
+    LEXER_CODE_CHECK("词法分析器代码校验","2004"),
 
     /**
      * 重置账户

@@ -10,7 +10,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * 词法分析器题目表
+ * 配置表
  * </p>
  *
  * @author ljz
@@ -18,8 +18,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("t_lexer")
-public class LexerPO implements Serializable {
+@TableName("t_config")
+public class ConfigPO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,34 +30,16 @@ public class LexerPO implements Serializable {
     private Long id;
 
     /**
-     * 编程语言
+     * 词法分析器题截止日期
      */
-    @TableField("language")
-    private String language;
+    @TableField("lexer_deadline")
+    private LocalDateTime lexerDeadline;
 
     /**
-     * 待编程语言
+     * 最后更新人id
      */
-    @TableField("comp_language")
-    private String compLanguage;
-
-    /**
-     * 题目描述
-     */
-    @TableField("description")
-    private String description;
-
-    /**
-     * 提交次数
-     */
-    @TableField("commit_num")
-    private Long commitNum;
-
-    /**
-     * 通过次数
-     */
-    @TableField("pass_num")
-    private Long passNum;
+    @TableField("last_update_user_id")
+    private Long lastUpdateUserId;
 
     /**
      * 创建时间

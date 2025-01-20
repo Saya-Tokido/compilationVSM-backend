@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljz.compilationVSM.infrastructure.mapper.StudentMapper">
+    <update id="updateStudentInfo" parameterType="com.ljz.compilationVSM.infrastructure.po.StudentPO">
+        UPDATE t_student
+        <set>
+            <if test="number != null">
+                number = #{number}
+            </if>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="adminClass != null">
+                admin_class = #{adminClass}
+            </if>
+            <if test="teachClass != null">
+                teach_class = #{teachClass}
+            </if>
+            <if test="objGrade != null">
+                obj_grade = #{objGrade}
+            </if>
+            <if test="methodGrade != null">
+                method_grade = #{methodGrade}
+            </if>
+            <if test="lexerGrade != null">
+                lexer_grade = #{lexerGrade}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
 </mapper>
