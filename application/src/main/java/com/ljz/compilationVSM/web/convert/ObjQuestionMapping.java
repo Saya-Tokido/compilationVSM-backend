@@ -17,10 +17,6 @@ public interface ObjQuestionMapping {
 
     ObjResponse objResponseConvert(ObjResponseDTO source);
 
-    ChooseResponse chooseResponseConvert(ChooseDTO source);
-
-    FillResponse fillResponseConvert(FillDTO source);
-
     ObjCheckRequestDTO objCheckRequestDTOConvert(ObjCheckRequest source);
 
     ObjCheckResponse objCheckResponseConvert(ObjCheckResponseDTO source);

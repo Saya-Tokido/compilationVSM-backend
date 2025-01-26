@@ -7,16 +7,12 @@ import com.ljz.compilationVSM.api.request.student.*;
 import com.ljz.compilationVSM.api.response.student.*;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
-import com.ljz.compilationVSM.domain.ObjQuestion.service.ChooseService;
-import com.ljz.compilationVSM.domain.ObjQuestion.service.FillService;
 import com.ljz.compilationVSM.domain.ObjQuestion.service.ObjQuestionService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
 import com.ljz.compilationVSM.web.convert.ObjQuestionMapping;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Slf4j

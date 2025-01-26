@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.common.config;
+package com.ljz.compilationVSM.common.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;

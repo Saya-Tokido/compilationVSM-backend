@@ -10,9 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ObjQuestionDTOMapping {
-    ChooseDTO chooseConvert(ChoosePO source);
     List<ChooseDTO> chooseListConvert(List<ChoosePO> source);
-
-    FillDTO fillConvert(FillPO source);
     List<FillDTO> fillListConvert(List<FillPO> source);
 }

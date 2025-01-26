@@ -31,10 +31,6 @@ import java.util.Optional;
 public class RemoteCompilerFacadeImpl implements RemoteCompilerFacade {
 
     private final WebClient webClient;
-    @Value("${remote-compiler.token}")
-    private String token;
-    @Value("${remote-compiler.success}")
-    private String successMessage;
     @Value("${remote-compiler.path}")
     private String compilePath;
 

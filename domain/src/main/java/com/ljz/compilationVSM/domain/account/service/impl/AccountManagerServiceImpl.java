@@ -2,7 +2,7 @@ package com.ljz.compilationVSM.domain.account.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ljz.compilationVSM.common.config.CacheUtil;
+import com.ljz.compilationVSM.common.utils.CacheUtil;
 import com.ljz.compilationVSM.common.enums.RoleEnum;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;

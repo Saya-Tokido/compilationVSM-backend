@@ -5,6 +5,7 @@ import com.ljz.compilationVSM.common.dto.LoginUserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
@@ -25,11 +26,13 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
 
-    private final RedisTemplate<String, String> stringMessageRedisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
     private final RedisTemplate<String, LoginUserDTO> loginRedisTemplate;
 
     private final RedisTemplate<String, LexerTestCaseDTO> lexerRedisTemplate;
+
+
 
     /**
      * string类型 查询key是否存在
@@ -38,7 +41,7 @@ public class RedisUtil {
      * @return 查询结果
      */
     public boolean stringKeyExists(String key) {
-        return Boolean.TRUE.equals(stringMessageRedisTemplate.hasKey(key));
+        return Boolean.TRUE.equals(stringRedisTemplate.hasKey(key));
     }
 
     /**
@@ -48,7 +51,7 @@ public class RedisUtil {
      * @return 查询结果
      */
     public String stringValueGet(String key) {
-        Optional<Object> stringOptional = Optional.ofNullable(stringMessageRedisTemplate.opsForValue().get(key));
+        Optional<Object> stringOptional = Optional.ofNullable(stringRedisTemplate.opsForValue().get(key));
         return (String) stringOptional.orElse(null);
     }
 
@@ -58,7 +61,7 @@ public class RedisUtil {
      * @param key redis key
      */
     public void stringDelete(String key) {
-        stringMessageRedisTemplate.delete(key);
+        stringRedisTemplate.delete(key);
     }
 
     /**
@@ -80,11 +83,11 @@ public class RedisUtil {
      * @param expire 过期时间，秒单位 如果为 0 则是永不过期
      */
     public void stringExpirePut(String key, String value, long expire) {
-        stringMessageRedisTemplate.opsForValue().set(key, value);
+        stringRedisTemplate.opsForValue().set(key, value);
         if (0 == expire) {
             return;
         }
-        stringMessageRedisTemplate.expire(key, expire, TimeUnit.SECONDS);
+        stringRedisTemplate.expire(key, expire, TimeUnit.SECONDS);
     }
 
     /**
@@ -94,7 +97,7 @@ public class RedisUtil {
      * @param value  待插入的值
      */
     public void stringExpirePutNX(String key, String value) {
-        stringMessageRedisTemplate.opsForValue().setIfAbsent(key,value);
+        stringRedisTemplate.opsForValue().setIfAbsent(key,value);
     }
 
     /**
@@ -107,7 +110,7 @@ public class RedisUtil {
      */
     public Object stringLuaExecute(String luaScript, List<String> keys, Object... args) {
         RedisScript<Object> script = new DefaultRedisScript<>(luaScript, Object.class);
-        return stringMessageRedisTemplate.execute(script, keys, args);
+        return stringRedisTemplate.execute(script, keys, args);
     }
 
     /**
@@ -138,7 +141,7 @@ public class RedisUtil {
      * @return 查询结果
      */
     public boolean lexerKeyExists(String key) {
-        return Boolean.TRUE.equals(stringMessageRedisTemplate.hasKey(key));
+        return Boolean.TRUE.equals(stringRedisTemplate.hasKey(key));
     }
 
     /**
