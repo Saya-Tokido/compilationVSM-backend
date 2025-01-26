@@ -8,7 +8,7 @@
 // * @author 劳金赞
 // * @since 2024-12-24
 // */
-//public interface AccountIface {
+//public interface AccountManagerIface {
 //
 //    Response<Void>
 //}

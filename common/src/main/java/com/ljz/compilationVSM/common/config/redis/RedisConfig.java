@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.common.config;
+package com.ljz.compilationVSM.common.config.redis;
 
 
 import com.ljz.compilationVSM.common.config.redis.protobuf.serializer.LexerTestCaseProtobufRedisSerializer;

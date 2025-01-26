@@ -71,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
         loginUserDTO.setUserName(userPO.getUserName());
         loginUserDTO.setRole(userPO.getRole());
         loginUserDTO.setLoginTimestamp(System.currentTimeMillis());
-        redisUtil.stringHashExpirePut(loginRecordPrefix + userPO.getId().toString(), String.valueOf(loginId), loginRecordExpire);
+        redisUtil.stringExpirePut(loginRecordPrefix + userPO.getId().toString(), String.valueOf(loginId), loginRecordExpire);
         redisUtil.loginUserExpirePut(loginInfoPrefix + loginId, loginUserDTO, loginInfoExpire);
         // 生成token
         LoggedDTO loggedDTO = new LoggedDTO();
@@ -91,7 +91,7 @@ public class LoginServiceImpl implements LoginService {
      * @param userId 用户Id
      */
     private void clearLoginInfoAndRecord(String userId) {
-        if (redisUtil.stringHashKeyExists(loginRecordPrefix + userId)) {
+        if (redisUtil.stringKeyExists(loginRecordPrefix + userId)) {
             Optional<String> loginIdOptional = Optional.ofNullable(redisUtil.stringValueGet(loginRecordPrefix + userId));
             if (loginIdOptional.isPresent()) {
                 // 先删除登录信息再删除登录记录，登录信息存在是登录记录存在的充分不必要条件

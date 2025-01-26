@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljz.compilationVSM.infrastructure.mapper.UserMapper">
+    <select id="getUser" parameterType="com.ljz.compilationVSM.infrastructure.po.UserPO" resultType="com.ljz.compilationVSM.infrastructure.po.UserPO">
+        SELECT id,user_name,password,role
+        FROM t_user
+        <where>
+            is_delete = 0
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="userName != null">
+                AND user_name = #{userName}
+            </if>
+            <if test="password != null">
+                AND password = #{password}
+            </if>
+            <if test="role != null">
+                AND role = #{role}
+            </if>
+        </where>
+    </select>
 
 </mapper>

@@ -51,6 +51,11 @@ redis-key-prefix:
   login-info: 'login:info:'
   login-record: 'login:record:'
   lexer-testcase: 'lexer:testcase'
+  bloom-filter: 'bloom:filter'
+  hash-seed: 'hash:seed'
+cache-key:
+  exist-user: 'existUser'
+  absent-user: 'absentUser'
 
 expire-time:
   login-info: 18000
@@ -76,3 +81,7 @@ distribute:
   id-generator:
     datacenterId: 0
     workerId: 0
+account:
+  password:
+    student: '123456'
+    teacher: 'nARZ+No!n6yq6*'
