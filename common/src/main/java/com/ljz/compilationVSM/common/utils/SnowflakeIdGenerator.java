@@ -91,4 +91,8 @@ public class SnowflakeIdGenerator {
     public long generate() {
         return nextId();
     }
+
+    public static void main(String[] args) {
+        System.out.println(new SnowflakeIdGenerator().generate());
+    }
 }

@@ -34,4 +34,7 @@ public class BCryptUtil {
         return BCrypt.hashpw(plainText,BCrypt.gensalt());
     }
 
+    public static void main(String[] args) {
+        System.out.println(new BCryptUtil().encryptMessage("04a28b58a6b142cc98bb5e4dba840fa9"));
+    }
 }

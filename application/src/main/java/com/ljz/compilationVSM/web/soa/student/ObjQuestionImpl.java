@@ -35,7 +35,7 @@ public class ObjQuestionImpl implements ObjQuestionIface {
     @Override
     @PostMapping("/check")
     @UserAuth(permission = PermissionEnum.OBJ_QUESTION_CHECK)
-    public Response<ObjCheckResponse> checkObjQuestion(ObjCheckRequest request) {
+    public Response<ObjCheckResponse> checkObjQuestion(@RequestBody ObjCheckRequest request) {
         ObjCheckResponseDTO objCheckResponseDTO = objQuestionService.checkObjQuestion(objQuestionMapping.objCheckRequestDTOConvert(request));
         ObjCheckResponse response = objQuestionMapping.objCheckResponseConvert(objCheckResponseDTO);
         return Response.success(response);

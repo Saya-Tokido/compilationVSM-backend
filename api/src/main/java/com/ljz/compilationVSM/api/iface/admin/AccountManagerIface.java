@@ -1,7 +1,8 @@
-package com.ljz.compilationVSM.api.iface.teacher;
+package com.ljz.compilationVSM.api.iface.admin;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.request.admin.StudentUserCreateRequest;
+import com.ljz.compilationVSM.api.request.admin.TeacherUserCreateRequest;
 
 /**
  * 账号管理接口
@@ -18,4 +19,12 @@ public interface AccountManagerIface {
      * @return 成功
      */
     Response<Void> addStudentUser(StudentUserCreateRequest request);
+
+    /**
+     *  添加单个教师用户
+     *
+     * @param request 请求
+     * @return 成功
+     */
+    Response<Void> addTeacherUser(TeacherUserCreateRequest request);
 }

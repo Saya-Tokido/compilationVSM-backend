@@ -13,6 +13,11 @@
 student1
 密码
 Wp-J*^Co_!
+
+用户名
+admin1
+密码
+V*vz&eh@g@
 ```
 
 ### 函数体

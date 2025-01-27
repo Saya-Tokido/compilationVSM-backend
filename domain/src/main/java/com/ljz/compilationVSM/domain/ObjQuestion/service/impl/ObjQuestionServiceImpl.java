@@ -1,6 +1,7 @@
 package com.ljz.compilationVSM.domain.ObjQuestion.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
@@ -17,13 +18,16 @@ import com.ljz.compilationVSM.infrastructure.mapper.FillMapper;
 import com.ljz.compilationVSM.infrastructure.po.ChoosePO;
 import com.ljz.compilationVSM.infrastructure.po.FillPO;
 import com.ljz.compilationVSM.infrastructure.po.ObjAnswerPO;
+import com.ljz.compilationVSM.infrastructure.po.StudentPO;
 import com.ljz.compilationVSM.infrastructure.repository.ChooseRepository;
 import com.ljz.compilationVSM.infrastructure.repository.FillRepository;
 import com.ljz.compilationVSM.infrastructure.repository.ObjAnswerRepository;
+import com.ljz.compilationVSM.infrastructure.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +52,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
     private final ChooseRepository chooseRepository;
     private final FillRepository fillRepository;
     private final ObjAnswerRepository objAnswerRepository;
+    private final StudentRepository studentRepository;
     private final SnowflakeIdGenerator idGenerator;
 
     /**
@@ -80,14 +85,15 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
         responseDTO.setFillList(objQuestionDTOMapping.fillListConvert(fillList));
         // 获取判题记录
         if (isPractise()) {
-            responseDTO.setPractise(0);
-        } else {
             responseDTO.setPractise(1);
+        } else {
+            responseDTO.setPractise(0);
         }
         return responseDTO;
     }
 
     @Override
+    @Transactional
     public ObjCheckResponseDTO checkObjQuestion(ObjCheckRequestDTO requestDTO) {
         ObjCheckResponseDTO responseDTO = new ObjCheckResponseDTO();
         // 客观题校验 (由于题目数据量不大，所以采用一次性查询完再分别校验，减轻数据库压力)
@@ -156,6 +162,12 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
             objAnswerPO.setChooseGrade(chooseGrade);
             objAnswerPO.setFillGrade(fillGrade);
             objAnswerRepository.save(objAnswerPO);
+            LambdaUpdateWrapper<StudentPO> updateWrapper = Wrappers.<StudentPO>lambdaUpdate()
+                    .set(StudentPO::getObjGrade, chooseGrade + fillGrade)
+                    .eq(StudentPO::getIsDelete, Boolean.FALSE)
+                    .eq(StudentPO::getUserId, UserContextHolder.getUserId());
+            studentRepository.update(updateWrapper);
+
         }
         responseDTO.setChooseResultList(chooseResult);
         responseDTO.setFillResultList(fillResult);

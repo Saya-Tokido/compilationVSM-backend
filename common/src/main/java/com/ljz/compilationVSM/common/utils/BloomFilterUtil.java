@@ -90,13 +90,17 @@ public class BloomFilterUtil {
         Map<String, String> hashSeedMap = JsonUtil.json2Map(json);
         List<String> hashCodeList = HashAlgorithmUtil.generate(value, hashSeedMap).stream().map(hashCode -> String.valueOf(hashCode % 8192)).toList();
         String luaScript = """
-                local result1 = redis.call('GETBIT', KEYS[1], tonumber(ARGV[1]))
-                local result2 = redis.call('GETBIT', KEYS[1], tonumber(ARGV[2]))
-                local result3 = redis.call('GETBIT', KEYS[1], tonumber(ARGV[3]))
-                return 'OK' == result1 and 'OK' == result2 and 'OK' == result3
+                local result = 1
+                for i = 1, 3 do
+                    if redis.call('GETBIT', KEYS[1], tonumber(ARGV[i])) ~= 1 then
+                        result = 0
+                        break
+                    end
+                end
+                return tostring(result)
                 """;
-        Object result = redisUtil.stringLuaExecute(luaScript, Collections.singletonList(bloomFilterKey), hashCodeList.get(0), hashCodeList.get(1), hashCodeList.get(2));
-        return result.equals(true);
+        String result = (String)(redisUtil.stringLuaExecute(luaScript, Collections.singletonList(bloomFilterKey), hashCodeList.get(0), hashCodeList.get(1), hashCodeList.get(2)));
+        return result.equals("1");
     }
 
 }

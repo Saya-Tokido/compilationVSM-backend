@@ -27,14 +27,30 @@ public class MessageEncodeUtil {
     public String encode(CharSequence charSequence) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
+            return toHexString(digest.digest(charSequence.toString().getBytes()));
+        } catch (NoSuchAlgorithmException e) {
+            log.error("MD5编码异常");
+            throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 使用MD5进行编码,结果取低位16位
+     *
+     * @param charSequence 明文
+     * @return 编码后的密文
+     */
+    public String encode16(CharSequence charSequence) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
             String hexString = toHexString(digest.digest(charSequence.toString().getBytes()));
-            // 生成的md5编码为32位，所以截取后16位
             return hexString.substring(16);
         } catch (NoSuchAlgorithmException e) {
             log.error("MD5编码异常");
             throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
         }
     }
+
 
     /**
      * 两个字符串是否匹配
@@ -63,5 +79,9 @@ public class MessageEncodeUtil {
 
         return builder.toString();
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new MessageEncodeUtil().encode("V*vz&eh@g@"));
     }
 }

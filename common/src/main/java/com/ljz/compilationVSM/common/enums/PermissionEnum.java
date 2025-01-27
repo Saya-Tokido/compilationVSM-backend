@@ -37,10 +37,12 @@ public enum PermissionEnum {
     LEXER_CODE_CHECK("词法分析器代码校验","2004"),
 
     /**
-     * 重置账户
+     * 账户相关权限
      */
     RESET_STUDENT_ACCOUNT("重置学生账户","8001"),
-    RESET_TEACHER_ACCOUNT("重置教师账户","8002");
+    RESET_TEACHER_ACCOUNT("重置教师账户","8002"),
+    CREATE_STUDENT_ACCOUNT("新增学生账户","8003"),
+    CREATE_TEACHER_ACCOUNT("新增教师账户","8004");
 
 
     private final String name;
