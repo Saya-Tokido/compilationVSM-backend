@@ -10,6 +10,7 @@ CREATE TABLE `t_user`
     `is_delete`   tinyint(1) DEFAULT 0 COMMENT '逻辑删除标志，0为未删除，1为删除',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '用户表';
+CREATE INDEX index_t_user_user_name ON t_user (user_name);
 
 
 DROP TABLE IF EXISTS `t_student`;
@@ -29,6 +30,7 @@ CREATE TABLE `t_student`
     `is_delete`    tinyint(1) DEFAULT 0 COMMENT '逻辑删除标志，0为未删除，1为删除',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '学生表';
+CREATE INDEX index_t_student_number_name ON t_student (number, name);
 
 
 DROP TABLE IF EXISTS `t_teacher`;
@@ -55,7 +57,7 @@ CREATE TABLE `t_choose`
     `choice1`     varchar(40)  DEFAULT '' COMMENT '选项1',
     `choice2`     varchar(40)  DEFAULT '' COMMENT '选项2',
     `choice3`     varchar(40)  DEFAULT '' COMMENT '选项3',
-    `key_answer`  varchar(45)  DEFAULT '' COMMENT '正确选项号和内容',
+    `key_answer`  varchar(40)  DEFAULT '' COMMENT '正确选项号和内容',
     `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `is_delete`   tinyint(1) DEFAULT 0 COMMENT '逻辑删除标志，0为未删除，1为删除',
@@ -84,7 +86,7 @@ CREATE TABLE `t_obj_answer`
     `user_id`            bigint       DEFAULT 0 COMMENT '学生用户id',
     `choose_id_list`     varchar(300) DEFAULT '' COMMENT '选择题id列表',
     `fill_id_list`       varchar(300) DEFAULT '' COMMENT '填空题id列表',
-    `choose_answer_list` varchar(30)  DEFAULT '' COMMENT '选择题答题选项列表',
+    `choose_answer_list` varchar(500) DEFAULT '' COMMENT '选择题答题选项内容列表',
     `fill_answer_list`   varchar(500) DEFAULT '' COMMENT '填空题答题内容列表',
     `choose_grade`       int(11) DEFAULT 0 COMMENT '选择题成绩',
     `fill_grade`         int(11) DEFAULT 0 COMMENT '填空题成绩',

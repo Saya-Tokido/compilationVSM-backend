@@ -2,7 +2,6 @@ package com.ljz.compilationVSM.common.config.redis;
 
 
 import com.ljz.compilationVSM.common.config.redis.protobuf.serializer.LexerTestCaseProtobufRedisSerializer;
-import com.ljz.compilationVSM.common.config.redis.protobuf.serializer.StringProtobufRedisSerializer;
 import com.ljz.compilationVSM.common.config.redis.protobuf.serializer.LoginProtobufRedisSerializer;
 import com.ljz.compilationVSM.common.dto.LexerTestCaseDTO;
 import com.ljz.compilationVSM.common.dto.LoginUserDTO;
@@ -56,27 +55,6 @@ public class RedisConfig {
         template.setConnectionFactory(connectionFactory);
 
         Jackson2JsonRedisSerializer<Object> serializer=new Jackson2JsonRedisSerializer<>(Object.class);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(serializer);
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(serializer);
-
-        return template;
-    }
-
-    /**
-     * 字符串 redis模板Bean
-     *
-     * @param connectionFactory redis连接工厂
-     * @return 字符串 redis模板
-     */
-    @Bean(name="stringMessageRedisTemplate")
-    public RedisTemplate<String, String> stringMessageRedisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-        StringProtobufRedisSerializer serializer=new StringProtobufRedisSerializer();
-
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(serializer);
         template.setHashKeySerializer(new StringRedisSerializer());

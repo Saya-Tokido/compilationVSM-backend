@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.api.response.base;
+package com.ljz.compilationVSM.api.response.common;
 
 import lombok.Getter;
 import lombok.Setter;

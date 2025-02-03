@@ -2,7 +2,7 @@ package com.ljz.compilationVSM.web.soa.student;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.student.OJIface;
-import com.ljz.compilationVSM.api.request.base.SourceCodeResponse;
+import com.ljz.compilationVSM.api.request.common.SourceCodeResponse;
 import com.ljz.compilationVSM.api.request.student.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.student.CodeProblemRequest;
 import com.ljz.compilationVSM.api.response.student.*;
@@ -10,7 +10,7 @@ import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.domain.oj.dto.*;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
-import com.ljz.compilationVSM.web.convert.OJMapping;
+import com.ljz.compilationVSM.web.convert.student.OJMapping;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -71,7 +71,7 @@ public class SourceCodeUtil {
      * @return 解析后的代码行链表
      */
     public List<String> toCodeLine(String sqlCode) {
-        return Arrays.stream(sqlCode.split(sourceCodeDelimiterPrefix + "\\d+" + sourceCodeDelimiterSuffix))
+        return Arrays.stream(sqlCode.split(sourceCodeDelimiterPrefix + "\\d+" + sourceCodeDelimiterSuffix,-1))
                 // 去除首个分隔符前的空字符串
                 .skip(1)
                 .toList();
@@ -94,6 +94,6 @@ public class SourceCodeUtil {
         Matcher m2 = r2.matcher(result1);
         String result2 = m2.replaceAll("");
 
-        return Arrays.stream(result2.split("\\R")).toList();
+        return Arrays.stream(result2.split("\\R",-1)).toList();
     }
 }

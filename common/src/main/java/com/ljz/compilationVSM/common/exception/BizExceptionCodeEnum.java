@@ -30,6 +30,8 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
     PERMISSION_FORBIDDEN_ERROR(2008, "无权限访问"),
     USER_NAME_EXISTED_ERROR(2009, "用户名已存在"),
 
+
+
     /**
      * 客观题异常
      */
@@ -40,7 +42,14 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
      */
     LEXER_PROBLEM_NOT_FOUNT(4001,"词法分析器题目不存在"),
     LEXER_TESTCASE_NOT_FOUNT(4002,"词法分析器用例不存在"),
-    LEXER_EXAM_CLOSED(4003,"词法分析器题停止提交");
+    LEXER_EXAM_CLOSED(4003,"词法分析器题停止提交"),
+
+    /**
+     * 基本信息异常
+     */
+    CLASS_NO_ACCESS(5001,"无权查看非所属教学班"),
+    STUDENT_NOT_EXIST(5002,"查无此学生"),
+    OBJ_ANSWER_NOT_EXIST(5003,"学生尚未作答客观题");
 
     /**
      * 错误码

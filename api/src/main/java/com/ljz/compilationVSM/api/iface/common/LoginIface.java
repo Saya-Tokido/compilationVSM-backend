@@ -1,9 +1,9 @@
-package com.ljz.compilationVSM.api.iface.base;
+package com.ljz.compilationVSM.api.iface.common;
 
 
 import com.ljz.compilationVSM.api.base.Response;
-import com.ljz.compilationVSM.api.request.base.LoginRequest;
-import com.ljz.compilationVSM.api.response.base.LoginResponse;
+import com.ljz.compilationVSM.api.request.common.LoginRequest;
+import com.ljz.compilationVSM.api.response.common.LoginResponse;
 
 /**
  * 登录登出接口

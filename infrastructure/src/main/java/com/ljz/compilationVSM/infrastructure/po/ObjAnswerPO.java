@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-01-19 19:46:28
+ * @since 2025-02-03 12:28:43
  */
 @Getter
 @Setter
@@ -48,7 +48,7 @@ public class ObjAnswerPO implements Serializable {
     private String fillIdList;
 
     /**
-     * 选择题答题选项列表
+     * 选择题答题选项内容列表
      */
     @TableField("choose_answer_list")
     private String chooseAnswerList;

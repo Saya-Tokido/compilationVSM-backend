@@ -1,6 +1,6 @@
-package com.ljz.compilationVSM.web.convert;
+package com.ljz.compilationVSM.web.convert.student;
 
-import com.ljz.compilationVSM.api.request.base.SourceCodeResponse;
+import com.ljz.compilationVSM.api.request.common.SourceCodeResponse;
 import com.ljz.compilationVSM.api.response.student.LexerProblemResponse;
 import com.ljz.compilationVSM.api.response.student.MethodBodyResponse;
 import com.ljz.compilationVSM.api.response.student.MethodResponse;

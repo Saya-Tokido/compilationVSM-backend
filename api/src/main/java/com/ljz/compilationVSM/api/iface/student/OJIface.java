@@ -1,7 +1,7 @@
 package com.ljz.compilationVSM.api.iface.student;
 
 import com.ljz.compilationVSM.api.base.Response;
-import com.ljz.compilationVSM.api.request.base.SourceCodeResponse;
+import com.ljz.compilationVSM.api.request.common.SourceCodeResponse;
 import com.ljz.compilationVSM.api.request.student.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.student.CodeProblemRequest;
 import com.ljz.compilationVSM.api.response.student.*;

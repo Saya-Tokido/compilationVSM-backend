@@ -9,7 +9,7 @@ import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import com.ljz.compilationVSM.domain.ObjQuestion.service.ObjQuestionService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
-import com.ljz.compilationVSM.web.convert.ObjQuestionMapping;
+import com.ljz.compilationVSM.web.convert.student.ObjQuestionMapping;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

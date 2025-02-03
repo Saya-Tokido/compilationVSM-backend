@@ -12,7 +12,7 @@ import com.ljz.compilationVSM.api.response.student.OptimResponse;
 import com.ljz.compilationVSM.api.response.student.SpecificQuestionResponse;
 import com.ljz.compilationVSM.domain.aiQA.dto.FreeQAAnswerDTO;
 import com.ljz.compilationVSM.domain.aiQA.dto.SpecificAnswerDTO;
-import com.ljz.compilationVSM.web.convert.AiQAMapping;
+import com.ljz.compilationVSM.web.convert.student.AiQAMapping;
 import com.ljz.compilationVSM.domain.aiQA.dto.OptimizedDTO;
 import com.ljz.compilationVSM.domain.aiQA.service.AiQAService;
 import lombok.extern.slf4j.Slf4j;

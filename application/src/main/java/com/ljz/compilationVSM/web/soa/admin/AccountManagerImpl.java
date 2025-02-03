@@ -7,7 +7,7 @@ import com.ljz.compilationVSM.api.request.admin.TeacherUserCreateRequest;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.domain.account.service.AccountManagerService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
-import com.ljz.compilationVSM.web.convert.AccountMapping;
+import com.ljz.compilationVSM.web.convert.admin.AccountMapping;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

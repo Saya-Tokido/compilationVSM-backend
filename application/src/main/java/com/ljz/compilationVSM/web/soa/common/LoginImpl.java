@@ -1,14 +1,13 @@
-package com.ljz.compilationVSM.web.soa.base;
+package com.ljz.compilationVSM.web.soa.common;
 
 import com.ljz.compilationVSM.api.base.Response;
-import com.ljz.compilationVSM.api.iface.base.LoginIface;
-import com.ljz.compilationVSM.api.request.base.LoginRequest;
-import com.ljz.compilationVSM.api.response.base.LoginResponse;
-import com.ljz.compilationVSM.common.enums.PermissionEnum;
+import com.ljz.compilationVSM.api.iface.common.LoginIface;
+import com.ljz.compilationVSM.api.request.common.LoginRequest;
+import com.ljz.compilationVSM.api.response.common.LoginResponse;
 import com.ljz.compilationVSM.domain.login.dto.LoggedDTO;
 import com.ljz.compilationVSM.domain.login.service.LoginService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
-import com.ljz.compilationVSM.web.convert.LoginMapping;
+import com.ljz.compilationVSM.web.convert.common.LoginMapping;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

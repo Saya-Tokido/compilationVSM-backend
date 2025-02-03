@@ -1,9 +1,6 @@
 package com.ljz.compilationVSM.domain.ObjQuestion.service;
 
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ObjCheckRequestDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ObjCheckResponseDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ObjQueryDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ObjResponseDTO;
+import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 
 public interface ObjQuestionService {
     /**
@@ -22,4 +19,18 @@ public interface ObjQuestionService {
      */
     ObjCheckResponseDTO checkObjQuestion(ObjCheckRequestDTO requestDTO);
 
+    /**
+     * 获取学生客观题答题情况
+     *
+     * @param number 学生学号
+     * @return 客观题答题情况
+     */
+    ObjAnswerInfoResponseDTO getObjAnswerInfo(String number);
+
+    /**
+     * 客观题调分
+     *
+     * @param requestDTO 请求参数
+     */
+    void modifyObjScore(ObjScoreModifyRequestDTO requestDTO);
 }

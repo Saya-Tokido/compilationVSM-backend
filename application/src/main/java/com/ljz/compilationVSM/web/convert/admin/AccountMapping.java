@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.web.convert;
+package com.ljz.compilationVSM.web.convert.admin;
 
 import com.ljz.compilationVSM.api.request.admin.StudentUserCreateRequest;
 import com.ljz.compilationVSM.api.request.admin.TeacherUserCreateRequest;

@@ -2,7 +2,6 @@ package com.ljz.compilationVSM.domain.aiQA.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
-import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.dependency.facade.AiModelFacade;
 import com.ljz.compilationVSM.domain.aiQA.dto.*;
 import com.ljz.compilationVSM.domain.convert.AiModelFacadeMapping;
@@ -13,8 +12,7 @@ import com.ljz.compilationVSM.infrastructure.po.AiQAPO;
 import com.ljz.compilationVSM.infrastructure.repository.AiQARepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,8 +31,7 @@ public class AiQAServiceImpl implements AiQAService {
     @Autowired
     private AiModelFacadeMapping aiModelFacadeMapping;
     @Autowired
-    @Qualifier("stringMessageRedisTemplate")
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     private static final String ANSWER_KEY = "specific_answer";
 

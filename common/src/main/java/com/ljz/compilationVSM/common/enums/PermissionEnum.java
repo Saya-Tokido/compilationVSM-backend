@@ -5,9 +5,8 @@ import lombok.Getter;
 
 /**
  * 权限枚举<br/>
- * 权限包括四位
- * 高位第一位第二位是业务名称<br/>
- * 低位第一第二位是对应业务的权限编号
+ * 高位对应业务名称编号<br/>
+ * 低位三位对应业务的权限编号
  *
  * @author ljz
  * @since 2025-01-15
@@ -27,6 +26,8 @@ public enum PermissionEnum {
      */
     OBJ_QUESTION_QUERY("获取客观题题目","1001"),
     OBJ_QUESTION_CHECK("客观题校验","1002"),
+    OBJ_REVIEW("评阅客观题答题情况","1011"),
+    OBJ_SCORE_MODIFY("客观题调分","1012"),
 
     /**
      * 词法分析器题相关权限
@@ -42,7 +43,12 @@ public enum PermissionEnum {
     RESET_STUDENT_ACCOUNT("重置学生账户","8001"),
     RESET_TEACHER_ACCOUNT("重置教师账户","8002"),
     CREATE_STUDENT_ACCOUNT("新增学生账户","8003"),
-    CREATE_TEACHER_ACCOUNT("新增教师账户","8004");
+    CREATE_TEACHER_ACCOUNT("新增教师账户","8004"),
+
+    /**
+     * 基本信息管理相关权限
+     */
+    PAGE_QUERY_STUDENT_INFO("分页查询学生基本信息","9001");
 
 
     private final String name;

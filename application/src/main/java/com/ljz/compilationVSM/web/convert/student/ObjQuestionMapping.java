@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.web.convert;
+package com.ljz.compilationVSM.web.convert.student;
 
 import com.ljz.compilationVSM.api.request.student.ObjCheckRequest;
 import com.ljz.compilationVSM.api.request.student.ObjRequest;

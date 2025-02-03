@@ -106,9 +106,17 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                     log.warn("新建学生用户,用户名已存在,userName = {}", requestDTO.getNumber());
                     throw new BizException(BizExceptionCodeEnum.USER_NAME_EXISTED_ERROR);
                 } else {
-                    absentUser.add(requestDTO.getNumber());
+                    cacheUtil.updateCache(absentUserKey,()->{
+                        HashSet<String> strSet = new HashSet<>();
+                        strSet.add(requestDTO.getNumber());
+                        return strSet;
+                    });
                     createStudentUser(requestDTO);
-                    existUser.add(requestDTO.getNumber());
+                    cacheUtil.updateCache(existUserKey,()->{
+                        HashSet<String> strSet = new HashSet<>();
+                        strSet.add(requestDTO.getNumber());
+                        return strSet;
+                    });
                 }
             }
         }
@@ -142,9 +150,17 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                     log.warn("新建教师用户,用户名已存在,userName = {}", requestDTO.getNumber());
                     throw new BizException(BizExceptionCodeEnum.USER_NAME_EXISTED_ERROR);
                 } else {
-                    absentUser.add(requestDTO.getNumber());
+                    cacheUtil.updateCache(absentUserKey,()->{
+                        HashSet<String> strSet = new HashSet<>();
+                        strSet.add(requestDTO.getNumber());
+                        return strSet;
+                    });
                     createTeacherUser(requestDTO);
-                    existUser.add(requestDTO.getNumber());
+                    cacheUtil.updateCache(existUserKey,()->{
+                        HashSet<String> strSet = new HashSet<>();
+                        strSet.add(requestDTO.getNumber());
+                        return strSet;
+                    });
                 }
             }
         }
@@ -170,6 +186,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         studentPO.setId(idGenerator.generate());
         studentPO.setUserId(userId);
         studentRepository.save(studentPO);
+        bloomFilterUtil.add(requestDTO.getNumber());
     }
 
     /**
@@ -198,5 +215,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 .collect(Collectors.joining(" "));
         teacherPO.setClassList(teachClassListStr);
         teacherRepository.save(teacherPO);
+        bloomFilterUtil.add(requestDTO.getNumber());
     }
 }
