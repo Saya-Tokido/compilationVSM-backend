@@ -1,24 +1,17 @@
-package com.ljz.compilationVSM.domain.oj.dto;
+package com.ljz.compilationVSM.api.response.teacher;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 词法分析器题目响应DTO
+ * 词法分析器题示例响应
  *
  * @author ljz
- * @since 2024-12-03
+ * @since 2025-02-04
  */
 @Getter
 @Setter
-public class LexerProblemResponseDTO {
-
-    /**
-     * 词法分析器题目id
-     */
-    private String lexerId;
+public class LexerDemoProblemResponse {
 
     /**
      * 题目描述

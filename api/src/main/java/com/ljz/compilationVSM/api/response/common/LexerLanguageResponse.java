@@ -1,4 +1,4 @@
-package com.ljz.compilationVSM.api.response.student;
+package com.ljz.compilationVSM.api.response.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,5 +36,10 @@ public class LexerLanguageResponse {
          * 编程当前词法分析器可用的语言列表
          */
         private List<String> languageList;
+
+        /**
+         * 词法分析器题id
+         */
+        private String lexerId;
     }
 }

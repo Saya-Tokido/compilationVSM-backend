@@ -32,10 +32,13 @@ public enum PermissionEnum {
     /**
      * 词法分析器题相关权限
      */
-    LEXER_LANGUAGE_QUERY("获取词法分析器语言","2001"),
-    LEXER_DEMO_PROBLEM_QUERY("获取词法分析器示例","2002"),
+    LEXER_LANGUAGE_QUERY_EXAM("测验时获取词法分析器语言","2001"),
+    LEXER_DEMO_PROBLEM_QUERY_EXAM("测验时获取词法分析器示例","2002"),
     LEXER_LAST_COMMIT_CODE_QUERY("获取词法分析器最后一次提交代码","2003"),
     LEXER_CODE_CHECK("词法分析器代码校验","2004"),
+    LEXER_LANGUAGE_QUERY_REVIEW("评估时获取词法分析器语言","2011"),
+    LEXER_DEMO_PROBLEM_QUERY_REVIEW("评估时获取词法分析器题目","2012"),
+    LEXER_CODE_REVIEW("评估词法分析器题代码","2013"),
 
     /**
      * 账户相关权限

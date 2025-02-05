@@ -13,6 +13,7 @@ import com.ljz.compilationVSM.common.utils.UserContextHolder;
 import com.ljz.compilationVSM.dependency.dto.CompilationInputDTO;
 import com.ljz.compilationVSM.dependency.dto.CompilationOutputDTO;
 import com.ljz.compilationVSM.dependency.facade.RemoteCompilerFacade;
+import com.ljz.compilationVSM.domain.ObjQuestion.dto.StudentBaseInfoResponseDTO;
 import com.ljz.compilationVSM.domain.convert.OJDTOMapping;
 import com.ljz.compilationVSM.domain.oj.dto.*;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
@@ -195,8 +196,9 @@ public class OJServiceImpl implements OJService {
                 } else {
                     isAccept = false;
                 }
+            }else{
+                passedCase++;
             }
-            passedCase++;
         }
         Integer score = passedCase * LexerTestcaseWeight;
         if (score.equals(0)) {
@@ -211,7 +213,7 @@ public class OJServiceImpl implements OJService {
         // 成绩入库
         Long userId = UserContextHolder.getUserId();
         LambdaQueryWrapper<StudentPO> queryWrapper = Wrappers.<StudentPO>lambdaQuery()
-                .select(StudentPO::getLexerGrade,StudentPO::getId)
+                .select(StudentPO::getLexerGrade, StudentPO::getId)
                 .eq(StudentPO::getIsDelete, Boolean.FALSE)
                 .eq(StudentPO::getUserId, userId);
         StudentPO studentPO = studentRepository.getOne(queryWrapper);
@@ -262,6 +264,89 @@ public class OJServiceImpl implements OJService {
                 .computeIfAbsent(lexerPO.getCompLanguage(), k -> new ArrayList<>())
                 .add(lexerPO.getLanguage()));
         return languageHashMap;
+    }
+
+    @Override
+    public LexerLanguageResponseDTO getLexerLanguage2() {
+        LambdaQueryWrapper<LexerPO> queryWrapper = Wrappers.<LexerPO>lambdaQuery()
+                .select(LexerPO::getId, LexerPO::getLanguage, LexerPO::getCompLanguage)
+                .eq(LexerPO::getIsDelete, Boolean.FALSE);
+        List<LexerLanguageResponseDTO.LanguageMap> list = lexerRepository.list(queryWrapper).stream().map(item -> {
+            LexerLanguageResponseDTO.LanguageMap languageMap = new LexerLanguageResponseDTO.LanguageMap();
+            languageMap.setLexerId(item.getId().toString());
+            languageMap.setCompLanguage(item.getCompLanguage());
+            languageMap.setLanguageList(Collections.singletonList(item.getLanguage()));
+            return languageMap;
+        }).toList();
+        LexerLanguageResponseDTO responseDTO = new LexerLanguageResponseDTO();
+        responseDTO.setLanguageMaps(list);
+        return responseDTO;
+    }
+
+    @Override
+    public LexerProblemResponseDTO getLexerProblem(String lexerId) {
+        LambdaQueryWrapper<LexerPO> queryWrapper = Wrappers.<LexerPO>lambdaQuery()
+                .select(LexerPO::getDescription)
+                .eq(LexerPO::getIsDelete, Boolean.FALSE)
+                .eq(LexerPO::getId, lexerId);
+        LexerPO lexerPO = lexerRepository.getOne(queryWrapper);
+        LambdaQueryWrapper<LexerTestcasePO> queryWrapper2 = Wrappers.<LexerTestcasePO>lambdaQuery()
+                .select(LexerTestcasePO::getLexerId, LexerTestcasePO::getTerminalInput, LexerTestcasePO::getTerminalOutput)
+                .eq(LexerTestcasePO::getIsDelete, Boolean.FALSE)
+                .eq(LexerTestcasePO::getLexerId, lexerId)
+                .orderByAsc(LexerTestcasePO::getId)
+                .last("limit 1");
+        LexerTestcasePO lexerTestcasePO = lexerTestcaseRepository.getOne(queryWrapper2);
+        if (Objects.isNull(lexerTestcasePO)) {
+            log.warn("词法分析器题目获取,未查到lexerId = {} 的用例", lexerId);
+            throw new BizException(BizExceptionCodeEnum.LEXER_TESTCASE_NOT_FOUNT);
+        }
+        LexerProblemResponseDTO lexerProblemResponseDTO = ojConvert.lexerProblemConvert(lexerTestcasePO);
+        lexerProblemResponseDTO.setDescription(lexerPO.getDescription());
+        return lexerProblemResponseDTO;
+    }
+
+    @Override
+    public LexerCodeReviewResponseDTO getLexerAnswer(LexerReviewRequestDTO requestDTO) {
+        // 获取学生基本信息
+        LambdaQueryWrapper<StudentPO> queryWrapper = Wrappers.<StudentPO>lambdaQuery()
+                .eq(StudentPO::getIsDelete, Boolean.FALSE)
+                .eq(StudentPO::getNumber, requestDTO.getNumber());
+        StudentPO studentPO = studentRepository.getOne(queryWrapper);
+        if (Objects.isNull(studentPO)) {
+            log.info("查询学生词法分析器作答情况,学生不存在, student number = {}", requestDTO.getNumber());
+            throw new BizException(BizExceptionCodeEnum.STUDENT_NOT_EXIST);
+        }
+        LexerCodeReviewResponseDTO responseDTO = new LexerCodeReviewResponseDTO();
+        StudentBaseInfoResponseDTO baseInfoDTO = new StudentBaseInfoResponseDTO();
+        baseInfoDTO.setName(studentPO.getName());
+        baseInfoDTO.setNumber(String.valueOf(studentPO.getNumber()));
+        baseInfoDTO.setAdminClass(studentPO.getAdminClass());
+        baseInfoDTO.setTeachClass(studentPO.getTeachClass());
+        responseDTO.setBaseInfo(baseInfoDTO);
+        // 获取答题情况
+        LexerAnswerPO lexerAnswerPO = getLexerAnswer(studentPO.getUserId(), Long.parseLong(requestDTO.getLexer_id()));
+        if (Objects.isNull(lexerAnswerPO)||Objects.isNull(lexerAnswerPO.getBestCodeId()) || 0L == lexerAnswerPO.getBestCodeId()) {
+            responseDTO.setScore(0);
+            return responseDTO;
+        }
+        LambdaQueryWrapper<LexerCodePO> queryWrapper2 = Wrappers.<LexerCodePO>lambdaQuery()
+                .select(LexerCodePO::getCode)
+                .eq(LexerCodePO::getIsDelete, Boolean.FALSE)
+                .eq(LexerCodePO::getId, lexerAnswerPO.getBestCodeId());
+        LexerCodePO codePO = lexerCodeRepository.getOne(queryWrapper2);
+        if (Objects.isNull(codePO)) {
+            log.error("查询代码, student number = {}, codeId = {} 代码不存在", requestDTO.getNumber(), lexerAnswerPO.getBestCodeId());
+            throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+        }
+        String sourceCode = codePO.getCode();
+        // 将代码字符串转化为字符串列表形式
+        List<String> codeLine = sourceCodeUtil.toCodeLine(sourceCode);
+        SourceCodeResponseDTO sourceCodeResponseDTO = new SourceCodeResponseDTO();
+        sourceCodeResponseDTO.setCode(codeLine);
+        responseDTO.setSourceCode(sourceCodeResponseDTO);
+        responseDTO.setScore(studentPO.getLexerGrade());
+        return responseDTO;
     }
 
     @Override
@@ -352,8 +437,8 @@ public class OJServiceImpl implements OJService {
     private Boolean check(String current, String target) {
 //        String trimmedStr1 = current.replaceAll("^[\\s\\p{Cntrl}]+|[\\s\\p{Cntrl}]+$", "");
 //        String trimmedStr2 = target.replaceAll("^[\\s\\p{Cntrl}]+|[\\s\\p{Cntrl}]+$", "");
-        String trimmedStr1 = current.replaceAll("\\s+", "");
-        String trimmedStr2 = target.replaceAll("\\s+", "");
+        String trimmedStr1 = current.trim();
+        String trimmedStr2 = target.trim();
         return trimmedStr1.equals(trimmedStr2);
     }
 }

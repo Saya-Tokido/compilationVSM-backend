@@ -5,6 +5,7 @@ import com.ljz.compilationVSM.api.iface.student.OJIface;
 import com.ljz.compilationVSM.api.request.common.SourceCodeResponse;
 import com.ljz.compilationVSM.api.request.student.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.student.CodeProblemRequest;
+import com.ljz.compilationVSM.api.response.common.LexerLanguageResponse;
 import com.ljz.compilationVSM.api.response.student.*;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.domain.oj.dto.*;
@@ -55,7 +56,7 @@ public class OJImpl implements OJIface {
     }
 
     @PostMapping("/lexer/demo")
-    @UserAuth(permission = PermissionEnum.LEXER_DEMO_PROBLEM_QUERY)
+    @UserAuth(permission = PermissionEnum.LEXER_DEMO_PROBLEM_QUERY_EXAM)
     @Override
     public Response<LexerProblemResponse> getDemoProblem(@RequestBody CodeProblemRequest request) {
         LexerProblemResponseDTO demoProblem = ojService.getDemoProblem(request.getLanguage(), request.getCompLanguage());
@@ -72,11 +73,11 @@ public class OJImpl implements OJIface {
 
     @Override
     @GetMapping("/lexer/language")
-    @UserAuth(permission = PermissionEnum.LEXER_LANGUAGE_QUERY)
+    @UserAuth(permission = PermissionEnum.LEXER_LANGUAGE_QUERY_EXAM)
     public Response<LexerLanguageResponse> getLexerLanguage() {
         Map<String, List<String>> lexerLanguage = ojService.getLexerLanguage();
         List<LexerLanguageResponse.LanguageMap> languageMapList = lexerLanguage.entrySet().stream()
-                .map(entry -> new LexerLanguageResponse.LanguageMap(entry.getKey(), entry.getValue()))
+                .map(entry -> new LexerLanguageResponse.LanguageMap(entry.getKey(), entry.getValue(),null))
                 .collect(Collectors.toList());
 
         return Response.success(new LexerLanguageResponse(languageMapList));
