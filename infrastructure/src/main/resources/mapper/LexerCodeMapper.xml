@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljz.compilationVSM.infrastructure.mapper.LexerCodeMapper">
-
+    <select id="getBestCode" resultType="com.ljz.compilationVSM.infrastructure.po.LexerCodePO">
+        SELECT lc.code, lc.id
+        FROM `t_lexer_answer` AS la
+        LEFT JOIN `t_lexer_code` AS lc
+        ON lc.is_delete = 0
+        AND la.best_code_id = lc.id
+        WHERE la.is_delete = 0
+        AND la.lexer_id = #{lexerId}
+        AND lc.code_map = ''
+        ORDER BY la.grade DESC
+        limit #{number}
+    </select>
 </mapper>

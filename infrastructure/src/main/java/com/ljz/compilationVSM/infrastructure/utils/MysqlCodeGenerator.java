@@ -37,7 +37,7 @@ public class MysqlCodeGenerator {
                 )
                 .strategyConfig(builder -> builder
                         // 目前已有表名 t_ai_q_a,t_choose,t_fill,t_lexer,t_lexer_answer,t_lexer_code,t_lexer_p_d,t_lexer_testcase,t_method_body,t_method_name,t_method_testcase,t_obj_answer,t_student,t_teacher,t_user,t_config
-                        .addInclude("t_choose,t_obj_answer")
+                        .addInclude("t_config")
                         .addTablePrefix("t_")
                         .entityBuilder()
                         .enableFileOverride()

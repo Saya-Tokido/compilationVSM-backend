@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-01-19 19:46:28
+ * @since 2025-02-06 15:16:26
  */
 @Getter
 @Setter
@@ -34,6 +34,12 @@ public class ConfigPO implements Serializable {
      */
     @TableField("lexer_deadline")
     private LocalDateTime lexerDeadline;
+
+    /**
+     * 计分的词法分析器题id
+     */
+    @TableField("lexer_id")
+    private Long lexerId;
 
     /**
      * 最后更新人id

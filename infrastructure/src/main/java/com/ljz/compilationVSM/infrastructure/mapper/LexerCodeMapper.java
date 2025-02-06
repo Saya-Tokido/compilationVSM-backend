@@ -3,6 +3,8 @@ package com.ljz.compilationVSM.infrastructure.mapper;
 import com.ljz.compilationVSM.infrastructure.po.LexerCodePO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 词法分析器代码表 Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface LexerCodeMapper extends BaseMapper<LexerCodePO> {
 
+    List<LexerCodePO> getBestCode(Long lexerId, Integer number);
 }

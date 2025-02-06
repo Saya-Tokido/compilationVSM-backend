@@ -1,6 +1,8 @@
 package com.ljz.compilationVSM.domain.oj.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ljz.compilationVSM.common.dto.LexerTestCaseDTO;
 import com.ljz.compilationVSM.common.enums.CompileStatusEnum;
@@ -19,6 +21,7 @@ import com.ljz.compilationVSM.domain.oj.dto.*;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
 import com.ljz.compilationVSM.infrastructure.mapper.ConfigMapper;
 import com.ljz.compilationVSM.infrastructure.mapper.LexerAnswerMapper;
+import com.ljz.compilationVSM.infrastructure.mapper.LexerCodeMapper;
 import com.ljz.compilationVSM.infrastructure.mapper.StudentMapper;
 import com.ljz.compilationVSM.infrastructure.po.*;
 import com.ljz.compilationVSM.infrastructure.repository.*;
@@ -32,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * OJ服务类
@@ -55,6 +59,7 @@ public class OJServiceImpl implements OJService {
     private final StudentMapper studentMapper;
     private final LexerAnswerMapper lexerAnswerMapper;
     private final ConfigMapper configMapper;
+    private final LexerCodeMapper lexerCodeMapper;
     private final OJDTOMapping ojConvert;
     private final RemoteCompilerFacade remoteCompilerFacade;
     private final RedisUtil redisUtil;
@@ -74,6 +79,12 @@ public class OJServiceImpl implements OJService {
      */
     @Value("${oj.lexer.testcase-weight}")
     private Integer LexerTestcaseWeight;
+
+    /**
+     * 词法分析器单次映射构建数量
+     */
+    @Value("${oj.lexer.pd.number}")
+    private Integer lexerPDNumber;
 
     @Override
     public List<MethodResponseDTO> getMethodList(MethodListRequestDTO requestDTO) {
@@ -196,7 +207,7 @@ public class OJServiceImpl implements OJService {
                 } else {
                     isAccept = false;
                 }
-            }else{
+            } else {
                 passedCase++;
             }
         }
@@ -326,7 +337,7 @@ public class OJServiceImpl implements OJService {
         responseDTO.setBaseInfo(baseInfoDTO);
         // 获取答题情况
         LexerAnswerPO lexerAnswerPO = getLexerAnswer(studentPO.getUserId(), Long.parseLong(requestDTO.getLexer_id()));
-        if (Objects.isNull(lexerAnswerPO)||Objects.isNull(lexerAnswerPO.getBestCodeId()) || 0L == lexerAnswerPO.getBestCodeId()) {
+        if (Objects.isNull(lexerAnswerPO) || Objects.isNull(lexerAnswerPO.getBestCodeId()) || 0L == lexerAnswerPO.getBestCodeId()) {
             responseDTO.setScore(0);
             return responseDTO;
         }
@@ -378,6 +389,31 @@ public class OJServiceImpl implements OJService {
         SourceCodeResponseDTO sourceCodeResponseDTO = new SourceCodeResponseDTO();
         sourceCodeResponseDTO.setCode(codeLine);
         return sourceCodeResponseDTO;
+    }
+
+    @Override
+    @Transactional
+    public void plagiarismDetectionPre() {
+        // 查询此次需要构建查重代码映射的代码
+        ConfigPO config = configMapper.getConfig();
+        List<LexerCodePO> bestCodeList = lexerCodeMapper.getBestCode(config.getLexerId(), lexerPDNumber);
+        if (CollectionUtils.isEmpty(bestCodeList)) {
+            log.info("构建查重代码映射,无需要构建映射的源代码");
+            return;
+        }
+        // todo 代码行入库
+        // 构建代码行映射并入库
+        AtomicInteger count = new AtomicInteger(0);
+        bestCodeList.forEach(item -> {
+            String sqlCodeMap = sourceCodeUtil.toSqlCodeMap(item.getCode());
+            LambdaUpdateWrapper<LexerCodePO> updateWrapper = Wrappers.<LexerCodePO>lambdaUpdate()
+                    .set(LexerCodePO::getCodeMap, sqlCodeMap)
+                    .eq(LexerCodePO::getIsDelete, Boolean.FALSE)
+                    .eq(LexerCodePO::getId, item.getId());
+            lexerCodeRepository.update(updateWrapper);
+            count.incrementAndGet();
+        });
+        log.info("构建查重代码映射,共处理 {} 串代码",count.get());
     }
 
     /**

@@ -72,11 +72,13 @@ obj-question:
   choose-weight: 5
   fill-weight: 5
 oj:
-  source-code-delimiter:
-    prefix: 'TEjM536xCG'
-    suffix: 'hiIHETHAf1'
+  source-code:
+    delimiter: 'J_H7#@g6%9Ne#!Hgrj~'
   lexer:
     testcase-weight: 5
+    pd:
+      number: 5
+      delimiter: 'q'
 distribute:
   id-generator:
     datacenterId: 0

@@ -93,4 +93,12 @@ public interface OJService {
      */
     SourceCodeResponseDTO getLastCommitCode(String lexerId);
 
+    /**
+     * 代码查重准备
+     *
+     * @author ljz
+     * @since 2025-02-06
+     */
+    void plagiarismDetectionPre();
+
 }

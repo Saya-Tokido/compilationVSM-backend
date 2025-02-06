@@ -31,8 +31,8 @@ VALUES (1, 'PL0语言编译后的中间代码', 'P-Code'),
        (7, '词法分析后是什么', '语法分析'),
        (8, 'java编译后生成什么', '字节码文件');
 
-INSERT INTO t_config(id, lexer_deadline, last_update_user_id)
-values (1, '20250101000000', 0);
+INSERT INTO t_config(id, lexer_deadline, lexer_id, last_update_user_id)
+values (1, '20250101000000', 1, 0);
 
 insert into `t_lexer`(id, language, comp_language, description, commit_num, pass_num)
 values (1, "C++", "PL0", "描述", 1, 0),
@@ -48,8 +48,6 @@ values (1,
         2,
         'test8',
         'test9');
-
-
 
 
 

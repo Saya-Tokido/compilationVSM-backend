@@ -103,7 +103,7 @@ CREATE TABLE `t_lexer_answer`
 (
     `id`           bigint NOT NULL COMMENT '主键id',
     `user_id`      bigint DEFAULT 0 COMMENT '学生用户id',
-    `lexer_id`     bigint DEFAULT 0 COMMENT '词法分析器题目',
+    `lexer_id`     bigint DEFAULT 0 COMMENT '词法分析器题目id',
     `last_code_id` bigint DEFAULT 0 COMMENT '有得分的最后一次提交的代码id',
     `best_code_id` bigint DEFAULT 0 COMMENT '有得分的最高成绩的代码id',
     `grade`        int(11) DEFAULT 0 COMMENT '成绩',
@@ -197,6 +197,7 @@ CREATE TABLE `t_config`
 (
     `id`                  bigint NOT NULL COMMENT '主键id',
     `lexer_deadline`      DATETIME COMMENT '词法分析器题截止日期',
+    `lexer_id`            bigint DEFAULT 0 COMMENT '计分的词法分析器题id',
     `last_update_user_id` bigint DEFAULT 0 COMMENT '最后更新人id',
     `create_time`         timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`         timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
