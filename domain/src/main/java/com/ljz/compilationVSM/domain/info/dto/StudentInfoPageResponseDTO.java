@@ -70,7 +70,7 @@ public class StudentInfoPageResponseDTO {
         /**
          * 客观题成绩
          */
-        private Integer objGrade;
+        private Integer objScore;
 
         /**
          * 词法分析题成绩

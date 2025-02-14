@@ -101,4 +101,19 @@ public interface OJService {
      */
     void plagiarismDetectionPre();
 
+    /**
+     * 获取查重信息
+     *
+     * @return 查重信息DTO
+     */
+    LexerPDInfoResponseDTO getPdInfo();
+
+    /**
+     * 词法分析器题代码查重
+     *
+     * @param teachClass 查重的教学班
+     * @return 查重映射对数
+     */
+    Integer lexerCodePD(String teachClass);
+
 }

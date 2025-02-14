@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-01-19 19:46:28
+ * @since 2025-02-07 12:59:40
  */
 @Getter
 @Setter
@@ -62,20 +62,20 @@ public class StudentPO implements Serializable {
     /**
      * 客观题成绩
      */
-    @TableField("obj_grade")
-    private Integer objGrade;
+    @TableField("obj_score")
+    private Integer objScore;
 
     /**
      * 函数题成绩
      */
-    @TableField("method_grade")
-    private Integer methodGrade;
+    @TableField("method_score")
+    private Integer methodScore;
 
     /**
      * 词法分析题成绩
      */
-    @TableField("lexer_grade")
-    private Integer lexerGrade;
+    @TableField("lexer_score")
+    private Integer lexerScore;
 
     /**
      * 创建时间

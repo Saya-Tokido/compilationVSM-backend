@@ -2,6 +2,9 @@ package com.ljz.compilationVSM.infrastructure.mapper;
 
 import com.ljz.compilationVSM.infrastructure.po.LexerAnswerPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljz.compilationVSM.infrastructure.queryDTO.LexerPDCodeQueryDTO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface LexerAnswerMapper extends BaseMapper<LexerAnswerPO> {
     void updateLexerAnswer(LexerAnswerPO lexerAnswerPO);
+
+    /**
+     * 查重代码查询
+     *
+     * @param queryDTO 查询参数
+     * @return 查重代码id列表
+     */
+    List<Long> getPDCodeId(LexerPDCodeQueryDTO queryDTO);
 }

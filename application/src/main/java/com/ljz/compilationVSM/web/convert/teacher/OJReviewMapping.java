@@ -5,6 +5,7 @@ import com.ljz.compilationVSM.api.request.teacher.LexerReviewRequest;
 import com.ljz.compilationVSM.api.response.common.LexerLanguageResponse;
 import com.ljz.compilationVSM.api.response.teacher.LexerCodeReviewResponse;
 import com.ljz.compilationVSM.api.response.teacher.LexerDemoProblemResponse;
+import com.ljz.compilationVSM.api.response.teacher.LexerPDInfoResponse;
 import com.ljz.compilationVSM.api.response.teacher.StudentBaseInfoResponse;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.StudentBaseInfoResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.*;
@@ -34,5 +35,9 @@ public interface OJReviewMapping {
     SourceCodeResponse convert(SourceCodeResponseDTO source);
 
     StudentBaseInfoResponse convert(StudentBaseInfoResponseDTO source);
+
+    LexerPDInfoResponse convert(LexerPDInfoResponseDTO source);
+
+    LexerPDInfoResponse.PDInfo convert(LexerPDInfoResponseDTO.PDInfo source);
 
 }

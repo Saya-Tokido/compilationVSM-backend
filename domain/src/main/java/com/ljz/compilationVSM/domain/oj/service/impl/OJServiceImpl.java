@@ -2,16 +2,15 @@ package com.ljz.compilationVSM.domain.oj.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.ljz.compilationVSM.infrastructure.queryDTO.LexerPDCodeQueryDTO;
+import org.springframework.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.dto.LexerTestCaseDTO;
 import com.ljz.compilationVSM.common.enums.CompileStatusEnum;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
-import com.ljz.compilationVSM.common.utils.RedisUtil;
-import com.ljz.compilationVSM.common.utils.SnowflakeIdGenerator;
-import com.ljz.compilationVSM.common.utils.SourceCodeUtil;
-import com.ljz.compilationVSM.common.utils.UserContextHolder;
+import com.ljz.compilationVSM.common.utils.*;
 import com.ljz.compilationVSM.dependency.dto.CompilationInputDTO;
 import com.ljz.compilationVSM.dependency.dto.CompilationOutputDTO;
 import com.ljz.compilationVSM.dependency.facade.RemoteCompilerFacade;
@@ -31,11 +30,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * OJ服务类
@@ -56,6 +58,8 @@ public class OJServiceImpl implements OJService {
     private final LexerAnswerRepository lexerAnswerRepository;
     private final LexerCodeRepository lexerCodeRepository;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
+    private final LexerPDRepository lexerPDRepository;
     private final StudentMapper studentMapper;
     private final LexerAnswerMapper lexerAnswerMapper;
     private final ConfigMapper configMapper;
@@ -65,6 +69,8 @@ public class OJServiceImpl implements OJService {
     private final RedisUtil redisUtil;
     private final SnowflakeIdGenerator idGenerator;
     private final SourceCodeUtil sourceCodeUtil;
+    private final DistributeLockUtil lock;
+    private final ThreadPoolUtil threadPoolUtil;
 
     private final String METHOD_LANGUAGE = "C++";
 
@@ -85,6 +91,18 @@ public class OJServiceImpl implements OJService {
      */
     @Value("${oj.lexer.pd.number}")
     private Integer lexerPDNumber;
+
+    /**
+     * 教学班列表分隔符
+     */
+    @Value("${info.teach-class.delimiter}")
+    private String teachClassDelimiter;
+
+    @Value("${distribute.lock.key-prefix.lexer-code-pd}")
+    private String lexerCodePDLockKeyPrefix;
+
+    @Value("${distribute.lock.timeout.lexer-code-pd}")
+    private Long lexerCodePDLockTimeout;
 
     @Override
     public List<MethodResponseDTO> getMethodList(MethodListRequestDTO requestDTO) {
@@ -133,7 +151,7 @@ public class OJServiceImpl implements OJService {
         ConfigPO config = configMapper.getConfig();
         if (config.getLexerDeadline().isBefore(LocalDateTime.now())) {
             log.info("查询词法分析器题目,考试已截止");
-            throw new BizException(BizExceptionCodeEnum.LEXER_EXAM_CLOSED);
+            throw new BizException(BizExceptionCodeEnum.LEXER_EXAM_CLOSED_ERROR);
         }
         // 查询示例代码
         LambdaQueryWrapper<LexerPO> queryWrapper1 = Wrappers.<LexerPO>lambdaQuery()
@@ -144,7 +162,7 @@ public class OJServiceImpl implements OJService {
         LexerPO lexerPO = lexerRepository.getOne(queryWrapper1);
         if (Objects.isNull(lexerPO)) {
             log.warn("词法分析器题目获取,未查到编程语言为{} 待编译语言为{} 的题目", language, compLanguage);
-            throw new BizException(BizExceptionCodeEnum.LEXER_PROBLEM_NOT_FOUNT);
+            throw new BizException(BizExceptionCodeEnum.LEXER_PROBLEM_NOT_FOUNT_ERROR);
         }
         LambdaQueryWrapper<LexerTestcasePO> queryWrapper2 = Wrappers.<LexerTestcasePO>lambdaQuery()
                 .select(LexerTestcasePO::getLexerId, LexerTestcasePO::getTerminalInput, LexerTestcasePO::getTerminalOutput)
@@ -155,7 +173,7 @@ public class OJServiceImpl implements OJService {
         LexerTestcasePO lexerTestcasePO = lexerTestcaseRepository.getOne(queryWrapper2);
         if (Objects.isNull(lexerTestcasePO)) {
             log.warn("词法分析器题目获取,未查到编程语言为{} 待编译语言为{} 的用例", language, compLanguage);
-            throw new BizException(BizExceptionCodeEnum.LEXER_TESTCASE_NOT_FOUNT);
+            throw new BizException(BizExceptionCodeEnum.LEXER_TESTCASE_NOT_FOUNT_ERROR);
         }
         LexerProblemResponseDTO lexerProblemResponseDTO = ojConvert.lexerProblemConvert(lexerTestcasePO);
         lexerProblemResponseDTO.setDescription(lexerPO.getDescription());
@@ -169,7 +187,7 @@ public class OJServiceImpl implements OJService {
         ConfigPO config = configMapper.getConfig();
         if (config.getLexerDeadline().isBefore(LocalDateTime.now())) {
             log.info("词法分析器代码校验,考试已截止");
-            throw new BizException(BizExceptionCodeEnum.LEXER_EXAM_CLOSED);
+            throw new BizException(BizExceptionCodeEnum.LEXER_EXAM_CLOSED_ERROR);
         }
         // 获取测试用例
         List<LexerTestCaseDTO> lexerTestCaseDTOList;
@@ -224,7 +242,7 @@ public class OJServiceImpl implements OJService {
         // 成绩入库
         Long userId = UserContextHolder.getUserId();
         LambdaQueryWrapper<StudentPO> queryWrapper = Wrappers.<StudentPO>lambdaQuery()
-                .select(StudentPO::getLexerGrade, StudentPO::getId)
+                .select(StudentPO::getLexerScore, StudentPO::getId)
                 .eq(StudentPO::getIsDelete, Boolean.FALSE)
                 .eq(StudentPO::getUserId, userId);
         StudentPO studentPO = studentRepository.getOne(queryWrapper);
@@ -239,21 +257,21 @@ public class OJServiceImpl implements OJService {
             lexerAnswer.setLastCodeId(coderId);
             lexerAnswer.setBestCodeId(coderId);
             lexerAnswer.setUserId(userId);
-            lexerAnswer.setGrade(score);
+            lexerAnswer.setScore(score);
             lexerAnswer.setLexerId(lexerId);
             lexerAnswerRepository.save(lexerAnswer);
-            studentPO.setLexerGrade(score);
+            studentPO.setLexerScore(score);
             studentMapper.updateStudentInfo(studentPO);
         } else {
-            Integer grade = lexerAnswer.getGrade();
+            Integer grade = lexerAnswer.getScore();
             lexerAnswer.setLastCodeId(coderId);
             // 空值不更新
-            lexerAnswer.setGrade(null);
+            lexerAnswer.setScore(null);
             lexerAnswer.setBestCodeId(null);
             if (grade < score) {
                 lexerAnswer.setBestCodeId(coderId);
-                lexerAnswer.setGrade(score);
-                studentPO.setLexerGrade(score);
+                lexerAnswer.setScore(score);
+                studentPO.setLexerScore(score);
                 studentMapper.updateStudentInfo(studentPO);
             }
             lexerAnswerMapper.updateLexerAnswer(lexerAnswer);
@@ -310,7 +328,7 @@ public class OJServiceImpl implements OJService {
         LexerTestcasePO lexerTestcasePO = lexerTestcaseRepository.getOne(queryWrapper2);
         if (Objects.isNull(lexerTestcasePO)) {
             log.warn("词法分析器题目获取,未查到lexerId = {} 的用例", lexerId);
-            throw new BizException(BizExceptionCodeEnum.LEXER_TESTCASE_NOT_FOUNT);
+            throw new BizException(BizExceptionCodeEnum.LEXER_TESTCASE_NOT_FOUNT_ERROR);
         }
         LexerProblemResponseDTO lexerProblemResponseDTO = ojConvert.lexerProblemConvert(lexerTestcasePO);
         lexerProblemResponseDTO.setDescription(lexerPO.getDescription());
@@ -326,7 +344,12 @@ public class OJServiceImpl implements OJService {
         StudentPO studentPO = studentRepository.getOne(queryWrapper);
         if (Objects.isNull(studentPO)) {
             log.info("查询学生词法分析器作答情况,学生不存在, student number = {}", requestDTO.getNumber());
-            throw new BizException(BizExceptionCodeEnum.STUDENT_NOT_EXIST);
+            throw new BizException(BizExceptionCodeEnum.STUDENT_NOT_EXIST_ERROR);
+        }
+        // 校验是否为所属教学班学生
+        if (!getClassList().contains(studentPO.getTeachClass())) {
+            log.info("查询学生词法分析器作答情况,学生非所属教学班, student number = {}", requestDTO.getNumber());
+            throw new BizException(BizExceptionCodeEnum.CLASS_NO_ACCESS_ERROR);
         }
         LexerCodeReviewResponseDTO responseDTO = new LexerCodeReviewResponseDTO();
         StudentBaseInfoResponseDTO baseInfoDTO = new StudentBaseInfoResponseDTO();
@@ -356,7 +379,7 @@ public class OJServiceImpl implements OJService {
         SourceCodeResponseDTO sourceCodeResponseDTO = new SourceCodeResponseDTO();
         sourceCodeResponseDTO.setCode(codeLine);
         responseDTO.setSourceCode(sourceCodeResponseDTO);
-        responseDTO.setScore(studentPO.getLexerGrade());
+        responseDTO.setScore(studentPO.getLexerScore());
         return responseDTO;
     }
 
@@ -366,7 +389,7 @@ public class OJServiceImpl implements OJService {
         ConfigPO config = configMapper.getConfig();
         if (config.getLexerDeadline().isBefore(LocalDateTime.now())) {
             log.info("查询词法分析器最近提交代码,考试已截止");
-            throw new BizException(BizExceptionCodeEnum.LEXER_EXAM_CLOSED);
+            throw new BizException(BizExceptionCodeEnum.LEXER_EXAM_CLOSED_ERROR);
         }
         // 查询学生最新提交记录代码
         Long userId = UserContextHolder.getUserId();
@@ -413,7 +436,137 @@ public class OJServiceImpl implements OJService {
             lexerCodeRepository.update(updateWrapper);
             count.incrementAndGet();
         });
-        log.info("构建查重代码映射,共处理 {} 串代码",count.get());
+        log.info("构建查重代码映射,共处理 {} 串代码", count.get());
+    }
+
+    @Override
+    public LexerPDInfoResponseDTO getPdInfo() {
+        ConfigPO configPO = configMapper.getConfig();
+        List<LexerPDInfoResponseDTO.PDInfo> pdInfoList = getClassList().stream().map(item -> {
+            LexerPDInfoResponseDTO.PDInfo pdInfo = new LexerPDInfoResponseDTO.PDInfo();
+            pdInfo.setTeachClass(item);
+            LambdaQueryWrapper<LexerPDPO> queryWrapper = Wrappers.<LexerPDPO>lambdaQuery()
+                    .eq(LexerPDPO::getIsDelete, Boolean.FALSE)
+                    .eq(LexerPDPO::getLexerId, configPO.getLexerId())
+                    .eq(LexerPDPO::getTeachClass, item)
+                    .ge(LexerPDPO::getRate, configPO.getLexerPdRate());
+            pdInfo.setPlagiarismNum((int) lexerPDRepository.count(queryWrapper));
+            return pdInfo;
+        }).toList();
+        LexerPDInfoResponseDTO responseDTO = new LexerPDInfoResponseDTO();
+        responseDTO.setPdInfoList(pdInfoList);
+        String compLanguage = lexerRepository.getOne(Wrappers.<LexerPO>lambdaQuery()
+                .select(LexerPO::getCompLanguage)
+                .eq(LexerPO::getIsDelete, Boolean.FALSE)
+                .eq(LexerPO::getId, configPO.getLexerId())
+        ).getCompLanguage();
+        responseDTO.setCompLanguage(compLanguage);
+        return responseDTO;
+    }
+
+    @Override
+    public Integer lexerCodePD(String teachClass) {
+        // 参数校验
+        if (!getClassList().contains(teachClass)) {
+            log.info("词法分析器题代码查重,非所属教学班, teachClass = {}", teachClass);
+            throw new BizException(BizExceptionCodeEnum.CLASS_NO_ACCESS_ERROR);
+        }
+        Long userId = UserContextHolder.getUserId();
+        // 获取分布式锁（粒度为教学班）
+        boolean locked = lock.lock(lexerCodePDLockKeyPrefix + teachClass, userId.toString(), lexerCodePDLockTimeout);
+        if (!locked) {
+            log.info("词法分析器题代码查重,当前教学班正在查重, teachClass = {}", teachClass);
+            throw new BizException(BizExceptionCodeEnum.LEXER_CODE_PD_LOCKED_ERROR);
+        }
+        // 查询代码映射是否就绪
+        ConfigPO configPO = configMapper.getConfig();
+        if (!CollectionUtils.isEmpty(lexerCodeMapper.getBestCode(configPO.getLexerId(), Constants.ONE))) {
+            log.info("词法分析器题代码查重,查重还未就绪");
+            lock.unlock(lexerCodePDLockKeyPrefix + teachClass, userId.toString());
+            throw new BizException(BizExceptionCodeEnum.LEXER_CODE_PD_PREPARING_ERROR);
+        }
+        // 查询对应教学班的所有待查重代码
+        LexerPDCodeQueryDTO queryDTO = new LexerPDCodeQueryDTO();
+        queryDTO.setLexerId(configPO.getLexerId());
+        queryDTO.setTeachClass(teachClass);
+        List<Long> codeIdList = lexerAnswerMapper.getPDCodeId(queryDTO);
+        if (CollectionUtils.isEmpty(codeIdList) || codeIdList.size() == Constants.ONE) {
+            log.warn("词法分析器题代码查重,当前教学班无可查重代码,teach class = {}", teachClass);
+            lock.unlock(lexerCodePDLockKeyPrefix + teachClass, userId.toString());
+            throw new BizException(BizExceptionCodeEnum.LEXER_NO_RECORDED_CODE_ERROR);
+        }
+        // 查重任务异步进行
+        threadPoolUtil.submitTask(() -> {
+            log.info("词法分析器题代码查重任务开始执行, teach class = {}", teachClass);
+            long startTime = System.currentTimeMillis();
+            try {
+                // 开始查重
+                LambdaQueryWrapper<LexerCodePO> queryWrapper2 = Wrappers.<LexerCodePO>lambdaQuery()
+                        .select(LexerCodePO::getCodeMap, LexerCodePO::getId)
+                        .eq(LexerCodePO::getIsDelete, Boolean.FALSE)
+                        .in(LexerCodePO::getId, codeIdList);
+                List<LexerCodePO> lexerCodeList = lexerCodeRepository.list(queryWrapper2);
+                int num = lexerCodeList.size();
+                List<LexerPDPO> lexerPDList = new ArrayList<>(num * (num - 1));
+                for (int i = 0; i < num; i++) {
+                    LexerCodePO pdCodePO = lexerCodeList.get(i);
+                    // 排除此前已对比的代码
+                    LambdaQueryWrapper<LexerPDPO> queryWrapper3 = Wrappers.<LexerPDPO>lambdaQuery()
+                            .select(LexerPDPO::getCompCodeId)
+                            .eq(LexerPDPO::getIsDelete, Boolean.FALSE)
+                            .eq(LexerPDPO::getLexerId, configPO.getLexerId())
+                            .eq(LexerPDPO::getPlagiarismCodeId, pdCodePO.getId());
+                    Set<Long> existedPDCodeIdSet = lexerPDRepository.list(queryWrapper3).stream().map(LexerPDPO::getCompCodeId).collect(Collectors.toSet());
+                    String[] pdMapList = sourceCodeUtil.mapStr2mapList(pdCodePO.getCodeMap());
+                    for (int j = 0; j < num; j++) {
+                        LexerCodePO curCodePO = lexerCodeList.get(j);
+                        if (i == j || existedPDCodeIdSet.contains(curCodePO.getId())) {
+                            continue;
+                        }
+                        // 计算查重率
+                        Set<String> compSet = new HashSet<>(List.of(sourceCodeUtil.mapStr2mapList(curCodePO.getCodeMap())));
+                        int pdCount = 0;
+                        for (String line : pdMapList) {
+                            if (compSet.contains(line)) {
+                                pdCount++;
+                            }
+                        }
+                        double pdRate = pdCount * 1.0 / pdMapList.length * 100;
+                        LexerPDPO lexerPDPO = new LexerPDPO();
+                        lexerPDPO.setId(idGenerator.generate());
+                        lexerPDPO.setLexerId(configPO.getLexerId());
+                        lexerPDPO.setCompCodeId(curCodePO.getId());
+                        lexerPDPO.setTeachClass(teachClass);
+                        lexerPDPO.setRate(new BigDecimal(pdRate));
+                        lexerPDPO.setPlagiarismCodeId(pdCodePO.getId());
+                        lexerPDList.add(lexerPDPO);
+                    }
+                }
+                // 查重结果入库
+                lexerPDRepository.saveBatch(lexerPDList);
+            } catch (RejectedExecutionException exception) {
+                log.warn("当前异步任务线程池已满, 抛弃查重任务, teach class = {}", teachClass);
+                throw new BizException(BizExceptionCodeEnum.THREAD_POOL_FULL_ERROR);
+            } finally {
+                lock.unlock(lexerCodePDLockKeyPrefix + teachClass, userId.toString());
+            }
+            log.info("词法分析器题代码查重任务执行完成, teach class = {}, 用时 {}ms", teachClass, System.currentTimeMillis() - startTime);
+        });
+        return codeIdList.size();
+    }
+
+    /**
+     * 获取教师所带教学班列表
+     *
+     * @return 教师所带教学班列表
+     */
+    private List<String> getClassList() {
+        Long userId = UserContextHolder.getUserId();
+        LambdaQueryWrapper<TeacherPO> queryWrapper = Wrappers.<TeacherPO>lambdaQuery()
+                .select(TeacherPO::getClassList)
+                .eq(TeacherPO::getIsDelete, Boolean.FALSE)
+                .eq(TeacherPO::getUserId, userId);
+        return Arrays.asList(teacherRepository.getOne(queryWrapper).getClassList().split(teachClassDelimiter, -1));
     }
 
     /**
@@ -423,7 +576,7 @@ public class OJServiceImpl implements OJService {
      */
     private LexerAnswerPO getLexerAnswer(Long userId, Long lexerId) {
         LambdaQueryWrapper<LexerAnswerPO> queryWrapper = Wrappers.<LexerAnswerPO>lambdaQuery()
-                .select(LexerAnswerPO::getId, LexerAnswerPO::getLastCodeId, LexerAnswerPO::getBestCodeId, LexerAnswerPO::getGrade)
+                .select(LexerAnswerPO::getId, LexerAnswerPO::getLastCodeId, LexerAnswerPO::getBestCodeId, LexerAnswerPO::getScore)
                 .eq(LexerAnswerPO::getIsDelete, Boolean.FALSE)
                 .eq(LexerAnswerPO::getUserId, userId)
                 .eq(LexerAnswerPO::getLexerId, lexerId);

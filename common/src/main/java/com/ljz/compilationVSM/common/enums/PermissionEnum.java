@@ -39,6 +39,8 @@ public enum PermissionEnum {
     LEXER_LANGUAGE_QUERY_REVIEW("评估时获取词法分析器语言","2011"),
     LEXER_DEMO_PROBLEM_QUERY_REVIEW("评估时获取词法分析器题目","2012"),
     LEXER_CODE_REVIEW("评估词法分析器题代码","2013"),
+    LEXER_CODE_PD_INFO_QUERY("词法分析器题代码查重信息获取","2014"),
+    LEXER_CODE_PD_EXECUTE("执行词法分析器题代码查重","2015"),
 
     /**
      * 账户相关权限
@@ -49,10 +51,11 @@ public enum PermissionEnum {
     CREATE_TEACHER_ACCOUNT("新增教师账户","8004"),
 
     /**
-     * 基本信息管理相关权限
+     * 基本信息相关权限
      */
-    PAGE_QUERY_STUDENT_INFO("分页查询学生基本信息","9001");
-
+    PAGE_QUERY_STUDENT_INFO("分页查询学生基本信息","9001"),
+    TEACHER_SELF_INFO_QUERY("教师用户信息查询","9002"),
+    STUDENT_SELF_INFO_QUERY("学生用户信息查询","9003");
 
     private final String name;
     private final String code;

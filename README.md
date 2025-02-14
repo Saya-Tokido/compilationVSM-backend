@@ -640,22 +640,10 @@ int main(){
 }
 ```
 
-为每行代码标号,以`TEjM536xCG`开头和`hiIHETHAf1` 结尾，中间为行号
+将代码通过`J_H7#@g6%9Ne#!Hgrj~`进行分隔，在数据库中，代码存储格式为字符串，以下代码存储结果
 
 ```
-TEjM536xCG1hiIHETHAf1#include<iostream>
-TEjM536xCG2hiIHETHAf1#include<cstdio>
-TEjM536xCG3hiIHETHAf1using namespace std;
-TEjM536xCGh4iIHETHAf1int main(){
-TEjM536xCGh5iIHETHAf1    int getchar();
-TEjM536xCGh6iIHETHAf1    return 0;
-TEjM536xCGh7iIHETHAf1}
-```
-
-在数据库中，代码存储格式为字符串，以上代码存储结果
-
-```
-TEjM536xCG1hiIHETHAf1#include<iostream>TEjM536xCG2hiIHETHAf1#include<cstdio>TEjM536xCG3hiIHETHAf1using namespace std;TEjM536xCGh4iIHETHAf1int main(){TEjM536xCGh5iIHETHAf1    int getchar();TEjM536xCGh6iIHETHAf1    return 0;TEjM536xCGh7iIHETHAf1}
+#include<iostream>J_H7#@g6%9Ne#!Hgrj~#include<cstdio>J_H7#@g6%9Ne#!Hgrj~using namespace std;J_H7#@g6%9Ne#!Hgrj~int main(){J_H7#@g6%9Ne#!Hgrj~    int getchar();J_H7#@g6%9Ne#!Hgrj~    return 0;J_H7#@g6%9Ne#!Hgrj~}
 ```
 
 以上为代码存储方式
@@ -690,21 +678,21 @@ d935e4a352dbb21e
 277e7e114796d8bd
 ```
 
-由于md5后只存在16进制位数，可以用`q`和`p`作为分隔符
+由于md5后只存在16进制位数，可以用`q`作为分隔符
 
 ```
-q1pdba7d3f9c3453c12
-q2pdba7d3f9c3453c12
-q3p30070f119ed5a9fd
-q4pd935e4a352dbb21e
-q5p314c6ac65bc8ffc6
-q6p277e7e114796d8bd
+qdba7d3f9c3453c12
+qdba7d3f9c3453c12
+q30070f119ed5a9fd
+qd935e4a352dbb21e
+q314c6ac65bc8ffc6
+q277e7e114796d8bd
 ```
 
 存入数据库中
 
 ```
-q1pdba7d3f9c3453c12q2pdba7d3f9c3453c12q3p30070f119ed5a9fdq4pd935e4a352dbb21eq5p314c6ac65bc8ffc6q6p277e7e114796d8bd
+qdba7d3f9c3453c12qdba7d3f9c3453c12q30070f119ed5a9fdqd935e4a352dbb21eq314c6ac65bc8ffc6q277e7e114796d8bd
 ```
 
 
@@ -896,6 +884,17 @@ return 0;
 
 
 
+```
+c80dacb55c9ac4a5
+q
+31eceaf1bf50fd15
+q
+3a98369c8d1c43df
+q
+6e04c44060f2bd83
+q
+b4fdf1a90d37ad91
+```
 
 
 

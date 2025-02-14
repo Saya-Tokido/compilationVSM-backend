@@ -14,7 +14,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-02-03 12:28:43
+ * @since 2025-02-07 12:59:40
  */
 @Getter
 @Setter
@@ -62,14 +62,14 @@ public class ObjAnswerPO implements Serializable {
     /**
      * 选择题成绩
      */
-    @TableField("choose_grade")
-    private Integer chooseGrade;
+    @TableField("choose_score")
+    private Integer chooseScore;
 
     /**
      * 填空题成绩
      */
-    @TableField("fill_grade")
-    private Integer fillGrade;
+    @TableField("fill_score")
+    private Integer fillScore;
 
     /**
      * 创建时间

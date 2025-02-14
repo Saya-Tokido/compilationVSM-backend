@@ -15,7 +15,7 @@ import org.quartz.JobExecutionException;
  * @since 2025-02-06
  */
 @AllArgsConstructor
-@JobHandle(value = "plagiarismJob", cronExpression = "0 */2 * * * ?")
+@JobHandle(value = "plagiarismJob", cronExpression = "0 0 */2 * * ?")
 @Slf4j
 public class PlagiarismDetectionPreJob implements Job {
 

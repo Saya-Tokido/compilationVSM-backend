@@ -15,6 +15,7 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
      */
     SERVER_ERROR(500, "服务器内部错误"),
     PARAMETER_ERROR(1001, "请求参数错误"),
+    THREAD_POOL_FULL_ERROR(1002,"任务数已满,晚点再执行吧"),
 
 
     /**
@@ -36,21 +37,25 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
      * 客观题异常
      */
     ILLEGAL_OBJ_QUESTION_ID_ERROR(3001,"非法客观题Id"),
+    OBJ_ANSWER_NOT_EXIST_ERROR(3011,"学生尚未作答客观题"),
 
     /**
      * 词法分析器题异常
      */
-    LEXER_PROBLEM_NOT_FOUNT(4001,"词法分析器题目不存在"),
-    LEXER_TESTCASE_NOT_FOUNT(4002,"词法分析器用例不存在"),
-    LEXER_EXAM_CLOSED(4003,"词法分析器题停止提交"),
-    LEXER_ANSWER_NOT_EXIST(4011,"学生尚未作答词法分析器题"),
+    LEXER_PROBLEM_NOT_FOUNT_ERROR(4001,"词法分析器题目不存在"),
+    LEXER_TESTCASE_NOT_FOUNT_ERROR(4002,"词法分析器用例不存在"),
+    LEXER_EXAM_CLOSED_ERROR(4003,"词法分析器题停止提交"),
+    LEXER_ANSWER_NOT_EXIST_ERROR(4011,"学生尚未作答词法分析器题"),
+    LEXER_CODE_PD_LOCKED_ERROR(4012,"当前教学班词法分析器题正在查重"),
+    LEXER_CODE_PD_PREPARING_ERROR(4013,"当前词法分析器题查重还未就绪"),
+    LEXER_NO_RECORDED_CODE_ERROR(4014,"无可查重代码"),
 
     /**
      * 基本信息异常
      */
-    CLASS_NO_ACCESS(5001,"无权查看非所属教学班"),
-    STUDENT_NOT_EXIST(5002,"查无此学生"),
-    OBJ_ANSWER_NOT_EXIST(5011,"学生尚未作答客观题");
+    CLASS_NO_ACCESS_ERROR(5001,"无权查看非所属教学班"),
+    STUDENT_NOT_EXIST_ERROR(5002,"查无此学生");
+
 
     /**
      * 错误码

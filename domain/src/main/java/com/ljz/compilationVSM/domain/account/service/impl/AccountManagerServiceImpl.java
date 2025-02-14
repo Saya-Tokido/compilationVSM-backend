@@ -2,6 +2,8 @@ package com.ljz.compilationVSM.domain.account.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ljz.compilationVSM.common.config.cache.HashSetCache;
+import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.utils.*;
 import com.ljz.compilationVSM.common.enums.RoleEnum;
 import com.ljz.compilationVSM.common.exception.BizException;
@@ -48,7 +50,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     private final AccountManagerMapping accountManagerMapping;
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
-    private final CacheUtil cacheUtil;
+    private final HashSetCache hashSetCache;
     private final UserMapper userMapper;
     private final MessageEncodeUtil md5EncodeUtil;
     private final BCryptUtil bCryptUtil;
@@ -64,6 +66,12 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Value("${cache-key.absent-user}")
     private String absentUserKey;
+
+    /**
+     * 教学班列表分隔符
+     */
+    @Value("${info.teach-class.delimiter}")
+    private String teachClassDelimiter;
 
     @PostConstruct
     public void init() {
@@ -82,7 +90,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     public void addStudentUser(StudentUserCreateRequestDTO requestDTO) {
         // 用户名为学号，查询该用户是否被创建过
         // 先查询存在用户缓存
-        Set<String> existUser = cacheUtil.getCache(existUserKey, HashSet::new);
+        Set<String> existUser = hashSetCache.getCachedSet(existUserKey);
         if (existUser.contains(requestDTO.getNumber())) {
             log.warn("新建学生用户,用户名已存在,userName = {}", requestDTO.getNumber());
             throw new BizException(BizExceptionCodeEnum.USER_NAME_EXISTED_ERROR);
@@ -93,7 +101,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             createStudentUser(requestDTO);
         } else {
             // 布隆过滤器可能存在误判，查询不存在用户缓存
-            Set<String> absentUser = cacheUtil.getCache(absentUserKey, HashSet::new);
+            Set<String> absentUser = hashSetCache.getCachedSet(absentUserKey);
             if (absentUser.contains(requestDTO.getNumber())) {
                 createStudentUser(requestDTO);
             } else {
@@ -102,21 +110,13 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 queryDTO.setUserName(requestDTO.getNumber());
                 UserPO user = userMapper.getUser(queryDTO);
                 if (Objects.nonNull(user)) {
-                    existUser.add(requestDTO.getNumber());
+                    hashSetCache.addElement(existUserKey, requestDTO.getNumber(), Constants.SIXTY);
                     log.warn("新建学生用户,用户名已存在,userName = {}", requestDTO.getNumber());
                     throw new BizException(BizExceptionCodeEnum.USER_NAME_EXISTED_ERROR);
                 } else {
-                    cacheUtil.updateCache(absentUserKey,()->{
-                        HashSet<String> strSet = new HashSet<>();
-                        strSet.add(requestDTO.getNumber());
-                        return strSet;
-                    });
+                    hashSetCache.addElement(absentUserKey, requestDTO.getNumber(), Constants.SIXTY);
                     createStudentUser(requestDTO);
-                    cacheUtil.updateCache(existUserKey,()->{
-                        HashSet<String> strSet = new HashSet<>();
-                        strSet.add(requestDTO.getNumber());
-                        return strSet;
-                    });
+                    hashSetCache.addElement(existUserKey, requestDTO.getNumber(), Constants.SIXTY);
                 }
             }
         }
@@ -126,7 +126,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     public void addTeacherUser(TeacherUserCreateRequestDTO requestDTO) {
         // 用户名为工号，查询该用户是否被创建过
         // 先查询存在用户缓存
-        Set<String> existUser = cacheUtil.getCache(existUserKey, HashSet::new);
+        Set<String> existUser = hashSetCache.getCachedSet(existUserKey);
         if (existUser.contains(requestDTO.getNumber())) {
             log.warn("新建教师用户,用户名已存在,userName = {}", requestDTO.getNumber());
             throw new BizException(BizExceptionCodeEnum.USER_NAME_EXISTED_ERROR);
@@ -137,7 +137,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             createTeacherUser(requestDTO);
         } else {
             // 布隆过滤器可能存在误判，查询不存在用户缓存
-            Set<String> absentUser = cacheUtil.getCache(absentUserKey, HashSet::new);
+            Set<String> absentUser = hashSetCache.getCachedSet(absentUserKey);
             if (absentUser.contains(requestDTO.getNumber())) {
                 createTeacherUser(requestDTO);
             } else {
@@ -146,21 +146,13 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 queryDTO.setUserName(requestDTO.getNumber());
                 UserPO user = userMapper.getUser(queryDTO);
                 if (Objects.nonNull(user)) {
-                    existUser.add(requestDTO.getNumber());
+                    hashSetCache.addElement(existUserKey, requestDTO.getNumber(), Constants.SIXTY);
                     log.warn("新建教师用户,用户名已存在,userName = {}", requestDTO.getNumber());
                     throw new BizException(BizExceptionCodeEnum.USER_NAME_EXISTED_ERROR);
                 } else {
-                    cacheUtil.updateCache(absentUserKey,()->{
-                        HashSet<String> strSet = new HashSet<>();
-                        strSet.add(requestDTO.getNumber());
-                        return strSet;
-                    });
+                    hashSetCache.addElement(absentUserKey, requestDTO.getNumber(), Constants.SIXTY);
                     createTeacherUser(requestDTO);
-                    cacheUtil.updateCache(existUserKey,()->{
-                        HashSet<String> strSet = new HashSet<>();
-                        strSet.add(requestDTO.getNumber());
-                        return strSet;
-                    });
+                    hashSetCache.addElement(existUserKey, requestDTO.getNumber(), Constants.SIXTY);
                 }
             }
         }
@@ -211,8 +203,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         teacherPO.setName(requestDTO.getName());
         teacherPO.setNumber(Long.parseLong(requestDTO.getNumber()));
         String teachClassListStr = requestDTO.getTeachClass().stream()
-                .map(str -> str.replaceAll("\\s", ""))
-                .collect(Collectors.joining(" "));
+                .map(str -> str.replaceAll(teachClassDelimiter, ""))
+                .collect(Collectors.joining(teachClassDelimiter));
         teacherPO.setClassList(teachClassListStr);
         teacherRepository.save(teacherPO);
         bloomFilterUtil.add(requestDTO.getNumber());

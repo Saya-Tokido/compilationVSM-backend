@@ -3,7 +3,7 @@ package com.ljz.compilationVSM.domain.info.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ljz.compilationVSM.common.constant.Constant;
+import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.common.utils.UserContextHolder;
@@ -18,6 +18,7 @@ import com.ljz.compilationVSM.infrastructure.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -39,6 +40,12 @@ public class BasicInfoManagerServiceImpl implements BasicInfoManagerService {
     private final TeacherRepository teacherRepository;
     private final BasicInfoManagerMapping basicInfoManagerMapping;
 
+    /**
+     * 教学班列表分隔符
+     */
+    @Value("${info.teach-class.delimiter}")
+    private String teachClassDelimiter;
+
     @Override
     public StudentInfoPageResponseDTO pageQueryStudentInfo(StudentPageQueryRequestDTO requestDTO) {
         // 获取教师的所带教学班
@@ -47,13 +54,13 @@ public class BasicInfoManagerServiceImpl implements BasicInfoManagerService {
                 .select(TeacherPO::getClassList)
                 .eq(TeacherPO::getIsDelete, Boolean.FALSE)
                 .eq(TeacherPO::getUserId, userId);
-        String[] classList = teacherRepository.getOne(teacherQueryWrapper).getClassList().split("\\s");
+        String[] classList = teacherRepository.getOne(teacherQueryWrapper).getClassList().split(teachClassDelimiter,-1);
         if (0 == classList.length) {
             return null;
         }
         // 构造查询参数
         LambdaQueryWrapper<StudentPO> studentQueryWrapper = Wrappers.<StudentPO>lambdaQuery()
-                .select(StudentPO::getNumber, StudentPO::getName, StudentPO::getAdminClass, StudentPO::getTeachClass, StudentPO::getObjGrade, StudentPO::getLexerGrade)
+                .select(StudentPO::getNumber, StudentPO::getName, StudentPO::getAdminClass, StudentPO::getTeachClass, StudentPO::getObjScore, StudentPO::getLexerScore)
                 .eq(StudentPO::getIsDelete, Boolean.FALSE);
         if (StringUtils.isNotBlank(requestDTO.getNumber())) {
             studentQueryWrapper.eq(StudentPO::getNumber, Long.parseLong(requestDTO.getNumber()));
@@ -73,12 +80,12 @@ public class BasicInfoManagerServiceImpl implements BasicInfoManagerService {
             }
         }
         if (Objects.nonNull(requestDTO.getObjAsc())) {
-            studentQueryWrapper.orderByAsc(Constant.ONE.equals(requestDTO.getObjAsc()), StudentPO::getObjGrade);
-            studentQueryWrapper.orderByDesc(Constant.ZERO.equals(requestDTO.getObjAsc()), StudentPO::getObjGrade);
+            studentQueryWrapper.orderByAsc(Constants.ONE.equals(requestDTO.getObjAsc()), StudentPO::getObjScore);
+            studentQueryWrapper.orderByDesc(Constants.ZERO.equals(requestDTO.getObjAsc()), StudentPO::getObjScore);
         }
         if (Objects.nonNull(requestDTO.getLexerAsc())) {
-            studentQueryWrapper.orderByAsc(Constant.ONE.equals(requestDTO.getLexerAsc()), StudentPO::getLexerGrade);
-            studentQueryWrapper.orderByDesc(Constant.ZERO.equals(requestDTO.getLexerAsc()), StudentPO::getLexerGrade);
+            studentQueryWrapper.orderByAsc(Constants.ONE.equals(requestDTO.getLexerAsc()), StudentPO::getLexerScore);
+            studentQueryWrapper.orderByDesc(Constants.ZERO.equals(requestDTO.getLexerAsc()), StudentPO::getLexerScore);
         }
         studentQueryWrapper.orderByAsc(StudentPO::getId);
         Page<StudentPO> queryPage = new Page<>();

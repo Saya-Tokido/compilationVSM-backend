@@ -2,13 +2,16 @@ package com.ljz.compilationVSM.web.soa.teacher;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.teacher.OJReviewIface;
+import com.ljz.compilationVSM.api.request.teacher.LexerCodePDRequest;
 import com.ljz.compilationVSM.api.request.teacher.LexerReviewRequest;
 import com.ljz.compilationVSM.api.response.common.LexerLanguageResponse;
 import com.ljz.compilationVSM.api.response.teacher.LexerCodeReviewResponse;
 import com.ljz.compilationVSM.api.response.teacher.LexerDemoProblemResponse;
+import com.ljz.compilationVSM.api.response.teacher.LexerPDInfoResponse;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.domain.oj.dto.LexerCodeReviewResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.LexerLanguageResponseDTO;
+import com.ljz.compilationVSM.domain.oj.dto.LexerPDInfoResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.LexerProblemResponseDTO;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
@@ -54,5 +57,21 @@ public class OJReviewImpl implements OJReviewIface {
     public Response<LexerCodeReviewResponse> getLexerAnswer(@RequestBody LexerReviewRequest request) {
         LexerCodeReviewResponseDTO responseDTO = ojService.getLexerAnswer(ojReviewMapping.convert(request));
         return Response.success(ojReviewMapping.convert(responseDTO));
+    }
+
+    @Override
+    @GetMapping("/pd/info")
+    @UserAuth(permission = PermissionEnum.LEXER_CODE_PD_INFO_QUERY)
+    public Response<LexerPDInfoResponse> getPDInfo() {
+        LexerPDInfoResponseDTO responseDTO = ojService.getPdInfo();
+        return Response.success(ojReviewMapping.convert(responseDTO));
+    }
+
+    @Override
+    @PostMapping("/pd/execute")
+    @UserAuth(permission = PermissionEnum.LEXER_CODE_PD_EXECUTE)
+    public Response<Integer> lexerCodePD(@RequestBody LexerCodePDRequest request) {
+        Integer response = ojService.lexerCodePD(request.getTeachClass());
+        return Response.success(response);
     }
 }

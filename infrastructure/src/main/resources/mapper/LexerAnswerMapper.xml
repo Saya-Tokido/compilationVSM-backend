@@ -10,10 +10,24 @@
             <if test="bestCodeId != null">
                 best_code_id = #{bestCodeId}
             </if>
-            <if test="grade != null">
-                grade = #{grade}
+            <if test="score != null">
+                score = #{score}
             </if>
         </set>
         WHERE id = #{id}
     </update>
+
+    <select id="getPDCodeId" parameterType="com.ljz.compilationVSM.infrastructure.queryDTO.LexerPDCodeQueryDTO" resultType="java.lang.Long">
+        SELECT ans.best_code_id
+        FROM `t_student` AS stu
+        LEFT JOIN `t_lexer_answer` AS ans
+        ON ans.user_id = stu.user_id
+        <where>
+            ans.is_delete = 0
+            AND stu.is_delete = 0
+            AND ans.best_code_id is not null
+            AND stu.teach_class = #{teachClass}
+            AND ans.lexer_id = #{lexerId}
+        </where>
+    </select>
 </mapper>

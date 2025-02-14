@@ -1,7 +1,7 @@
 package com.ljz.compilationVSM.web.config.aspect;
 
 import com.ljz.compilationVSM.api.base.Response;
-import com.ljz.compilationVSM.common.constant.Constant;
+import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.dto.LoginUserDTO;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.common.enums.RoleEnum;
@@ -152,7 +152,7 @@ public class ProcessResultAspect {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         if (requestAttributes instanceof ServletRequestAttributes attributes) {
             // 获取token
-            Optional<Object> tokenOptional = Optional.ofNullable(attributes.getRequest().getHeader(Constant.TOKEN));
+            Optional<Object> tokenOptional = Optional.ofNullable(attributes.getRequest().getHeader(Constants.TOKEN));
             Long loginId;
             if (tokenOptional.isPresent()) {
                 try {

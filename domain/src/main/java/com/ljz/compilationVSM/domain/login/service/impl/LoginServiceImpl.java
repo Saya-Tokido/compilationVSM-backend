@@ -2,6 +2,8 @@ package com.ljz.compilationVSM.domain.login.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ljz.compilationVSM.common.config.cache.HashSetCache;
+import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.common.utils.*;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -36,6 +39,8 @@ public class LoginServiceImpl implements LoginService {
     private final RedisUtil redisUtil;
     private final BCryptUtil bCryptUtil;
     private final SnowflakeIdGenerator idGenerator;
+    private final BloomFilterUtil bloomFilterUtil;
+    private final HashSetCache hashSetCache;
 
     @Value("${redis-key-prefix.login-info}")
     private String loginInfoPrefix;
@@ -49,15 +54,28 @@ public class LoginServiceImpl implements LoginService {
     @Value("${expire-time.login-record}")
     private Long loginRecordExpire;
 
+    @Value("${cache-key.absent-user}")
+    private String absentUserKey;
+
     @Override
     public LoggedDTO login(LoginDTO loginDTO) {
         // 查询登录信息
+        if (hashSetCache.getCachedSet(absentUserKey).contains(loginDTO.getUserName()) || !bloomFilterUtil.exists(loginDTO.getUserName())) {
+            log.info("用户登录，用户名或密码错误");
+            throw new BizException(BizExceptionCodeEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
         LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.<UserPO>lambdaQuery()
                 .select(UserPO::getId, UserPO::getUserName, UserPO::getRole, UserPO::getPassword)
                 .eq(UserPO::getIsDelete, Boolean.FALSE)
                 .eq(UserPO::getUserName, loginDTO.getUserName());
         UserPO userPO = userRepository.getOne(queryWrapper);
-        if (Objects.isNull(userPO) || !bCryptUtil.checkMessage(loginDTO.getPassword(), userPO.getPassword())) {
+        // 缓存不存在用户
+        if (Objects.isNull(userPO) ) {
+            hashSetCache.addElement(absentUserKey,loginDTO.getUserName(), Constants.SIXTY);
+            log.info("用户登录，用户名或密码错误");
+            throw new BizException(BizExceptionCodeEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+        if (!bCryptUtil.checkMessage(loginDTO.getPassword(), userPO.getPassword())) {
             log.info("用户登录，用户名或密码错误");
             throw new BizException(BizExceptionCodeEnum.USERNAME_OR_PASSWORD_ERROR);
         }

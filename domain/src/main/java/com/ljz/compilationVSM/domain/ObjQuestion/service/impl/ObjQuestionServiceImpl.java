@@ -3,7 +3,7 @@ package com.ljz.compilationVSM.domain.ObjQuestion.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ljz.compilationVSM.common.constant.Constant;
+import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.common.utils.SnowflakeIdGenerator;
@@ -46,9 +46,15 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
     private final TeacherRepository teacherRepository;
 
     /**
-     * 填空题作答内容分割符
+     * 客观题作答题号分割符
      */
-    @Value("${obj-question.delimiter}")
+    @Value("${obj-question.id-delimiter}")
+    private String idDelimiter;
+
+    /**
+     * 客观题作答内容分割符
+     */
+    @Value("${obj-question.answer-delimiter}")
     private String answerDelimiter;
 
     /**
@@ -63,6 +69,11 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
     @Value("${obj-question.fill-weight}")
     private Integer fillWeight;
 
+    /**
+     * 教学班列表分隔符
+     */
+    @Value("${info.teach-class.delimiter}")
+    private String teachClassDelimiter;
 
     @Override
     public ObjResponseDTO getObjQuestion(ObjQueryDTO objQueryDTO) {
@@ -136,11 +147,11 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
             // 答题情况入库
             ObjAnswerPO objAnswerPO = new ObjAnswerPO();
             String chooseIdList = chooseAnswerList.stream().map(item -> item.getId().toString())
-                    .collect(Collectors.joining(","));
+                    .collect(Collectors.joining(idDelimiter));
             String chooseAnswer = chooseAnswerList.stream().map(ObjCheckRequestDTO.Answer::getAnswer)
                     .collect(Collectors.joining(answerDelimiter));
             String fillIdList = fillAnswerList.stream().map(item -> item.getId().toString())
-                    .collect(Collectors.joining(","));
+                    .collect(Collectors.joining(idDelimiter));
             String fillAnswer = fillAnswerList.stream().map(ObjCheckRequestDTO.Answer::getAnswer)
                     .collect(Collectors.joining(answerDelimiter));
             objAnswerPO.setId(idGenerator.generate());
@@ -149,11 +160,11 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
             objAnswerPO.setFillIdList(fillIdList);
             objAnswerPO.setFillAnswerList(fillAnswer);
             objAnswerPO.setUserId(UserContextHolder.getUserId());
-            objAnswerPO.setChooseGrade(chooseGrade);
-            objAnswerPO.setFillGrade(fillGrade);
+            objAnswerPO.setChooseScore(chooseGrade);
+            objAnswerPO.setFillScore(fillGrade);
             objAnswerRepository.save(objAnswerPO);
             LambdaUpdateWrapper<StudentPO> updateWrapper = Wrappers.<StudentPO>lambdaUpdate()
-                    .set(StudentPO::getObjGrade, chooseGrade + fillGrade)
+                    .set(StudentPO::getObjScore, chooseGrade + fillGrade)
                     .eq(StudentPO::getIsDelete, Boolean.FALSE)
                     .eq(StudentPO::getUserId, UserContextHolder.getUserId());
             studentRepository.update(updateWrapper);
@@ -177,11 +188,11 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
         ObjAnswerPO answerPO = objAnswerRepository.getOne(objAnswerQueryWrapper);
         if (Objects.isNull(answerPO)) {
             log.info(logPrefix+",客观题答题信息不存在,student number = {}", number);
-            throw new BizException(BizExceptionCodeEnum.OBJ_ANSWER_NOT_EXIST);
+            throw new BizException(BizExceptionCodeEnum.OBJ_ANSWER_NOT_EXIST_ERROR);
         }
-        List<String> chooseIdList = Arrays.stream(answerPO.getChooseIdList().split(",", -1)).toList();
+        List<String> chooseIdList = Arrays.stream(answerPO.getChooseIdList().split(idDelimiter, -1)).toList();
         String[] chooseAnswerList = answerPO.getChooseAnswerList().split(answerDelimiter, -1);
-        List<String> fillIdList = Arrays.stream(answerPO.getFillIdList().split(",", -1)).toList();
+        List<String> fillIdList = Arrays.stream(answerPO.getFillIdList().split(idDelimiter, -1)).toList();
         String[] fillAnswerList = answerPO.getFillAnswerList().split(answerDelimiter, -1);
         LambdaQueryWrapper<ChoosePO> chooseQuestionQueryWrapper = Wrappers.<ChoosePO>lambdaQuery()
                 .select(ChoosePO::getId, ChoosePO::getTitle, ChoosePO::getChoice0, ChoosePO::getChoice1, ChoosePO::getChoice2, ChoosePO::getChoice3, ChoosePO::getKeyAnswer)
@@ -205,7 +216,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
             chooseResponseDTO.setChoose3(choosePO.getChoice3());
             chooseResponseDTO.setKeyAnswer(choosePO.getKeyAnswer());
             chooseResponseDTO.setAnswer(chooseAnswerList[index]);
-            chooseResponseDTO.setMark(choosePO.getKeyAnswer().equals(chooseAnswerList[index]) ? Constant.ONE : Constant.ZERO);
+            chooseResponseDTO.setMark(choosePO.getKeyAnswer().equals(chooseAnswerList[index]) ? Constants.ONE : Constants.ZERO);
             chooseResponseDTOS.add(chooseResponseDTO);
         }
         List<ObjAnswerInfoResponseDTO.FillResponseDTO> fillResponseDTOS = new ArrayList<>(fillIdList.size());
@@ -215,13 +226,13 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
             fillResponseDTO.setTitle(fillPO.getTitle());
             fillResponseDTO.setKeyAnswer(fillPO.getKeyAnswer());
             fillResponseDTO.setAnswer(fillAnswerList[index]);
-            fillResponseDTO.setMark(fillPO.getKeyAnswer().equals(fillAnswerList[index]) ? Constant.ONE : Constant.ZERO);
+            fillResponseDTO.setMark(fillPO.getKeyAnswer().equals(fillAnswerList[index]) ? Constants.ONE : Constants.ZERO);
             fillResponseDTOS.add(fillResponseDTO);
         }
         ObjAnswerInfoResponseDTO responseDTO = new ObjAnswerInfoResponseDTO();
         responseDTO.setChooseList(chooseResponseDTOS);
         responseDTO.setFillList(fillResponseDTOS);
-        responseDTO.setScore(studentPO.getObjGrade());
+        responseDTO.setScore(studentPO.getObjScore());
         StudentBaseInfoResponseDTO baseInfoDTO = new StudentBaseInfoResponseDTO();
         baseInfoDTO.setName(studentPO.getName());
         baseInfoDTO.setNumber(String.valueOf(studentPO.getNumber()));
@@ -246,15 +257,15 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
                 .eq(TeacherPO::getUserId, userId);
         String[] classList = teacherRepository.getOne(teacherQueryWrapper)
                 .getClassList()
-                .split("\\s", -1);
+                .split(teachClassDelimiter, -1);
         LambdaQueryWrapper<StudentPO> studentInfoQueryWrapper = Wrappers.<StudentPO>lambdaQuery()
-                .select(StudentPO::getId,StudentPO::getName, StudentPO::getNumber, StudentPO::getAdminClass, StudentPO::getTeachClass, StudentPO::getUserId, StudentPO::getObjGrade)
+                .select(StudentPO::getId,StudentPO::getName, StudentPO::getNumber, StudentPO::getAdminClass, StudentPO::getTeachClass, StudentPO::getUserId, StudentPO::getObjScore)
                 .eq(StudentPO::getIsDelete, Boolean.FALSE)
                 .eq(StudentPO::getNumber, number);
         StudentPO studentPO = studentRepository.getOne(studentInfoQueryWrapper);
         if (Objects.isNull(studentPO)) {
             log.info(prefix + ",学生不存在,number = {}", number);
-            throw new BizException(BizExceptionCodeEnum.STUDENT_NOT_EXIST);
+            throw new BizException(BizExceptionCodeEnum.STUDENT_NOT_EXIST_ERROR);
         }
         // 学生是否为所属教学班
         boolean belong = false;
@@ -266,7 +277,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
         }
         if (!belong) {
             log.info("教师操作非所属教学班学生客观题答题情况,teacher userId = {}, student number = {}", userId, number);
-            throw new BizException(BizExceptionCodeEnum.CLASS_NO_ACCESS);
+            throw new BizException(BizExceptionCodeEnum.CLASS_NO_ACCESS_ERROR);
         }
         return studentPO;
     }
@@ -278,7 +289,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
         StudentPO studentPO = verify(requestDTO.getNumber(), logPrefix);
         // 修改客观题成绩
         LambdaUpdateWrapper<StudentPO> updateWrapper = Wrappers.<StudentPO>lambdaUpdate()
-                .set(StudentPO::getObjGrade, requestDTO.getScore())
+                .set(StudentPO::getObjScore, requestDTO.getScore())
                 .eq(StudentPO::getIsDelete, Boolean.FALSE)
                 .eq(StudentPO::getId, studentPO.getId());
         studentRepository.update(updateWrapper);

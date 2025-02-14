@@ -16,14 +16,14 @@
             <if test="teachClass != null">
                 teach_class = #{teachClass}
             </if>
-            <if test="objGrade != null">
-                obj_grade = #{objGrade}
+            <if test="objScore != null">
+                obj_score = #{objScore}
             </if>
-            <if test="methodGrade != null">
-                method_grade = #{methodGrade}
+            <if test="methodScore != null">
+                method_score = #{methodScore}
             </if>
-            <if test="lexerGrade != null">
-                lexer_grade = #{lexerGrade}
+            <if test="lexerScore != null">
+                lexer_score = #{lexerScore}
             </if>
         </set>
         WHERE id = #{id}

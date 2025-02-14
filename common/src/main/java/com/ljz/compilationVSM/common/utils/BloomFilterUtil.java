@@ -99,7 +99,7 @@ public class BloomFilterUtil {
                 end
                 return tostring(result)
                 """;
-        String result = (String)(redisUtil.stringLuaExecute(luaScript, Collections.singletonList(bloomFilterKey), hashCodeList.get(0), hashCodeList.get(1), hashCodeList.get(2)));
+        String result = redisUtil.stringLuaExecute(luaScript, Collections.singletonList(bloomFilterKey), hashCodeList.get(0), hashCodeList.get(1), hashCodeList.get(2));
         return result.equals("1");
     }
 

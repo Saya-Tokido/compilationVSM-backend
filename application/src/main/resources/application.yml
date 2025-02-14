@@ -22,6 +22,7 @@ mybatis-plus:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
   global-config:
     db-config:
       id-type: ASSIGN_ID
@@ -45,7 +46,7 @@ logging:
 
 # 自定义字段值
 
-role-permission: '{"student":[1001,1002,2001,2002,2003,2004],"teacher":[9001,1011,1012,2011,2012,2013],"admin":[8001,8002,8003,8004]}'
+role-permission: '{"student":[1001,1002,2001,2002,2003,2004,9003],"teacher":[9001,1011,1012,2011,2012,2013,9002,2014,2015],"admin":[8001,8002,8003,8004]}'
 
 redis-key-prefix:
   login-info: 'login:info:'
@@ -68,7 +69,8 @@ remote-compiler:
   baseurl: https://rapi.xjq.icu
   path: /code/run
 obj-question:
-  delimiter: '&1klB!'
+  id-delimiter: ','
+  answer-delimiter: '&1klB!'
   choose-weight: 5
   fill-weight: 5
 oj:
@@ -77,12 +79,20 @@ oj:
   lexer:
     testcase-weight: 5
     pd:
-      number: 5
+      number: 20
       delimiter: 'q'
+info:
+  teach-class:
+    delimiter: '\s'
 distribute:
   id-generator:
     datacenterId: 0
     workerId: 0
+  lock:
+    key-prefix:
+      lexer-code-pd: 'lexer:code:pd:'
+    timeout:
+      lexer-code-pd: 300000
 account:
   password:
     student: '123456'

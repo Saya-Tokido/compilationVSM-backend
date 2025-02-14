@@ -69,9 +69,19 @@ public class SourceCodeUtil {
         return codeLine.stream()
                 .filter(str -> !str.matches("[\\s,;'\"]*[{()}]*"))
                 .map(this::replaceVariablesAndFunctions)
-                .map(item->item.replaceAll("\\R",""))
+                .map(item -> item.replaceAll("\\R", ""))
                 .map(messageEncodeUtil::encode16)
                 .collect(Collectors.joining(pdDelimiter));
+    }
+
+    /**
+     * 将数据库中映射字符串解析为映射数组
+     *
+     * @param mapStr 映射字符串
+     * @return 映射数组
+     */
+    public String[] mapStr2mapList(String mapStr) {
+        return mapStr.split(pdDelimiter, -1);
     }
 
     /**

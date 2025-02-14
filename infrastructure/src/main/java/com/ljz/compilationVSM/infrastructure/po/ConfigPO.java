@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-02-06 15:16:26
+ * @since 2025-02-11 20:35:31
  */
 @Getter
 @Setter
@@ -40,6 +41,12 @@ public class ConfigPO implements Serializable {
      */
     @TableField("lexer_id")
     private Long lexerId;
+
+    /**
+     * 查重率阈值,百分比
+     */
+    @TableField("lexer_pd_rate")
+    private BigDecimal lexerPdRate;
 
     /**
      * 最后更新人id

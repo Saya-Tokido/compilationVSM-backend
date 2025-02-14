@@ -6,7 +6,7 @@ package com.ljz.compilationVSM.common.constant;
  * @author ljz
  * @since 2024-12-26
  */
-public class Constant {
+public class Constants {
 
     /**
      * number
@@ -14,7 +14,7 @@ public class Constant {
     public static final Integer ZERO = 0;
     public static final Integer ONE = 1;
     public static final Integer TWO = 2;
-
+    public static final Integer SIXTY = 60;
 
 
 

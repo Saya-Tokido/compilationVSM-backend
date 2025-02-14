@@ -108,8 +108,8 @@ public class RedisUtil {
      * @param args      传入Lua的参数
      * @return 执行结果
      */
-    public Object stringLuaExecute(String luaScript, List<String> keys, Object... args) {
-        RedisScript<Object> script = new DefaultRedisScript<>(luaScript, Object.class);
+    public String stringLuaExecute(String luaScript, List<String> keys, Object... args) {
+        RedisScript<String> script = new DefaultRedisScript<>(luaScript, String.class);
         return stringRedisTemplate.execute(script, keys, args);
     }
 

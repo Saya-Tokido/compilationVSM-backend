@@ -10,7 +10,7 @@
         WHERE la.is_delete = 0
         AND la.lexer_id = #{lexerId}
         AND lc.code_map = ''
-        ORDER BY la.grade DESC
+        ORDER BY la.score DESC
         limit #{number}
     </select>
 </mapper>

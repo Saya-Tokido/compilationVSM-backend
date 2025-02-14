@@ -15,7 +15,7 @@ import lombok.Setter;
  * </p>
  *
  * @author ljz
- * @since 2025-01-19 19:46:28
+ * @since 2025-02-11 20:35:31
  */
 @Getter
 @Setter
@@ -49,10 +49,16 @@ public class LexerPDPO implements Serializable {
     private Long compCodeId;
 
     /**
-     * 填空题成绩
+     * 查重率,百分比
      */
-    @TableField("fill_grade")
-    private BigDecimal fillGrade;
+    @TableField("rate")
+    private BigDecimal rate;
+
+    /**
+     * 查重教学班
+     */
+    @TableField("teach_class")
+    private String teachClass;
 
     /**
      * 创建时间
