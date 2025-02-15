@@ -555,6 +555,34 @@ public class OJServiceImpl implements OJService {
         return codeIdList.size();
     }
 
+    @Override
+    public LexerPlaStudentInfoResponseDTO getPlaStudentInfo(String teachClass) {
+        if (!getClassList().contains(teachClass)) {
+            log.info("词法分析器题代码抄袭学生导出,非所属教学班, teachClass = {}", teachClass);
+            throw new BizException(BizExceptionCodeEnum.CLASS_NO_ACCESS_ERROR);
+        }
+        ConfigPO configPO = configMapper.getConfig();
+        LambdaQueryWrapper<LexerPDPO> queryWrapper = Wrappers.<LexerPDPO>lambdaQuery()
+                .select(LexerPDPO::getPlagiarismCodeId, LexerPDPO::getCompCodeId)
+                .eq(LexerPDPO::getIsDelete, Boolean.FALSE)
+                .eq(LexerPDPO::getLexerId, configPO.getLexerId())
+                .eq(LexerPDPO::getTeachClass, teachClass)
+                .ge(LexerPDPO::getRate, configPO.getLexerPdRate());
+        List<LexerPDPO> lexerPDPOList = lexerPDRepository.list(queryWrapper);
+        if(CollectionUtils.isEmpty(lexerPDPOList)){
+            return new LexerPlaStudentInfoResponseDTO();
+        }
+        Set<Long> codeIdSet = new HashSet<>();
+        for(LexerPDPO lexerPDPO:lexerPDPOList){
+            codeIdSet.add(lexerPDPO.getCompCodeId());
+            codeIdSet.add(lexerPDPO.getPlagiarismCodeId());
+        }
+        List<StudentPO> studentPOList = studentMapper.getStudentsByCodeIds(codeIdSet);
+        LexerPlaStudentInfoResponseDTO responseDTO = new LexerPlaStudentInfoResponseDTO();
+        responseDTO.setStudentList(ojConvert.convert(studentPOList));
+        return responseDTO;
+    }
+
     /**
      * 获取教师所带教学班列表
      *

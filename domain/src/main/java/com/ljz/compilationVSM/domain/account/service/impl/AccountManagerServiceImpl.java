@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -156,6 +155,12 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 }
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public void addStudentUserBatch(List<StudentUserCreateRequestDTO> requestDTO) {
+        requestDTO.forEach(this::addStudentUser);
     }
 
     /**

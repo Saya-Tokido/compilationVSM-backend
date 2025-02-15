@@ -14,9 +14,11 @@ import java.util.List;
  * @author ljz
  * @since 2025-01-20
  */
-@Mapper(componentModel = "spring",imports = {List.class})
+@Mapper(componentModel = "spring", imports = {List.class})
 public interface AccountMapping {
     StudentUserCreateRequestDTO convert(StudentUserCreateRequest source);
 
     TeacherUserCreateRequestDTO convert(TeacherUserCreateRequest source);
+
+    List<StudentUserCreateRequestDTO> convert(List<StudentUserCreateRequest> source);
 }

@@ -2,12 +2,14 @@ package com.ljz.compilationVSM.domain.convert;
 
 import com.ljz.compilationVSM.common.dto.LexerTestCaseDTO;
 import com.ljz.compilationVSM.common.enums.LevelEnum;
+import com.ljz.compilationVSM.domain.ObjQuestion.dto.StudentBaseInfoResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.LexerProblemResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodBodyResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.MethodResponseDTO;
 import com.ljz.compilationVSM.infrastructure.po.LexerTestcasePO;
 import com.ljz.compilationVSM.infrastructure.po.MethodBodyPO;
 import com.ljz.compilationVSM.infrastructure.po.MethodNamePO;
+import com.ljz.compilationVSM.infrastructure.po.StudentPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -34,4 +36,8 @@ public interface OJDTOMapping {
     LexerProblemResponseDTO lexerProblemConvert(LexerTestcasePO source);
 
     List<LexerTestCaseDTO> lexerTestCaseConvert(List<LexerTestcasePO> source);
+
+    List<StudentBaseInfoResponseDTO> convert(List<StudentPO> source);
+
+    StudentBaseInfoResponseDTO convert(StudentPO source);
 }

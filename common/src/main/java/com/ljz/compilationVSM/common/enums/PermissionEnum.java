@@ -41,6 +41,7 @@ public enum PermissionEnum {
     LEXER_CODE_REVIEW("评估词法分析器题代码","2013"),
     LEXER_CODE_PD_INFO_QUERY("词法分析器题代码查重信息获取","2014"),
     LEXER_CODE_PD_EXECUTE("执行词法分析器题代码查重","2015"),
+    LEXER_PD_STUDENT_EXPORT("词法分析器题抄袭学生数据导出","2016"),
 
     /**
      * 账户相关权限
@@ -49,6 +50,7 @@ public enum PermissionEnum {
     RESET_TEACHER_ACCOUNT("重置教师账户","8002"),
     CREATE_STUDENT_ACCOUNT("新增学生账户","8003"),
     CREATE_TEACHER_ACCOUNT("新增教师账户","8004"),
+    CREATE_STUDENT_ACCOUNT_BY_EXCEL("通过Excel添加学生账户","8005"),
 
     /**
      * 基本信息相关权限

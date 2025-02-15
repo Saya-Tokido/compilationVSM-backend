@@ -3,6 +3,8 @@ package com.ljz.compilationVSM.domain.account.service;
 import com.ljz.compilationVSM.domain.account.dto.StudentUserCreateRequestDTO;
 import com.ljz.compilationVSM.domain.account.dto.TeacherUserCreateRequestDTO;
 
+import java.util.List;
+
 /**
  * 账户管理服务接口
  *
@@ -22,4 +24,6 @@ public interface AccountManagerService {
      * @param requestDTO 请求参数
      */
     void addTeacherUser(TeacherUserCreateRequestDTO requestDTO);
+
+    void addStudentUserBatch(List<StudentUserCreateRequestDTO> requestDTO);
 }

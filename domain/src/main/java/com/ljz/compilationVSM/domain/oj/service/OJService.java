@@ -116,4 +116,10 @@ public interface OJService {
      */
     Integer lexerCodePD(String teachClass);
 
+    /**
+     * 获取抄袭词法分析器题代码的学生
+     * @param teachClass 教学班
+     * @return 抄袭词法分析器题代码的学生列表
+     */
+    LexerPlaStudentInfoResponseDTO getPlaStudentInfo(String teachClass);
 }

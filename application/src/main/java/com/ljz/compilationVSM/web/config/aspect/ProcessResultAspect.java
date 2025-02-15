@@ -78,7 +78,11 @@ public class ProcessResultAspect {
         } catch (Exception ex) {
             String methodName = joinPoint.getSignature().getName();
             String className = joinPoint.getTarget().getClass().getSimpleName();
-            log.error("接口执行异常，执行类:{}, 执行方法:{}, 入参:{}", className, methodName, JsonUtil.toJsonStr(joinPoint.getArgs()), ex);
+            try {
+                log.error("接口执行异常，执行类:{}, 执行方法:{}, 入参:{}", className, methodName, JsonUtil.toJsonStr(joinPoint.getArgs()), ex);
+            } catch (Exception ex2) {
+                log.error("接口执行异常，执行类:{}, 执行方法:{}", className, methodName, ex);
+            }
             result = handleException(ex);
         } finally {
             UserContextHolder.clear();

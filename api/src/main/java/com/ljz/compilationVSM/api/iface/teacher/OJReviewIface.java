@@ -2,11 +2,13 @@ package com.ljz.compilationVSM.api.iface.teacher;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.request.teacher.LexerCodePDRequest;
+import com.ljz.compilationVSM.api.request.teacher.LexerPlaStudentExportRequest;
 import com.ljz.compilationVSM.api.request.teacher.LexerReviewRequest;
 import com.ljz.compilationVSM.api.response.common.LexerLanguageResponse;
 import com.ljz.compilationVSM.api.response.teacher.LexerCodeReviewResponse;
 import com.ljz.compilationVSM.api.response.teacher.LexerDemoProblemResponse;
 import com.ljz.compilationVSM.api.response.teacher.LexerPDInfoResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 教师评估编程题接口
@@ -53,4 +55,12 @@ public interface OJReviewIface {
      * @return 查重映射对数
      */
     Response<Integer> lexerCodePD(LexerCodePDRequest request);
+
+    /**
+     * 导出抄袭的学生信息为xlsx文件
+     *
+     * @param request  请求参数
+     * @param response 响应处理器
+     */
+    void exportPlaStudent(LexerPlaStudentExportRequest request, HttpServletResponse response);
 }

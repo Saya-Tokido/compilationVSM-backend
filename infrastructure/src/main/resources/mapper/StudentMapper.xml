@@ -29,4 +29,19 @@
         WHERE id = #{id}
     </update>
 
+    <select id="getStudentsByCodeIds" parameterType="java.util.Set" resultType="com.ljz.compilationVSM.infrastructure.po.StudentPO">
+        SELECT stu.name,stu.number,stu.admin_class,stu.teach_class
+        FROM `t_lexer_answer` AS ans
+        LEFT JOIN `t_student` AS stu
+        ON ans.user_id = stu.user_id
+        <where>
+            ans.is_delete = 0
+            AND stu.is_delete = 0
+            AND ans.best_code_id IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
 </mapper>

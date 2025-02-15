@@ -75,6 +75,6 @@ public class StudentInfoPageResponseDTO {
         /**
          * 词法分析题成绩
          */
-        private Integer lexerGrade;
+        private Integer lexerScore;
     }
 }
