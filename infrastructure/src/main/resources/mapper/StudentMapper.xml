@@ -44,4 +44,12 @@
         </where>
     </select>
 
+    <select id="getAllAdminClass" resultType="java.lang.String">
+        SELECT DISTINCT teach_class
+        FROM `t_student`
+        <where>
+            is_delete = 0
+        </where>
+    </select>
+
 </mapper>

@@ -1,8 +1,11 @@
 package com.ljz.compilationVSM.api.iface.admin;
 
 import com.ljz.compilationVSM.api.base.Response;
+import com.ljz.compilationVSM.api.request.admin.AccountDeleteRequest;
+import com.ljz.compilationVSM.api.request.admin.StudentPageQueryRequest;
 import com.ljz.compilationVSM.api.request.admin.StudentUserCreateRequest;
 import com.ljz.compilationVSM.api.request.admin.TeacherUserCreateRequest;
+import com.ljz.compilationVSM.api.response.admin.StudentInfoPageResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -36,4 +39,28 @@ public interface AccountManagerIface {
      * @return 成功
      */
     Response<Void> addStudentByExcel(MultipartFile file);
+
+    /**
+     * 分页查询学生信息
+     *
+     * @param request 请求参数
+     * @return 学生信息分页
+     */
+    Response<StudentInfoPageResponse> pageQueryStudent(StudentPageQueryRequest request);
+
+    /**
+     * 删除学生账号
+     *
+     * @param request 请求参数
+     * @return 成功
+     */
+    Response<Void> deleteStudent(AccountDeleteRequest request);
+
+    /**
+     * 删除教师账号
+     *
+     * @param request 请求参数
+     * @return 成功
+     */
+    Response<Void> deleteTeacher(AccountDeleteRequest request);
 }

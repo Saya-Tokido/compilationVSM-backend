@@ -55,7 +55,8 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
      * 基本信息异常
      */
     CLASS_NO_ACCESS_ERROR(5001,"无权查看非所属教学班"),
-    STUDENT_NOT_EXIST_ERROR(5002,"查无此学生");
+    STUDENT_NOT_EXIST_ERROR(5002,"查无此学生"),
+    NO_CLASS_ACCESS_ERROR(5003,"无权查看任何教学班");
 
 
     /**

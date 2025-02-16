@@ -18,4 +18,7 @@ public interface BasicInfoManagerService {
      * @return 学生基本信息分页
      */
     StudentInfoPageResponseDTO pageQueryStudentInfo(StudentPageQueryRequestDTO requestDTO);
+
+    StudentInfoPageResponseDTO pageQueryStudentInfoByAdmin(StudentPageQueryRequestDTO requestDTO);
+
 }

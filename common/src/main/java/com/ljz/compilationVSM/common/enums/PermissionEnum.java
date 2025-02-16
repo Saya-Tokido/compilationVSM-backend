@@ -51,13 +51,16 @@ public enum PermissionEnum {
     CREATE_STUDENT_ACCOUNT("新增学生账户","8003"),
     CREATE_TEACHER_ACCOUNT("新增教师账户","8004"),
     CREATE_STUDENT_ACCOUNT_BY_EXCEL("通过Excel添加学生账户","8005"),
+    DELETE_STUDENT_ACCOUNT("删除学生账户","8005"),
+    DELETE_TEACHER_ACCOUNT("删除教师账户","8006"),
 
     /**
      * 基本信息相关权限
      */
     PAGE_QUERY_STUDENT_INFO("分页查询学生基本信息","9001"),
     TEACHER_SELF_INFO_QUERY("教师用户信息查询","9002"),
-    STUDENT_SELF_INFO_QUERY("学生用户信息查询","9003");
+    STUDENT_SELF_INFO_QUERY("学生用户信息查询","9003"),
+    ADMIN_PAGE_QUERY_STUDENT("管理员分页查询学生信息","9010");
 
     private final String name;
     private final String code;

@@ -18,4 +18,6 @@ public interface StudentMapper extends BaseMapper<StudentPO> {
     void updateStudentInfo(StudentPO studentPO);
 
     List<StudentPO> getStudentsByCodeIds(Set<Long> ids);
+
+    List<String> getAllAdminClass();
 }

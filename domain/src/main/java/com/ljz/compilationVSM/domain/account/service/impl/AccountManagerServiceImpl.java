@@ -163,6 +163,25 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         requestDTO.forEach(this::addStudentUser);
     }
 
+    @Override
+    public void deleteStudentAccount(String number) {
+        // todo
+        LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.<UserPO>lambdaQuery()
+                .select(UserPO::getId)
+                .eq(UserPO::getIsDelete, Boolean.FALSE)
+                .eq(UserPO::getUserName,number);
+        UserPO userPO = userRepository.getOne(queryWrapper);
+        if(Objects.isNull(userPO)){
+//            log.warn("");
+            throw new BizException(BizExceptionCodeEnum.USER_NOT_EXIST_ERROR);
+        }
+    }
+
+    @Override
+    public void deleteTeacherAccount(String number) {
+        // todo
+    }
+
     /**
      * create user and student
      *
