@@ -28,6 +28,10 @@ public enum PermissionEnum {
     OBJ_QUESTION_CHECK("客观题校验","1002"),
     OBJ_REVIEW("评阅客观题答题情况","1011"),
     OBJ_SCORE_MODIFY("客观题调分","1012"),
+    PAGE_CHOOSE_BANK("选择题题库分页查询","1013"),
+    PAGE_FILL_BANK("填空题题库分页查询","1014"),
+    CHOOSE_DELETE("选择题删除","1015"),
+    FILL_DELETE("填空题删除","1016"),
 
     /**
      * 词法分析器题相关权限

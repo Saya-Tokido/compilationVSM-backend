@@ -3,6 +3,7 @@ package com.ljz.compilationVSM.domain.ObjQuestion.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
@@ -187,7 +188,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
                 .eq(ObjAnswerPO::getUserId, studentPO.getUserId());
         ObjAnswerPO answerPO = objAnswerRepository.getOne(objAnswerQueryWrapper);
         if (Objects.isNull(answerPO)) {
-            log.info(logPrefix+",客观题答题信息不存在,student number = {}", number);
+            log.info(logPrefix + ",客观题答题信息不存在,student number = {}", number);
             throw new BizException(BizExceptionCodeEnum.OBJ_ANSWER_NOT_EXIST_ERROR);
         }
         List<String> chooseIdList = Arrays.stream(answerPO.getChooseIdList().split(idDelimiter, -1)).toList();
@@ -259,7 +260,7 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
                 .getClassList()
                 .split(teachClassDelimiter, -1);
         LambdaQueryWrapper<StudentPO> studentInfoQueryWrapper = Wrappers.<StudentPO>lambdaQuery()
-                .select(StudentPO::getId,StudentPO::getName, StudentPO::getNumber, StudentPO::getAdminClass, StudentPO::getTeachClass, StudentPO::getUserId, StudentPO::getObjScore)
+                .select(StudentPO::getId, StudentPO::getName, StudentPO::getNumber, StudentPO::getAdminClass, StudentPO::getTeachClass, StudentPO::getUserId, StudentPO::getObjScore)
                 .eq(StudentPO::getIsDelete, Boolean.FALSE)
                 .eq(StudentPO::getNumber, number);
         StudentPO studentPO = studentRepository.getOne(studentInfoQueryWrapper);
@@ -293,6 +294,50 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
                 .eq(StudentPO::getIsDelete, Boolean.FALSE)
                 .eq(StudentPO::getId, studentPO.getId());
         studentRepository.update(updateWrapper);
+    }
+
+    @Override
+    public ChoosePageQueryResponseDTO pageChooseBank(ChoosePageQueryRequestDTO requestDTO) {
+        LambdaQueryWrapper<ChoosePO> queryWrapper = Wrappers.<ChoosePO>lambdaQuery()
+                .eq(ChoosePO::getIsDelete, Boolean.FALSE)
+                .like(ChoosePO::getTitle, requestDTO.getTitle());
+        Page<ChoosePO> queryPage = new Page<>();
+        queryPage.setSize(requestDTO.getPageSize());
+        queryPage.setCurrent(requestDTO.getPageIndex());
+        Page<ChoosePO> page = chooseRepository.page(queryPage, queryWrapper);
+        ChoosePageQueryResponseDTO responseDTO = objQuestionDTOMapping.convertPage(page);
+        responseDTO.setChooseList(objQuestionDTOMapping.convertList(page.getRecords()));
+        return responseDTO;
+    }
+
+    @Override
+    public FillPageQueryResponseDTO pageFillBank(FillPageQueryRequestDTO requestDTO) {
+        LambdaQueryWrapper<FillPO> queryWrapper = Wrappers.<FillPO>lambdaQuery()
+                .eq(FillPO::getIsDelete, Boolean.FALSE)
+                .like(FillPO::getTitle, requestDTO.getTitle());
+        Page<FillPO> queryPage = new Page<>();
+        queryPage.setSize(requestDTO.getPageSize());
+        queryPage.setCurrent(requestDTO.getPageIndex());
+        Page<FillPO> page = fillRepository.page(queryPage, queryWrapper);
+        FillPageQueryResponseDTO responseDTO = objQuestionDTOMapping.convertPage2(page);
+        responseDTO.setFillList(objQuestionDTOMapping.convertList2(page.getRecords()));
+        return responseDTO;
+    }
+
+    @Override
+    public void deleteChoose(Long id) {
+        LambdaUpdateWrapper<ChoosePO> updateWrapper = Wrappers.<ChoosePO>lambdaUpdate()
+                .set(ChoosePO::getIsDelete, Boolean.TRUE)
+                .eq(ChoosePO::getId, id);
+        chooseRepository.update(updateWrapper);
+    }
+
+    @Override
+    public void deleteFill(Long id) {
+        LambdaUpdateWrapper<FillPO> updateWrapper = Wrappers.<FillPO>lambdaUpdate()
+                .set(FillPO::getIsDelete, Boolean.TRUE)
+                .eq(FillPO::getId, id);
+        fillRepository.update(updateWrapper);
     }
 
     /**

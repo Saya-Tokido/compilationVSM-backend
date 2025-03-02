@@ -33,4 +33,32 @@ public interface ObjQuestionService {
      * @param requestDTO 请求参数
      */
     void modifyObjScore(ObjScoreModifyRequestDTO requestDTO);
+
+    /**
+     * 获取选择题题库分页
+     *
+     * @param requestDTO 请求参数
+     * @return 选择题题库分页
+     */
+    ChoosePageQueryResponseDTO pageChooseBank(ChoosePageQueryRequestDTO requestDTO);
+
+    /**
+     * 获取填空题题库分页
+     *
+     * @param requestDTO 请求参数
+     * @return 填空题题库分页
+     */
+    FillPageQueryResponseDTO pageFillBank(FillPageQueryRequestDTO requestDTO);
+
+    /**
+     * 删除选择题
+     * @param id 选择题id
+     */
+    void deleteChoose(Long id);
+
+    /**
+     * 删除填空题
+     * @param id 填空题id
+     */
+    void deleteFill(Long id);
 }
