@@ -259,7 +259,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         teacherPO.setNumber(Long.parseLong(requestDTO.getNumber()));
         String teachClassListStr = requestDTO.getTeachClass().stream()
                 .map(str -> str.replaceAll(teachClassDelimiter, ""))
-                .collect(Collectors.joining(teachClassDelimiter));
+                .collect(Collectors.joining(" "));
         teacherPO.setClassList(teachClassListStr);
         teacherRepository.save(teacherPO);
         bloomFilterUtil.add(requestDTO.getNumber());
