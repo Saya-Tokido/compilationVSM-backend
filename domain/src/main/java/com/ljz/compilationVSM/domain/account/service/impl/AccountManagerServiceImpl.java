@@ -1,6 +1,7 @@
 package com.ljz.compilationVSM.domain.account.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ljz.compilationVSM.common.config.cache.HashSetCache;
 import com.ljz.compilationVSM.common.constant.Constants;
@@ -13,12 +14,8 @@ import com.ljz.compilationVSM.domain.account.dto.TeacherUserCreateRequestDTO;
 import com.ljz.compilationVSM.domain.account.service.AccountManagerService;
 import com.ljz.compilationVSM.domain.convert.AccountManagerMapping;
 import com.ljz.compilationVSM.infrastructure.mapper.UserMapper;
-import com.ljz.compilationVSM.infrastructure.po.StudentPO;
-import com.ljz.compilationVSM.infrastructure.po.TeacherPO;
-import com.ljz.compilationVSM.infrastructure.po.UserPO;
-import com.ljz.compilationVSM.infrastructure.repository.StudentRepository;
-import com.ljz.compilationVSM.infrastructure.repository.TeacherRepository;
-import com.ljz.compilationVSM.infrastructure.repository.UserRepository;
+import com.ljz.compilationVSM.infrastructure.po.*;
+import com.ljz.compilationVSM.infrastructure.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +46,10 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     private final AccountManagerMapping accountManagerMapping;
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
+    private final LexerAnswerRepository lexerAnswerRepository;
+    private final LexerCodeRepository lexerCodeRepository;
+    private final LexerPDRepository lexerPDRepository;
+    private final ObjAnswerRepository objAnswerRepository;
     private final HashSetCache hashSetCache;
     private final UserMapper userMapper;
     private final MessageEncodeUtil md5EncodeUtil;
@@ -164,22 +165,52 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteStudentAccount(String number) {
-        // todo
+        // 删除学生信息
         LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.<UserPO>lambdaQuery()
                 .select(UserPO::getId)
                 .eq(UserPO::getIsDelete, Boolean.FALSE)
-                .eq(UserPO::getUserName,number);
+                .eq(UserPO::getUserName, number);
         UserPO userPO = userRepository.getOne(queryWrapper);
-        if(Objects.isNull(userPO)){
-//            log.warn("");
+        if (Objects.isNull(userPO)) {
+            log.warn("删除学生账号，学生账号不存在");
             throw new BizException(BizExceptionCodeEnum.USER_NOT_EXIST_ERROR);
         }
+        LambdaUpdateWrapper<UserPO> updateWrapper = Wrappers.<UserPO>lambdaUpdate()
+                .set(UserPO::getIsDelete, Boolean.TRUE)
+                .eq(UserPO::getId, userPO.getId());
+        userRepository.update(updateWrapper);
+        LambdaUpdateWrapper<StudentPO> updateWrapper2 = Wrappers.<StudentPO>lambdaUpdate()
+                .set(StudentPO::getIsDelete, Boolean.TRUE)
+                .eq(StudentPO::getUserId, userPO.getId());
+        studentRepository.update(updateWrapper2);
+        // 删除学生作答记录
+        deleteStudentAnswerInfo(userPO.getId());
+        hashSetCache.addElement(absentUserKey, number, Constants.SIXTY);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteTeacherAccount(String number) {
-        // todo
+        LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.<UserPO>lambdaQuery()
+                .select(UserPO::getId)
+                .eq(UserPO::getIsDelete, Boolean.FALSE)
+                .eq(UserPO::getUserName, number);
+        UserPO userPO = userRepository.getOne(queryWrapper);
+        if (Objects.isNull(userPO)) {
+            log.warn("删除教师账号，教师账号不存在");
+            throw new BizException(BizExceptionCodeEnum.USER_NOT_EXIST_ERROR);
+        }
+        LambdaUpdateWrapper<UserPO> updateWrapper = Wrappers.<UserPO>lambdaUpdate()
+                .set(UserPO::getIsDelete, Boolean.TRUE)
+                .eq(UserPO::getId, userPO.getId());
+        userRepository.update(updateWrapper);
+        LambdaUpdateWrapper<TeacherPO> updateWrapper2 = Wrappers.<TeacherPO>lambdaUpdate()
+                .set(TeacherPO::getIsDelete, Boolean.TRUE)
+                .eq(TeacherPO::getUserId, userPO.getId());
+        teacherRepository.update(updateWrapper2);
+        hashSetCache.addElement(absentUserKey, number, Constants.SIXTY);
     }
 
     /**
@@ -232,5 +263,43 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         teacherPO.setClassList(teachClassListStr);
         teacherRepository.save(teacherPO);
         bloomFilterUtil.add(requestDTO.getNumber());
+    }
+
+    /**
+     * 删除学生作答记录
+     *
+     * @param userId 学生用户id
+     */
+    private void deleteStudentAnswerInfo(Long userId) {
+        // 删除客观题答题记录
+        LambdaUpdateWrapper<ObjAnswerPO> updateWrapper = Wrappers.<ObjAnswerPO>lambdaUpdate()
+                .set(ObjAnswerPO::getIsDelete, Boolean.TRUE)
+                .eq(ObjAnswerPO::getUserId, userId);
+        objAnswerRepository.update(updateWrapper);
+        // 删除词法分析题答题记录
+        LambdaQueryWrapper<LexerAnswerPO> queryWrapper = Wrappers.<LexerAnswerPO>lambdaQuery()
+                .select(LexerAnswerPO::getBestCodeId)
+                .eq(LexerAnswerPO::getUserId, userId)
+                .eq(LexerAnswerPO::getIsDelete, Boolean.FALSE);
+        List<LexerAnswerPO> list = lexerAnswerRepository.list(queryWrapper);
+        if (!CollectionUtils.isEmpty(list)) {
+            List<Long> lexerCodeIdList = list.stream().map(LexerAnswerPO::getBestCodeId).collect(Collectors.toList());
+            LambdaUpdateWrapper<LexerAnswerPO> updateWrapper1 = Wrappers.<LexerAnswerPO>lambdaUpdate()
+                    .set(LexerAnswerPO::getIsDelete, Boolean.TRUE)
+                    .in(LexerAnswerPO::getBestCodeId, lexerCodeIdList);
+            lexerAnswerRepository.update(updateWrapper1);
+            if (!CollectionUtils.isEmpty(lexerCodeIdList)) {
+                LambdaUpdateWrapper<LexerCodePO> updateWrapper2 = Wrappers.<LexerCodePO>lambdaUpdate()
+                        .set(LexerCodePO::getIsDelete, Boolean.TRUE)
+                        .in(LexerCodePO::getId, lexerCodeIdList);
+                lexerCodeRepository.update(updateWrapper2);
+                LambdaUpdateWrapper<LexerPDPO> updateWrapper3 = Wrappers.<LexerPDPO>lambdaUpdate()
+                        .set(LexerPDPO::getIsDelete, Boolean.TRUE)
+                        .in(LexerPDPO::getPlagiarismCodeId, lexerCodeIdList)
+                        .or()
+                        .in(LexerPDPO::getCompCodeId, lexerCodeIdList);
+                lexerPDRepository.update(updateWrapper3);
+            }
+        }
     }
 }

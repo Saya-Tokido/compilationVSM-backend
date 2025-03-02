@@ -51,8 +51,8 @@ public enum PermissionEnum {
     CREATE_STUDENT_ACCOUNT("新增学生账户","8003"),
     CREATE_TEACHER_ACCOUNT("新增教师账户","8004"),
     CREATE_STUDENT_ACCOUNT_BY_EXCEL("通过Excel添加学生账户","8005"),
-    DELETE_STUDENT_ACCOUNT("删除学生账户","8005"),
-    DELETE_TEACHER_ACCOUNT("删除教师账户","8006"),
+    DELETE_STUDENT_ACCOUNT("删除学生账户","8006"),
+    DELETE_TEACHER_ACCOUNT("删除教师账户","8007"),
 
     /**
      * 基本信息相关权限

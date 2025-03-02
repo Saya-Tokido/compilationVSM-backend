@@ -93,7 +93,7 @@ public class AccountManagerImpl implements AccountManagerIface {
     @Override
     @UserAuth(permission = PermissionEnum.DELETE_STUDENT_ACCOUNT)
     @PostMapping("/delete-student")
-    public Response<Void> deleteStudent(AccountDeleteRequest request) {
+    public Response<Void> deleteStudent(@RequestBody AccountDeleteRequest request) {
         accountManagerService.deleteStudentAccount(request.getNumber());
         return Response.success();
     }
@@ -101,7 +101,7 @@ public class AccountManagerImpl implements AccountManagerIface {
     @Override
     @UserAuth(permission = PermissionEnum.DELETE_TEACHER_ACCOUNT)
     @PostMapping("/delete-teacher")
-    public Response<Void> deleteTeacher(AccountDeleteRequest request) {
+    public Response<Void> deleteTeacher(@RequestBody AccountDeleteRequest request) {
         accountManagerService.deleteTeacherAccount(request.getNumber());
         return Response.success();
     }
