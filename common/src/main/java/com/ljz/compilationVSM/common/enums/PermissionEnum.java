@@ -32,6 +32,10 @@ public enum PermissionEnum {
     PAGE_FILL_BANK("填空题题库分页查询","1014"),
     CHOOSE_DELETE("选择题删除","1015"),
     FILL_DELETE("填空题删除","1016"),
+    CHOOSE_ADD("选择题添加","1017"),
+    FILL_ADD("填空题添加","1018"),
+    CHOOSE_BATCH_ADD("选择题批量添加","1019"),
+    FILL_BATCH_ADD("填空题批量添加","1020"),
 
     /**
      * 词法分析器题相关权限

@@ -1,13 +1,12 @@
 package com.ljz.compilationVSM.web.convert.teacher;
 
+import com.ljz.compilationVSM.api.request.teacher.ChooseAddRequest;
 import com.ljz.compilationVSM.api.request.teacher.ChoosePageQueryRequest;
+import com.ljz.compilationVSM.api.request.teacher.FillAddRequest;
 import com.ljz.compilationVSM.api.request.teacher.FillPageQueryRequest;
 import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
 import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ChoosePageQueryRequestDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ChoosePageQueryResponseDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.FillPageQueryRequestDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.FillPageQueryResponseDTO;
+import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import org.mapstruct.Mapper;
 
 /**
@@ -25,4 +24,8 @@ public interface QuestionBankMapping {
     ChoosePageQueryResponse convert(ChoosePageQueryResponseDTO source);
 
     FillPageQueryResponse convert(FillPageQueryResponseDTO source);
+
+    ChooseAddRequestDTO convert(ChooseAddRequest source);
+
+    FillAddRequestDTO convert(FillAddRequest source);
 }

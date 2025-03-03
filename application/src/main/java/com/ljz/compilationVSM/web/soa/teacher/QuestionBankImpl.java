@@ -2,24 +2,28 @@ package com.ljz.compilationVSM.web.soa.teacher;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.teacher.QuestionBankIface;
-import com.ljz.compilationVSM.api.request.teacher.ChooseDeleteRequest;
-import com.ljz.compilationVSM.api.request.teacher.ChoosePageQueryRequest;
-import com.ljz.compilationVSM.api.request.teacher.FillDeleteRequest;
-import com.ljz.compilationVSM.api.request.teacher.FillPageQueryRequest;
+import com.ljz.compilationVSM.api.request.admin.StudentUserCreateRequest;
+import com.ljz.compilationVSM.api.request.teacher.*;
 import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
 import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ChoosePageQueryRequestDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.ChoosePageQueryResponseDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.FillPageQueryRequestDTO;
-import com.ljz.compilationVSM.domain.ObjQuestion.dto.FillPageQueryResponseDTO;
+import com.ljz.compilationVSM.common.exception.BizException;
+import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
+import com.ljz.compilationVSM.common.utils.ExcelUtil;
+import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import com.ljz.compilationVSM.domain.ObjQuestion.service.ObjQuestionService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
 import com.ljz.compilationVSM.web.convert.teacher.QuestionBankMapping;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,10 +36,12 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @RequestMapping("/api/teacher/question-bank")
+@Validated
 public class QuestionBankImpl implements QuestionBankIface {
 
     private final QuestionBankMapping questionBankMapping;
     private final ObjQuestionService objQuestionService;
+    private final ExcelUtil excelUtil;
 
     @Override
     @PostMapping("/choose-page")
@@ -73,5 +79,61 @@ public class QuestionBankImpl implements QuestionBankIface {
     public Response<Void> deleteFill(@RequestBody FillDeleteRequest request) {
         objQuestionService.deleteFill(request.getId());
         return Response.success();
+    }
+
+    @Override
+    @PostMapping("/choose-add")
+    @UserAuth(permission = PermissionEnum.CHOOSE_ADD)
+    public Response<Void> addChoose(@RequestBody @Valid ChooseAddRequest request) {
+        objQuestionService.addChoose(questionBankMapping.convert(request));
+        return Response.success();
+    }
+
+    @Override
+    @PostMapping("/fill-add")
+    @UserAuth(permission = PermissionEnum.FILL_ADD)
+    public Response<Void> addFill(@RequestBody @Valid FillAddRequest request) {
+        objQuestionService.addFill(questionBankMapping.convert(request));
+        return Response.success();
+    }
+
+    @Override
+    @PostMapping("/choose-import")
+    @UserAuth(permission = PermissionEnum.CHOOSE_BATCH_ADD)
+    public Response<Void> addChooseByExcel(@RequestBody MultipartFile file) {
+        try {
+            List<ChooseAddRequestDTO> chooseAddDTOList = excelUtil.importFromExcel(file.getBytes(), ChooseAddRequestDTO.class);
+            objQuestionService.addChooseBatch(chooseAddDTOList);
+            return Response.success();
+        } catch (Exception ex) {
+            if (ex instanceof BizException bizException) {
+                throw bizException;
+            } else {
+                StringWriter sw = new StringWriter();
+                ex.printStackTrace(new PrintWriter(sw));
+                log.error("教师通过Excel批量添加选择题, 触发已检查异常, 异常信息\n {}", sw);
+                throw new BizException(BizExceptionCodeEnum.EXCEL_FORMAT_ERROR);
+            }
+        }
+    }
+
+    @Override
+    @PostMapping("/fill-import")
+    @UserAuth(permission = PermissionEnum.FILL_BATCH_ADD)
+    public Response<Void> addFillByExcel(@RequestBody MultipartFile file) {
+        try {
+            List<FillAddRequestDTO> fillAddDTOList = excelUtil.importFromExcel(file.getBytes(), FillAddRequestDTO.class);
+            objQuestionService.addFillBatch(fillAddDTOList);
+            return Response.success();
+        } catch (Exception ex) {
+            if (ex instanceof BizException bizException) {
+                throw bizException;
+            } else {
+                StringWriter sw = new StringWriter();
+                ex.printStackTrace(new PrintWriter(sw));
+                log.error("教师通过Excel批量添加填空题, 触发已检查异常, 异常信息\n {}", sw);
+                throw new BizException(BizExceptionCodeEnum.EXCEL_FORMAT_ERROR);
+            }
+        }
     }
 }

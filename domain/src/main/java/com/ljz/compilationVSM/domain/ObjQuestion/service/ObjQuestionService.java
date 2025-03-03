@@ -2,6 +2,8 @@ package com.ljz.compilationVSM.domain.ObjQuestion.service;
 
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 
+import java.util.List;
+
 public interface ObjQuestionService {
     /**
      * 获取客观题题目
@@ -52,13 +54,43 @@ public interface ObjQuestionService {
 
     /**
      * 删除选择题
+     *
      * @param id 选择题id
      */
     void deleteChoose(Long id);
 
     /**
      * 删除填空题
+     *
      * @param id 填空题id
      */
     void deleteFill(Long id);
+
+    /**
+     * 添加选择题
+     *
+     * @param requestDTO 请求DTO
+     */
+    void addChoose(ChooseAddRequestDTO requestDTO);
+
+    /**
+     * 添加填空题
+     *
+     * @param requestDTO 请求DTO
+     */
+    void addFill(FillAddRequestDTO requestDTO);
+
+    /**
+     * 批量添加选择题
+     *
+     * @param chooseList 选择题列表
+     */
+    void addChooseBatch(List<ChooseAddRequestDTO> chooseList);
+
+    /**
+     * 批量添加填空题
+     *
+     * @param filllList 填空题列表
+     */
+    void addFillBatch(List<FillAddRequestDTO> filllList);
 }

@@ -1,12 +1,10 @@
 package com.ljz.compilationVSM.api.iface.teacher;
 
 import com.ljz.compilationVSM.api.base.Response;
-import com.ljz.compilationVSM.api.request.teacher.ChooseDeleteRequest;
-import com.ljz.compilationVSM.api.request.teacher.ChoosePageQueryRequest;
-import com.ljz.compilationVSM.api.request.teacher.FillDeleteRequest;
-import com.ljz.compilationVSM.api.request.teacher.FillPageQueryRequest;
+import com.ljz.compilationVSM.api.request.teacher.*;
 import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
 import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 题库接口
@@ -47,4 +45,36 @@ public interface QuestionBankIface {
      * @return 成功
      */
     Response<Void> deleteFill(FillDeleteRequest request);
+
+    /**
+     * 新增选择题
+     *
+     * @param request 请求
+     * @return 成功
+     */
+    Response<Void> addChoose(ChooseAddRequest request);
+
+    /**
+     * 新增填空题
+     *
+     * @param request 请求
+     * @return 成功
+     */
+    Response<Void> addFill(FillAddRequest request);
+
+    /**
+     * 通过excel批量导入选择题
+     *
+     * @param file excel文件
+     * @return 成功
+     */
+    Response<Void> addChooseByExcel(MultipartFile file);
+
+    /**
+     * 通过excel批量添加填空题
+     *
+     * @param file excel文件
+     * @return 成功
+     */
+    Response<Void> addFillByExcel(MultipartFile file);
 }

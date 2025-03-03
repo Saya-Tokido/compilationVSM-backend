@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljz.compilationVSM.common.constant.Constants;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
+import com.ljz.compilationVSM.common.utils.AssertUtil;
 import com.ljz.compilationVSM.common.utils.SnowflakeIdGenerator;
 import com.ljz.compilationVSM.common.utils.UserContextHolder;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
@@ -338,6 +339,46 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
                 .set(FillPO::getIsDelete, Boolean.TRUE)
                 .eq(FillPO::getId, id);
         fillRepository.update(updateWrapper);
+    }
+
+    @Override
+    public void addChoose(ChooseAddRequestDTO requestDTO) {
+        addChooseBatch(Collections.singletonList(requestDTO));
+    }
+
+    @Override
+    public void addFill(FillAddRequestDTO requestDTO) {
+        addFillBatch(Collections.singletonList(requestDTO));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addChooseBatch(List<ChooseAddRequestDTO> chooseList) {
+        List<ChoosePO> choosePOList = chooseList.stream().map(item -> {
+            ChoosePO choosePO = new ChoosePO();
+            choosePO.setId(idGenerator.generate());
+            choosePO.setTitle(AssertUtil.notBlank(item.getTitle(), "题目不能为空"));
+            choosePO.setChoice0(AssertUtil.notBlank(item.getChoice0(), "需要填满四个选项"));
+            choosePO.setChoice1(AssertUtil.notBlank(item.getChoice1(), "需要填满四个选项"));
+            choosePO.setChoice2(AssertUtil.notBlank(item.getChoice2(), "需要填满四个选项"));
+            choosePO.setChoice3(AssertUtil.notBlank(item.getChoice3(), "需要填满四个选项"));
+            choosePO.setKeyAnswer(AssertUtil.notBlank(item.getKeyAnswer(), "标准答案不能为空"));
+            return choosePO;
+        }).toList();
+        chooseRepository.saveBatch(choosePOList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addFillBatch(List<FillAddRequestDTO> filllList) {
+        List<FillPO> fillPOS = filllList.stream().map(item -> {
+            FillPO fillPO = new FillPO();
+            fillPO.setId(idGenerator.generate());
+            fillPO.setTitle(AssertUtil.notBlank(fillPO.getTitle(), "题目不能为空"));
+            fillPO.setKeyAnswer(AssertUtil.notBlank(fillPO.getKeyAnswer(), "标准答案不能为空"));
+            return fillPO;
+        }).toList();
+        fillRepository.saveBatch(fillPOS);
     }
 
     /**
