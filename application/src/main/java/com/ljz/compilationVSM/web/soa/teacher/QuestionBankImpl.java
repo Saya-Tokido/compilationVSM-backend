@@ -2,7 +2,6 @@ package com.ljz.compilationVSM.web.soa.teacher;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.teacher.QuestionBankIface;
-import com.ljz.compilationVSM.api.request.admin.StudentUserCreateRequest;
 import com.ljz.compilationVSM.api.request.teacher.*;
 import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
 import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
@@ -13,11 +12,10 @@ import com.ljz.compilationVSM.common.utils.ExcelUtil;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import com.ljz.compilationVSM.domain.ObjQuestion.service.ObjQuestionService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
+import com.ljz.compilationVSM.api.valid.Valid;
 import com.ljz.compilationVSM.web.convert.teacher.QuestionBankMapping;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +34,6 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @RequestMapping("/api/teacher/question-bank")
-@Validated
 public class QuestionBankImpl implements QuestionBankIface {
 
     private final QuestionBankMapping questionBankMapping;

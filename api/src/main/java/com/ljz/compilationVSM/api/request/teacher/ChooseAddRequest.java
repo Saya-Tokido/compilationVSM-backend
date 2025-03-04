@@ -1,6 +1,6 @@
 package com.ljz.compilationVSM.api.request.teacher;
 
-import jakarta.validation.constraints.NotBlank;
+import com.ljz.compilationVSM.api.valid.annotation.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 

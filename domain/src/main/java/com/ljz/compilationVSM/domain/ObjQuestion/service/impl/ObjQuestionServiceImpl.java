@@ -342,11 +342,13 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void addChoose(ChooseAddRequestDTO requestDTO) {
         addChooseBatch(Collections.singletonList(requestDTO));
     }
 
     @Override
+    @SuppressWarnings("all")
     public void addFill(FillAddRequestDTO requestDTO) {
         addFillBatch(Collections.singletonList(requestDTO));
     }
@@ -374,8 +376,8 @@ public class ObjQuestionServiceImpl implements ObjQuestionService {
         List<FillPO> fillPOS = filllList.stream().map(item -> {
             FillPO fillPO = new FillPO();
             fillPO.setId(idGenerator.generate());
-            fillPO.setTitle(AssertUtil.notBlank(fillPO.getTitle(), "题目不能为空"));
-            fillPO.setKeyAnswer(AssertUtil.notBlank(fillPO.getKeyAnswer(), "标准答案不能为空"));
+            fillPO.setTitle(AssertUtil.notBlank(item.getTitle(), "题目不能为空"));
+            fillPO.setKeyAnswer(AssertUtil.notBlank(item.getKeyAnswer(), "标准答案不能为空"));
             return fillPO;
         }).toList();
         fillRepository.saveBatch(fillPOS);
