@@ -118,8 +118,33 @@ public interface OJService {
 
     /**
      * 获取抄袭词法分析器题代码的学生
+     *
      * @param teachClass 教学班
      * @return 抄袭词法分析器题代码的学生列表
      */
     LexerPlaStudentInfoResponseDTO getPlaStudentInfo(String teachClass);
+
+    /**
+     * 查询词法分析器题库
+     *
+     * @param requestDTO 请求参数DTO
+     * @return 词法分析器题库分页
+     */
+    LexerPageQueryResponseDTO pageQueryLexer(LexerPageQueryRequestDTO requestDTO);
+
+    /**
+     * 保存词法分析器题目
+     *
+     * @param requestDTO 请求参数DTO
+     * @return 词法分析器题目id
+     */
+    Long saveLexer(LexerSaveRequestDTO requestDTO);
+
+    /**
+     * 获取词法分析器题目详情
+     *
+     * @param lexerId 词法分析器id
+     * @return 词法分析器题详情
+     */
+    LexerDetailResponseDTO getLexerDetail(Long lexerId);
 }

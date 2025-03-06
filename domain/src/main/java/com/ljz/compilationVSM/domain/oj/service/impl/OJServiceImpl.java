@@ -2,7 +2,10 @@ package com.ljz.compilationVSM.domain.oj.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljz.compilationVSM.infrastructure.mapper.*;
 import com.ljz.compilationVSM.infrastructure.queryDTO.LexerPDCodeQueryDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ljz.compilationVSM.common.constant.Constants;
@@ -18,10 +21,6 @@ import com.ljz.compilationVSM.domain.ObjQuestion.dto.StudentBaseInfoResponseDTO;
 import com.ljz.compilationVSM.domain.convert.OJDTOMapping;
 import com.ljz.compilationVSM.domain.oj.dto.*;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
-import com.ljz.compilationVSM.infrastructure.mapper.ConfigMapper;
-import com.ljz.compilationVSM.infrastructure.mapper.LexerAnswerMapper;
-import com.ljz.compilationVSM.infrastructure.mapper.LexerCodeMapper;
-import com.ljz.compilationVSM.infrastructure.mapper.StudentMapper;
 import com.ljz.compilationVSM.infrastructure.po.*;
 import com.ljz.compilationVSM.infrastructure.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +63,7 @@ public class OJServiceImpl implements OJService {
     private final LexerAnswerMapper lexerAnswerMapper;
     private final ConfigMapper configMapper;
     private final LexerCodeMapper lexerCodeMapper;
+    private final LexerMapper lexerMapper;
     private final OJDTOMapping ojConvert;
     private final RemoteCompilerFacade remoteCompilerFacade;
     private final RedisUtil redisUtil;
@@ -569,11 +569,11 @@ public class OJServiceImpl implements OJService {
                 .eq(LexerPDPO::getTeachClass, teachClass)
                 .ge(LexerPDPO::getRate, configPO.getLexerPdRate());
         List<LexerPDPO> lexerPDPOList = lexerPDRepository.list(queryWrapper);
-        if(CollectionUtils.isEmpty(lexerPDPOList)){
+        if (CollectionUtils.isEmpty(lexerPDPOList)) {
             return new LexerPlaStudentInfoResponseDTO();
         }
         Set<Long> codeIdSet = new HashSet<>();
-        for(LexerPDPO lexerPDPO:lexerPDPOList){
+        for (LexerPDPO lexerPDPO : lexerPDPOList) {
             codeIdSet.add(lexerPDPO.getCompCodeId());
             codeIdSet.add(lexerPDPO.getPlagiarismCodeId());
         }
@@ -582,6 +582,102 @@ public class OJServiceImpl implements OJService {
         responseDTO.setStudentList(ojConvert.convert(studentPOList));
         return responseDTO;
     }
+
+    @Override
+    public LexerPageQueryResponseDTO pageQueryLexer(LexerPageQueryRequestDTO requestDTO) {
+        LambdaQueryWrapper<LexerPO> queryWrapper = Wrappers.<LexerPO>lambdaQuery()
+                .eq(LexerPO::getIsDelete, Boolean.FALSE);
+        if (StringUtils.isNotBlank(requestDTO.getLanguage())) {
+            queryWrapper.eq(LexerPO::getLanguage, requestDTO.getLanguage());
+        }
+        if (StringUtils.isNotBlank(requestDTO.getCompLanguage())) {
+            queryWrapper.eq(LexerPO::getCompLanguage, requestDTO.getCompLanguage());
+        }
+        if (StringUtils.isNotBlank(requestDTO.getDescription())) {
+            queryWrapper.like(LexerPO::getDescription, requestDTO.getDescription());
+        }
+        Page<LexerPO> pageQuery = new Page<>();
+        pageQuery.setCurrent(requestDTO.getPageIndex());
+        pageQuery.setSize(requestDTO.getPageSize());
+        Page<LexerPO> page = lexerRepository.page(pageQuery, queryWrapper);
+        LexerPageQueryResponseDTO responseDTO = new LexerPageQueryResponseDTO();
+        responseDTO.setCurrentPage((int) page.getCurrent());
+        responseDTO.setTotalPages((int) page.getPages());
+        responseDTO.setTotalRecords((int) page.getTotal());
+        responseDTO.setLexerList(ojConvert.convertList(page.getRecords()));
+        return responseDTO;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long saveLexer(LexerSaveRequestDTO requestDTO) {
+        if (Objects.nonNull(requestDTO.getId())) {
+            // 更新
+            LambdaQueryWrapper<LexerPO> queryWrapper = Wrappers.<LexerPO>lambdaQuery()
+                    .select(LexerPO::getId)
+                    .eq(LexerPO::getIsDelete, Boolean.FALSE)
+                    .eq(LexerPO::getId, requestDTO.getId());
+            LexerPO lexerPO = lexerRepository.getOne(queryWrapper);
+            if (Objects.isNull(lexerPO)) {
+                log.warn("更新词法分析器题,词法分析器id不存在,id = {}", requestDTO.getId());
+                throw new BizException(BizExceptionCodeEnum.LEXER_PROBLEM_NOT_FOUNT_ERROR);
+            }
+            lexerPO = ojConvert.convert(requestDTO);
+            Integer updated = lexerMapper.updateLexer(lexerPO);
+            if (Objects.equals(updated, Constants.ZERO)) {
+                log.warn("更新词法分析器题，未更新成功,id = {}", requestDTO.getId());
+                throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+            }
+            LambdaQueryWrapper<LexerTestcasePO> queryWrapper1 = Wrappers.<LexerTestcasePO>lambdaQuery()
+                    .select(LexerTestcasePO::getId)
+                    .eq(LexerTestcasePO::getIsDelete, Boolean.FALSE)
+                    .eq(LexerTestcasePO::getLexerId, lexerPO.getId())
+                    .orderByAsc(LexerTestcasePO::getId)
+                    .last("limit 1");
+            LexerTestcasePO lexerTestcasePO = lexerTestcaseRepository.getOne(queryWrapper1);
+            if (Objects.isNull(lexerTestcasePO)) {
+                log.warn("更新词法分析器题，无初始用例,id = {}", lexerPO.getId());
+                throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+            }
+            LambdaUpdateWrapper<LexerTestcasePO> updateWrapper = Wrappers.<LexerTestcasePO>lambdaUpdate()
+                    .set(LexerTestcasePO::getTerminalInput, requestDTO.getTerminalInput())
+                    .set(LexerTestcasePO::getTerminalOutput, requestDTO.getTerminalOutput())
+                    .eq(LexerTestcasePO::getIsDelete, Boolean.FALSE)
+                    .eq(LexerTestcasePO::getId, lexerTestcasePO.getId());
+            boolean updated1 = lexerTestcaseRepository.update(updateWrapper);
+            if (Objects.equals(updated1, Boolean.FALSE)) {
+                log.warn("更新词法分析器题，用例未更新成功,lexer id = {},testcase id = {}", requestDTO.getId(), lexerTestcasePO.getId());
+                throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+            }
+            return lexerPO.getId();
+        }
+        // 新增
+        LexerPO lexerPO = ojConvert.convert(requestDTO);
+        long lexerId = idGenerator.generate();
+        lexerPO.setId(lexerId);
+        boolean saved = lexerRepository.save(lexerPO);
+        if (Objects.equals(saved, Boolean.FALSE)) {
+            log.warn("新增词法分析器题，未添加成功,id = {}", requestDTO.getId());
+            throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+        }
+        LexerTestcasePO lexerTestcasePO = new LexerTestcasePO();
+        lexerTestcasePO.setId(idGenerator.generate());
+        lexerTestcasePO.setLexerId(lexerId);
+        lexerTestcasePO.setTerminalInput(requestDTO.getTerminalInput());
+        lexerTestcasePO.setTerminalOutput(requestDTO.getTerminalOutput());
+        boolean saved1 = lexerTestcaseRepository.save(lexerTestcasePO);
+        if (Objects.equals(saved1, Boolean.FALSE)) {
+            log.warn("新增词法分析器题，未成功添加示例用例,lexer id = {}", lexerId);
+            throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+        }
+        return lexerId;
+    }
+
+    @Override
+    public LexerDetailResponseDTO getLexerDetail(Long lexerId) {
+        return null;
+    }
+
 
     /**
      * 获取教师所带教学班列表

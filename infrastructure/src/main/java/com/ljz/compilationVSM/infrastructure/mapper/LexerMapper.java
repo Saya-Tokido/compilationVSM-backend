@@ -13,4 +13,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface LexerMapper extends BaseMapper<LexerPO> {
 
+    /**
+     * 更新词法分析器题
+     *
+     * @return 更新数量
+     */
+    Integer updateLexer(LexerPO lexerPO);
 }

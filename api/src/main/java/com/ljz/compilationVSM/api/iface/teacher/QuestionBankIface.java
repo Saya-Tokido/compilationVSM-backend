@@ -4,6 +4,8 @@ import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.request.teacher.*;
 import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
 import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
+import com.ljz.compilationVSM.api.response.teacher.LexerDetailResponse;
+import com.ljz.compilationVSM.api.response.teacher.LexerPageQueryResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -77,4 +79,28 @@ public interface QuestionBankIface {
      * @return 成功
      */
     Response<Void> addFillByExcel(MultipartFile file);
+
+    /**
+     * 分页查询词法分析器题库
+     *
+     * @param request 请求参数
+     * @return 词法分析器题库分页
+     */
+    Response<LexerPageQueryResponse> pageQueryLexer(LexerPageQueryRequest request);
+
+    /**
+     * 保存词法分析器题
+     *
+     * @param request 请求
+     * @return 词法分析器id
+     */
+    Response<Long> saveLexer(LexerSaveRequest request);
+
+    /**
+     * 获取词法分析器题详情
+     *
+     * @param id 词法分析器题id
+     * @return 词法分析器题详情
+     */
+    Response<LexerDetailResponse> getLexerDetail(Long id);
 }

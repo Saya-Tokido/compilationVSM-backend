@@ -5,12 +5,16 @@ import com.ljz.compilationVSM.api.iface.teacher.QuestionBankIface;
 import com.ljz.compilationVSM.api.request.teacher.*;
 import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
 import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
+import com.ljz.compilationVSM.api.response.teacher.LexerDetailResponse;
+import com.ljz.compilationVSM.api.response.teacher.LexerPageQueryResponse;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.common.utils.ExcelUtil;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import com.ljz.compilationVSM.domain.ObjQuestion.service.ObjQuestionService;
+import com.ljz.compilationVSM.domain.oj.dto.LexerPageQueryResponseDTO;
+import com.ljz.compilationVSM.domain.oj.service.OJService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
 import com.ljz.compilationVSM.api.valid.Valid;
 import com.ljz.compilationVSM.web.convert.teacher.QuestionBankMapping;
@@ -38,6 +42,7 @@ public class QuestionBankImpl implements QuestionBankIface {
 
     private final QuestionBankMapping questionBankMapping;
     private final ObjQuestionService objQuestionService;
+    private final OJService ojService;
     private final ExcelUtil excelUtil;
 
     @Override
@@ -132,5 +137,28 @@ public class QuestionBankImpl implements QuestionBankIface {
                 throw new BizException(BizExceptionCodeEnum.EXCEL_FORMAT_ERROR);
             }
         }
+    }
+
+    @Override
+    @PostMapping("/lexer-page")
+    @UserAuth(permission = PermissionEnum.PAGE_LEXER_BANK)
+    public Response<LexerPageQueryResponse> pageQueryLexer(@RequestBody LexerPageQueryRequest request) {
+        LexerPageQueryResponseDTO responseDTO = ojService.pageQueryLexer(questionBankMapping.convert(request));
+        LexerPageQueryResponse response = questionBankMapping.convert(responseDTO);
+        return Response.success(response);
+    }
+
+    @Override
+    @PostMapping("/lexer-save")
+    @UserAuth(permission = PermissionEnum.LEXER_BANK_SAVE)
+    public Response<Long> saveLexer(@RequestBody @Valid LexerSaveRequest request) {
+        Long response = ojService.saveLexer(questionBankMapping.convert(request));
+        return Response.success(response);
+    }
+
+    @Override
+    public Response<LexerDetailResponse> getLexerDetail(Long id) {
+
+        return null;
     }
 }

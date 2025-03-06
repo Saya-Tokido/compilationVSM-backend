@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljz.compilationVSM.infrastructure.mapper.LexerMapper">
 
+    <update id="updateLexer" parameterType="com.ljz.compilationVSM.infrastructure.po.LexerPO">
+        UPDATE t_lexer
+        <set>
+            language = #{language},
+            comp_language = #{compLanguage},
+            description = #{description}
+        </set>
+        WHERE id = #{id}
+        AND is_delete = 0
+    </update>
 </mapper>
