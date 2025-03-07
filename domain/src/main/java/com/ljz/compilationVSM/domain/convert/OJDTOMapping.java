@@ -40,4 +40,5 @@ public interface OJDTOMapping {
 
     LexerPO convert(LexerSaveRequestDTO source);
 
+    LexerDetailResponseDTO convert(LexerPO source);
 }

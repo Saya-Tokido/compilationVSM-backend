@@ -13,6 +13,7 @@ import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
 import com.ljz.compilationVSM.common.utils.ExcelUtil;
 import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import com.ljz.compilationVSM.domain.ObjQuestion.service.ObjQuestionService;
+import com.ljz.compilationVSM.domain.oj.dto.LexerDetailResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.LexerPageQueryResponseDTO;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
@@ -157,8 +158,11 @@ public class QuestionBankImpl implements QuestionBankIface {
     }
 
     @Override
+    @PostMapping("/lexer-detail")
+    @UserAuth(permission = PermissionEnum.LEXER_PROBLEM_DETAIL_QUERY)
     public Response<LexerDetailResponse> getLexerDetail(Long id) {
-
-        return null;
+        LexerDetailResponseDTO responseDTO = ojService.getLexerDetail(id);
+        LexerDetailResponse response = questionBankMapping.convert(responseDTO);
+        return Response.success(response);
     }
 }

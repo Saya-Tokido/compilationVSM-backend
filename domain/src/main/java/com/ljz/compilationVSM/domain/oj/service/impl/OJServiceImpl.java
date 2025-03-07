@@ -675,7 +675,26 @@ public class OJServiceImpl implements OJService {
 
     @Override
     public LexerDetailResponseDTO getLexerDetail(Long lexerId) {
-        return null;
+        LambdaQueryWrapper<LexerPO> queryWrapper = Wrappers.<LexerPO>lambdaQuery()
+                .select(LexerPO::getId, LexerPO::getLanguage, LexerPO::getCompLanguage)
+                .eq(LexerPO::getIsDelete, Boolean.FALSE)
+                .eq(LexerPO::getId, lexerId);
+        LexerPO lexerPO = lexerRepository.getOne(queryWrapper);
+        if (Objects.isNull(lexerPO)) {
+            log.warn("查询词法分析器题详情,词法分析器id不存在,id = {}", lexerId);
+            throw new BizException(BizExceptionCodeEnum.LEXER_PROBLEM_NOT_FOUNT_ERROR);
+        }
+        LambdaQueryWrapper<LexerTestcasePO> queryWrapper1 = Wrappers.<LexerTestcasePO>lambdaQuery()
+                .select(LexerTestcasePO::getTerminalInput, LexerTestcasePO::getTerminalOutput)
+                .eq(LexerTestcasePO::getIsDelete, Boolean.FALSE)
+                .eq(LexerTestcasePO::getLexerId, lexerPO.getId())
+                .orderByAsc(LexerTestcasePO::getId)
+                .last("limit 1");
+        LexerTestcasePO lexerTestcasePO = lexerTestcaseRepository.getOne(queryWrapper1);
+        LexerDetailResponseDTO responseDTO = ojConvert.convert(lexerPO);
+        responseDTO.setTerminalInput(lexerTestcasePO.getTerminalInput());
+        responseDTO.setTerminalOutput(lexerTestcasePO.getTerminalOutput());
+        return responseDTO;
     }
 
 
