@@ -52,7 +52,10 @@ public enum PermissionEnum {
     LEXER_PD_STUDENT_EXPORT("词法分析器题抄袭学生数据导出", "2016"),
     PAGE_LEXER_BANK("词法分析器题题库分页查询", "2017"),
     LEXER_BANK_SAVE("保存词法分析器题目", "2018"),
-    LEXER_PROBLEM_DETAIL_QUERY("词法分析器题详情查询","2019"),
+    LEXER_PROBLEM_DETAIL_QUERY("词法分析器题详情查询", "2019"),
+    PAGE_LEXER_TESTCASE("分页查询词法分析器题用例", "2020"),
+    LEXER_TESTCASE_ADD("添加词法分析器题用例", "2021"),
+    LEXER_TESTCASE_DELETE("删除词法分析器题用例", "2022"),
 
     /**
      * 账户相关权限

@@ -3,10 +3,7 @@ package com.ljz.compilationVSM.web.soa.teacher;
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.teacher.QuestionBankIface;
 import com.ljz.compilationVSM.api.request.teacher.*;
-import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
-import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
-import com.ljz.compilationVSM.api.response.teacher.LexerDetailResponse;
-import com.ljz.compilationVSM.api.response.teacher.LexerPageQueryResponse;
+import com.ljz.compilationVSM.api.response.teacher.*;
 import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.common.exception.BizException;
 import com.ljz.compilationVSM.common.exception.BizExceptionCodeEnum;
@@ -15,6 +12,7 @@ import com.ljz.compilationVSM.domain.ObjQuestion.dto.*;
 import com.ljz.compilationVSM.domain.ObjQuestion.service.ObjQuestionService;
 import com.ljz.compilationVSM.domain.oj.dto.LexerDetailResponseDTO;
 import com.ljz.compilationVSM.domain.oj.dto.LexerPageQueryResponseDTO;
+import com.ljz.compilationVSM.domain.oj.dto.LexerTestcasePageResponseDTO;
 import com.ljz.compilationVSM.domain.oj.service.OJService;
 import com.ljz.compilationVSM.web.config.aspect.UserAuth;
 import com.ljz.compilationVSM.api.valid.Valid;
@@ -158,11 +156,36 @@ public class QuestionBankImpl implements QuestionBankIface {
     }
 
     @Override
-    @PostMapping("/lexer-detail")
+    @GetMapping("/lexer-detail/{lexer-id}")
     @UserAuth(permission = PermissionEnum.LEXER_PROBLEM_DETAIL_QUERY)
-    public Response<LexerDetailResponse> getLexerDetail(Long id) {
+    public Response<LexerDetailResponse> getLexerDetail(@PathVariable("lexer-id") Long id) {
         LexerDetailResponseDTO responseDTO = ojService.getLexerDetail(id);
         LexerDetailResponse response = questionBankMapping.convert(responseDTO);
         return Response.success(response);
+    }
+
+    @Override
+    @PostMapping("/lexer-testcase-page")
+    @UserAuth(permission = PermissionEnum.LEXER_PROBLEM_DETAIL_QUERY)
+    public Response<LexerTestcasePageResponse> pageQueryLexerTestcase(@RequestBody @Valid LexerTestcasePageRequest request) {
+        LexerTestcasePageResponseDTO responseDTO = ojService.pageLexerTestcase(questionBankMapping.convert(request));
+        LexerTestcasePageResponse response = questionBankMapping.convert(responseDTO);
+        return Response.success(response);
+    }
+
+    @Override
+    @PostMapping("/lexer-testcase-add")
+    @UserAuth(permission = PermissionEnum.LEXER_TESTCASE_ADD)
+    public Response<Void> addLexerTestcase(LexerTestcaseAddRequest request) {
+        ojService.addLexerTestcase(questionBankMapping.convert(request));
+        return Response.success();
+    }
+
+    @Override
+    @PostMapping("/lexer-testcase-delete")
+    @UserAuth(permission = PermissionEnum.LEXER_TESTCASE_DELETE)
+    public Response<Void> deleteLexerTestcase(LexerTestcaseDeleteRequest request) {
+        ojService.deleteLexerTestcase(request.getId());
+        return Response.success();
     }
 }

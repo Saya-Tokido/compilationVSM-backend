@@ -147,4 +147,26 @@ public interface OJService {
      * @return 词法分析器题详情
      */
     LexerDetailResponseDTO getLexerDetail(Long lexerId);
+
+    /**
+     * 分页查询词法分析器题用例
+     *
+     * @param requestDTO 请求参数DTO
+     * @return 词法分析器题用例分页
+     */
+    LexerTestcasePageResponseDTO pageLexerTestcase(LexerTestcasePageRequestDTO requestDTO);
+
+    /**
+     * 添加词法分析器题用例
+     *
+     * @param requestDTO 请求DTO
+     */
+    void addLexerTestcase(LexerTestcaseAddRequestDTO requestDTO);
+
+    /**
+     * 删除词法分析器题用例
+     *
+     * @param id 用例id
+     */
+    void deleteLexerTestcase(Long id);
 }

@@ -22,13 +22,13 @@ public class LexerSaveRequest {
     /**
      * 编程语言
      */
-    @NotBlank
+    @NotBlank(message = "编程语言不能为空")
     private String language;
 
     /**
      * 待编译语言
      */
-    @NotBlank
+    @NotBlank(message = "待编译语言不能为空")
     private String compLanguage;
 
     /**
@@ -39,12 +39,12 @@ public class LexerSaveRequest {
     /**
      * 示例终端输入
      */
-    @NotBlank
+    @NotBlank(message = "终端输入不能为空")
     private String terminalInput;
 
     /**
      * 示例终端输出
      */
-    @NotBlank
+    @NotBlank(message = "终端输出不能为空")
     private String terminalOutput;
 }

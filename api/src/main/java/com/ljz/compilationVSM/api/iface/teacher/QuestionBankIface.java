@@ -2,10 +2,7 @@ package com.ljz.compilationVSM.api.iface.teacher;
 
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.request.teacher.*;
-import com.ljz.compilationVSM.api.response.teacher.ChoosePageQueryResponse;
-import com.ljz.compilationVSM.api.response.teacher.FillPageQueryResponse;
-import com.ljz.compilationVSM.api.response.teacher.LexerDetailResponse;
-import com.ljz.compilationVSM.api.response.teacher.LexerPageQueryResponse;
+import com.ljz.compilationVSM.api.response.teacher.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -103,4 +100,28 @@ public interface QuestionBankIface {
      * @return 词法分析器题详情
      */
     Response<LexerDetailResponse> getLexerDetail(Long id);
+
+    /**
+     * 分页查询词法分析器题用例
+     *
+     * @param request 请求
+     * @return 词法分析题用例分页
+     */
+    Response<LexerTestcasePageResponse> pageQueryLexerTestcase(LexerTestcasePageRequest request);
+
+    /**
+     * 添加词法分析器题用例
+     *
+     * @param request 请求
+     * @return 添加成功
+     */
+    Response<Void> addLexerTestcase(LexerTestcaseAddRequest request);
+
+    /**
+     * 删除词法分析器题用例
+     *
+     * @param request 请求
+     * @return 删除成功
+     */
+    Response<Void> deleteLexerTestcase(LexerTestcaseDeleteRequest request);
 }

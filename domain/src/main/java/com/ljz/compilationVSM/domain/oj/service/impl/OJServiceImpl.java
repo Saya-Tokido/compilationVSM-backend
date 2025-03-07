@@ -596,6 +596,7 @@ public class OJServiceImpl implements OJService {
         if (StringUtils.isNotBlank(requestDTO.getDescription())) {
             queryWrapper.like(LexerPO::getDescription, requestDTO.getDescription());
         }
+        queryWrapper.orderByDesc(LexerPO::getId);
         Page<LexerPO> pageQuery = new Page<>();
         pageQuery.setCurrent(requestDTO.getPageIndex());
         pageQuery.setSize(requestDTO.getPageSize());
@@ -697,6 +698,75 @@ public class OJServiceImpl implements OJService {
         return responseDTO;
     }
 
+    @Override
+    public LexerTestcasePageResponseDTO pageLexerTestcase(LexerTestcasePageRequestDTO requestDTO) {
+        lexerExistVerify(requestDTO.getLexerId(), "分页查询词法分析器题用例");
+        LambdaQueryWrapper<LexerTestcasePO> queryWrapper1 = Wrappers.<LexerTestcasePO>lambdaQuery()
+                .select(LexerTestcasePO::getTerminalInput, LexerTestcasePO::getTerminalOutput)
+                .eq(LexerTestcasePO::getIsDelete, Boolean.FALSE)
+                .eq(LexerTestcasePO::getLexerId, requestDTO.getLexerId())
+                .orderByDesc(LexerTestcasePO::getId);
+        Page<LexerTestcasePO> queryPage = new Page<>();
+        queryPage.setCurrent(requestDTO.getPageIndex())
+                .setSize(requestDTO.getPageSize());
+        Page<LexerTestcasePO> page = lexerTestcaseRepository.page(queryPage, queryWrapper1);
+        List<LexerTestcasePageResponseDTO.Testcase> testcaseList = ojConvert.convertList2(page.getRecords());
+        LexerTestcasePageResponseDTO responseDTO = new LexerTestcasePageResponseDTO();
+        responseDTO.setList(testcaseList);
+        responseDTO.setCurrentPage((int) page.getCurrent());
+        responseDTO.setTotalPages((int) page.getPages());
+        responseDTO.setTotalRecords((int) page.getTotal());
+        return responseDTO;
+    }
+
+    @Override
+    public void addLexerTestcase(LexerTestcaseAddRequestDTO requestDTO) {
+        String logStr = "添加词法分析器题用例";
+        lexerExistVerify(requestDTO.getLexerId(), logStr);
+        LexerTestcasePO lexerTestcasePO = new LexerTestcasePO();
+        lexerTestcasePO.setId(idGenerator.generate());
+        lexerTestcasePO.setLexerId(requestDTO.getLexerId());
+        lexerTestcasePO.setTerminalInput(requestDTO.getTerminalInput());
+        lexerTestcasePO.setTerminalOutput(requestDTO.getTerminalOutput());
+        boolean saved = lexerTestcaseRepository.save(lexerTestcasePO);
+        if (Objects.equals(saved, Boolean.FALSE)) {
+            log.error(logStr + ",用例添加失败, lexerId = {}", requestDTO.getLexerId());
+            throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void deleteLexerTestcase(Long id) {
+        // todo 无法删除初始用例
+        // todo 词法分析器题保存初始用例id
+        LambdaUpdateWrapper<LexerTestcasePO> updateWrapper = Wrappers.<LexerTestcasePO>lambdaUpdate()
+                .set(LexerTestcasePO::getIsDelete, Boolean.TRUE)
+                .eq(LexerTestcasePO::getIsDelete, Boolean.FALSE)
+                .eq(LexerTestcasePO::getId, id);
+        boolean updated = lexerTestcaseRepository.update(updateWrapper);
+        if (Objects.equals(updated, Boolean.FALSE)) {
+            log.error("删除词法分析器题用例，用例删除失败, id = {}", id);
+            throw new BizException(BizExceptionCodeEnum.SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 校验词法分析器题是否存在
+     *
+     * @param lexerId 词法分析器题id
+     * @param logStr  日志前缀
+     */
+    private void lexerExistVerify(Long lexerId, String logStr) {
+        LambdaQueryWrapper<LexerPO> queryWrapper = Wrappers.<LexerPO>lambdaQuery()
+                .select(LexerPO::getId)
+                .eq(LexerPO::getIsDelete, Boolean.FALSE)
+                .eq(LexerPO::getId, lexerId);
+        LexerPO lexerPO = lexerRepository.getOne(queryWrapper);
+        if (Objects.isNull(lexerPO)) {
+            log.warn(logStr + ",词法分析器题id不存在,id = {}", lexerId);
+            throw new BizException(BizExceptionCodeEnum.LEXER_PROBLEM_NOT_FOUNT_ERROR);
+        }
+    }
 
     /**
      * 获取教师所带教学班列表
