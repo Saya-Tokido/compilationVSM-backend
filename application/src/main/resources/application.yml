@@ -46,7 +46,7 @@ logging:
 
 # 自定义字段值
 
-role-permission: '{"student":[1001,1002,2001,2002,2003,2004,9003],"teacher":[9001,1011,1012,2011,2012,2013,9002,2014,2015,2016,1013,1014,1015,1016,1017,1018,1019,1020,2017,2018,2019],"admin":[8001,8002,8003,8004,8005,9010,8006,8007]}'
+role-permission: '{"student":[1001,1002,2001,2002,2003,2004,9003,2023],"teacher":[9001,1011,1012,2011,2012,2013,9002,2014,2015,2016,1013,1014,1015,1016,1017,1018,1019,1020,2017,2018,2019,2020,2021,2022],"admin":[8001,8002,8003,8004,8005,9010,8006,8007]}'
 
 redis-key-prefix:
   login-info: 'login:info:'
@@ -62,9 +62,10 @@ expire-time:
   login-info: 18000
   login-record: 19800
 ai-model:
-  baseurl: http://192.168.1.150:6006
+  baseurl: https://api.deepseek.com
   freeQA: /proxy/ask_by_message
   optimize: /proxy/optimize
+  api-key: your-api-key
 remote-compiler:
   baseurl: https://rapi.xjq.icu
   path: /code/run

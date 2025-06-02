@@ -70,7 +70,7 @@ public class BasicInfoManagerServiceImpl implements BasicInfoManagerService {
                 studentQueryWrapper = buildBasicInfoQuery(requestDTO, queryClassSet);
             } else {
                 log.error("教师用户查询学生信息,查询条件包含非所带教学班,queryClassList = {}, teacher's classList = {}", queryClassSet, Arrays.toString(classList));
-                throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR);
+                throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR, "无法访问本所带教学班");
             }
         }
         if (Objects.nonNull(requestDTO.getObjAsc())) {
@@ -96,9 +96,9 @@ public class BasicInfoManagerServiceImpl implements BasicInfoManagerService {
     @Override
     public StudentInfoPageResponseDTO pageQueryStudentInfoByAdmin(StudentPageQueryRequestDTO requestDTO) {
         LambdaQueryWrapper<StudentPO> queryWrapper;
-        if(!CollectionUtils.isEmpty(requestDTO.getClassList())){
+        if (!CollectionUtils.isEmpty(requestDTO.getClassList())) {
             queryWrapper = buildBasicInfoQuery(requestDTO, requestDTO.getClassList());
-        }else{
+        } else {
             queryWrapper = buildBasicInfoQuery(requestDTO, null);
         }
         queryWrapper.orderByAsc(StudentPO::getId);

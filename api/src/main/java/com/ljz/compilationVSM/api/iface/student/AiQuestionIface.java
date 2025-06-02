@@ -8,6 +8,7 @@ import com.ljz.compilationVSM.api.response.student.AiQAQuestionListResponse;
 import com.ljz.compilationVSM.api.response.student.FreeQAResponse;
 import com.ljz.compilationVSM.api.response.student.OptimResponse;
 import com.ljz.compilationVSM.api.response.student.SpecificQuestionResponse;
+import reactor.core.publisher.Flux;
 
 /**
  * ai 问答
@@ -20,7 +21,7 @@ public interface AiQuestionIface {
      * @param request
      * @return
      */
-    public Response<OptimResponse> optimize(OptimRequest request);
+    Flux<String> optimize(OptimRequest request);
 
     /**
      * 自由问答

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.util.List;
@@ -70,9 +71,8 @@ public class AiQAServiceImpl implements AiQAService {
     }
 
     @Override
-    public OptimizedDTO optimize(OptimCodeDTO optimCodeDTO) {
-        String optimizedCode = aiModelFacade.optimize(aiModelFacadeMapping.convert(optimCodeDTO));
-        return new OptimizedDTO(optimizedCode);
+    public Flux<String> optimize(OptimCodeDTO optimCodeDTO) {
+        return aiModelFacade.optimize(aiModelFacadeMapping.convert(optimCodeDTO));
     }
 
     @Override

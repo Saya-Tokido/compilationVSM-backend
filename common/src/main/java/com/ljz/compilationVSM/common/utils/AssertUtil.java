@@ -25,7 +25,7 @@ public class AssertUtil {
      */
     public static Object notNull(Object object, String message) {
         if (Objects.isNull(object)) {
-            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR);
+            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR, message);
         }
         return object;
     }
@@ -39,20 +39,21 @@ public class AssertUtil {
      */
     public static String notBlank(String str, String message) {
         if (StringUtils.isBlank(str)) {
-            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR);
+            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR, message);
         }
         return str;
     }
 
     /**
      * 校验集合是否为空
+     *
      * @param collection 集合
-     * @param message 异常信息
+     * @param message    异常信息
      * @return 原集合
      */
     public static Collection<?> notEmpty(Collection<?> collection, String message) {
         if (CollectionUtils.isEmpty(collection)) {
-            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR);
+            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR, message);
         }
         return collection;
     }

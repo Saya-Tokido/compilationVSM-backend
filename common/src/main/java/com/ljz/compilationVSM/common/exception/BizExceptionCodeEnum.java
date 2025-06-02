@@ -1,7 +1,5 @@
 package com.ljz.compilationVSM.common.exception;
 
-import lombok.AllArgsConstructor;
-
 /**
  * 异常枚举
  *
@@ -14,7 +12,7 @@ public enum BizExceptionCodeEnum implements BaseErrorInfoInterface {
      * 通用异常
      */
     SERVER_ERROR(500, "服务器内部错误"),
-    PARAMETER_ERROR(1001, "请求参数错误"),
+    PARAMETER_ERROR(1001, "%s"),
     THREAD_POOL_FULL_ERROR(1002,"任务数已满,晚点再执行吧"),
     EXCEL_FORMAT_ERROR(1003,"解析出错!请检查Excel文件数据格式是否正确"),
 

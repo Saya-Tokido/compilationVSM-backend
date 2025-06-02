@@ -750,6 +750,11 @@ public class OJServiceImpl implements OJService {
         }
     }
 
+    @Override
+    public SourceCodeResponseDTO aiCodeGenerate(AiCodeGenerateRequestDTO requestDTO) {
+        return null;
+    }
+
     /**
      * 校验词法分析器题是否存在
      *

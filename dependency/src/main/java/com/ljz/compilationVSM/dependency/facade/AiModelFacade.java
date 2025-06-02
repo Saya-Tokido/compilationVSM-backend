@@ -1,6 +1,7 @@
 package com.ljz.compilationVSM.dependency.facade;
 
 import com.ljz.compilationVSM.dependency.dto.AiOptimCodeDTO;
+import reactor.core.publisher.Flux;
 
 public interface AiModelFacade {
     /**
@@ -8,9 +9,9 @@ public interface AiModelFacade {
      * @param question
      * @return
      */
-    public String askByMessage(String question);
+    String askByMessage(String question);
     /**
      * 大模型代码优化接口
      */
-    public String optimize(AiOptimCodeDTO aioptimCodeDTO);
+    Flux<String> optimize(AiOptimCodeDTO aioptimCodeDTO);
 }

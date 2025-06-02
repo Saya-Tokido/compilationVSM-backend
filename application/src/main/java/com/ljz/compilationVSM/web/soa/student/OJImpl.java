@@ -3,6 +3,7 @@ package com.ljz.compilationVSM.web.soa.student;
 import com.ljz.compilationVSM.api.base.Response;
 import com.ljz.compilationVSM.api.iface.student.OJIface;
 import com.ljz.compilationVSM.api.request.common.SourceCodeResponse;
+import com.ljz.compilationVSM.api.request.student.AiCodeGenerateRequest;
 import com.ljz.compilationVSM.api.request.student.CheckCodeRequest;
 import com.ljz.compilationVSM.api.request.student.CodeProblemRequest;
 import com.ljz.compilationVSM.api.response.common.LexerLanguageResponse;
@@ -77,7 +78,7 @@ public class OJImpl implements OJIface {
     public Response<LexerLanguageResponse> getLexerLanguage() {
         Map<String, List<String>> lexerLanguage = ojService.getLexerLanguage();
         List<LexerLanguageResponse.LanguageMap> languageMapList = lexerLanguage.entrySet().stream()
-                .map(entry -> new LexerLanguageResponse.LanguageMap(entry.getKey(), entry.getValue(),null))
+                .map(entry -> new LexerLanguageResponse.LanguageMap(entry.getKey(), entry.getValue(), null))
                 .collect(Collectors.toList());
 
         return Response.success(new LexerLanguageResponse(languageMapList));
@@ -86,9 +87,18 @@ public class OJImpl implements OJIface {
     @Override
     @GetMapping("/lexer/last-commit/{lexer-id}")
     @UserAuth(permission = PermissionEnum.LEXER_LAST_COMMIT_CODE_QUERY)
-    public Response<SourceCodeResponse> getLastCommitCode(@PathVariable(value = "lexer-id")String lexerId) {
+    public Response<SourceCodeResponse> getLastCommitCode(@PathVariable(value = "lexer-id") String lexerId) {
         SourceCodeResponseDTO lastCommitCode = ojService.getLastCommitCode(lexerId);
         SourceCodeResponse response = ojMapping.sourceCodeResponseConvert(lastCommitCode);
+        return Response.success(response);
+    }
+
+    @Override
+    @GetMapping("/lexer/ai-code-generate")
+    @UserAuth(permission = PermissionEnum.LEXER_LAST_COMMIT_CODE_QUERY)
+    public Response<SourceCodeResponse> aiCodeGenerate(@RequestBody AiCodeGenerateRequest request) {
+        SourceCodeResponseDTO responseDTO = ojService.aiCodeGenerate(ojMapping.convert(request));
+        SourceCodeResponse response = ojMapping.sourceCodeResponseConvert(responseDTO);
         return Response.success(response);
     }
 }

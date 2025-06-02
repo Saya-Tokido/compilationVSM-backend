@@ -169,4 +169,13 @@ public interface OJService {
      * @param id 用例id
      */
     void deleteLexerTestcase(Long id);
+
+    /**
+     * ai代码续写
+     *
+     * @param requestDTO 请求dto
+     * @return 生成的代码
+     */
+    SourceCodeResponseDTO aiCodeGenerate(AiCodeGenerateRequestDTO requestDTO);
+
 }

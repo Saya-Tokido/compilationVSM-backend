@@ -1,13 +1,13 @@
 package com.ljz.compilationVSM.web.config.mvc;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.lang.Nullable;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Objects;
+import java.util.List;
 
 /**
  * Web MVC 配置类
@@ -16,7 +16,10 @@ import java.util.Objects;
  * @since 2024-12-26
  */
 @Configuration
+@RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    private final JacksonConverter JsonConverterObjectMapper;
 
     /**
      * 跨域配置
@@ -32,24 +35,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new StringToLongConverter());
-        registry.addConverter(new LongToStringConverter());
-    }
-
-    public static class StringToLongConverter implements Converter<String, Long> {
-        @Override
-        public Long convert(@Nullable String source) {
-            return Objects.isNull(source) ? null : Long.parseLong(source);
-        }
-    }
-
-    public static class LongToStringConverter implements Converter<Long, String> {
-        @Override
-        public String convert(@Nullable Long source) {
-            return Objects.isNull(source) ? null : source.toString();
-        }
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(JsonConverterObjectMapper);
+        converters.addFirst(converter);
     }
 
 }

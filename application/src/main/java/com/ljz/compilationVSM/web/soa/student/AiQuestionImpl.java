@@ -10,14 +10,17 @@ import com.ljz.compilationVSM.api.response.student.AiQAQuestionListResponse;
 import com.ljz.compilationVSM.api.response.student.FreeQAResponse;
 import com.ljz.compilationVSM.api.response.student.OptimResponse;
 import com.ljz.compilationVSM.api.response.student.SpecificQuestionResponse;
+import com.ljz.compilationVSM.common.enums.PermissionEnum;
 import com.ljz.compilationVSM.domain.aiQA.dto.FreeQAAnswerDTO;
 import com.ljz.compilationVSM.domain.aiQA.dto.SpecificAnswerDTO;
+import com.ljz.compilationVSM.web.config.aspect.UserAuth;
 import com.ljz.compilationVSM.web.convert.student.AiQAMapping;
 import com.ljz.compilationVSM.domain.aiQA.dto.OptimizedDTO;
 import com.ljz.compilationVSM.domain.aiQA.service.AiQAService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 /**
  * ai 问答接口实现
@@ -26,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @Slf4j
-@RequestMapping("/aiqa")
+@RequestMapping("/api/student/aiqa")
 public class AiQuestionImpl implements AiQuestionIface {
 
     @Autowired
@@ -41,9 +44,9 @@ public class AiQuestionImpl implements AiQuestionIface {
      * @return
      */
     @PostMapping("/optim")
-    public Response<OptimResponse> optimize(@RequestBody OptimRequest request) {
-        OptimizedDTO optimize = aiQAService.optimize(aiQAMapping.optimConvert(request));
-        return Response.success(aiQAMapping.optimConvert2(optimize));
+    @UserAuth(permission = PermissionEnum.AI_CODE_GENERATE)
+    public Flux<String> optimize(@RequestBody OptimRequest request) {
+        return aiQAService.optimize(aiQAMapping.optimConvert(request));
     }
 
     /**

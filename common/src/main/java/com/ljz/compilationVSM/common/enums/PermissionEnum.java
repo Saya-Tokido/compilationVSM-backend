@@ -56,6 +56,7 @@ public enum PermissionEnum {
     PAGE_LEXER_TESTCASE("分页查询词法分析器题用例", "2020"),
     LEXER_TESTCASE_ADD("添加词法分析器题用例", "2021"),
     LEXER_TESTCASE_DELETE("删除词法分析器题用例", "2022"),
+    AI_CODE_GENERATE("ai代码续写","2023"),
 
     /**
      * 账户相关权限

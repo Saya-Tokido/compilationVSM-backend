@@ -41,7 +41,7 @@ public class Validator {
                     try {
                         Object value = field.get(object);
                         if (!rule.isValid(value, annotation)) {
-                            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR);
+                            throw new BizException(BizExceptionCodeEnum.PARAMETER_ERROR, rule.getErrorMessage(annotation));
                         }
                     } catch (IllegalAccessException e) {
                         log.error("请求入参校验，无法获取对象属性");

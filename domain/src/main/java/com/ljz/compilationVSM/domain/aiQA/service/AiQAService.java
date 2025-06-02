@@ -2,6 +2,7 @@ package com.ljz.compilationVSM.domain.aiQA.service;
 
 import com.ljz.compilationVSM.common.dto.base.KeyValueDTO;
 import com.ljz.compilationVSM.domain.aiQA.dto.*;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface AiQAService {
      * @return
      */
 
-    OptimizedDTO optimize(OptimCodeDTO optimCodeDTO);
+    Flux<String> optimize(OptimCodeDTO optimCodeDTO);
 
     /**
      * 获取指定问答问题列表
